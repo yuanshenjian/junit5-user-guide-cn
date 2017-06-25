@@ -76,7 +76,7 @@ JUnit Jupiter测试引擎的实现，仅仅用在运行时。
 将JUnit 4的支持迁移到JUnit Jupiter，仅仅用来运行选择了JUnit 4规则的测试。
 
 
-###2.1.3. JUnit Vintage
+### 2.1.3. JUnit Vintage
 
 * **Group ID**: `org.junit.vintage`
 
