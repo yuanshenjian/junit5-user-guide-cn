@@ -1,6 +1,8 @@
 # junit5-user-guide-cn
 该工程中包含了JUnit5 User Guide文档的中文翻译。
 
+原文链接：<http://junit.org/junit5/docs/current/user-guide/>
+
 ## 翻译说明：
 
 - 统一使用Markdown格式编辑，推荐使用[MacDown](http://macdown.uranusjr.com/)工具编辑。
