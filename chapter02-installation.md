@@ -97,6 +97,6 @@ JUnit Vintage测试引擎实现，允许在行的JUnit平台上运行古老的JU
 ## 2.3 JUnit Jupiter示例工程
 [junit5-samples](https://github.com/junit-team/junit5-samples) 代码库中包含了一系列基于JUnit Jupiter和JUnit Vintage的示例工程。在下面的项目中，你会分别找到`build.gradle`和`pom.xml`文件：
 
-Gradle工程：[junit5-gradle-consumer](https://github.com/junit-team/junit5-samples/tree/r5.0.0-M4/junit5-gradle-consumer).
+- Gradle工程：[junit5-gradle-consumer](https://github.com/junit-team/junit5-samples/tree/r5.0.0-M4/junit5-gradle-consumer).
 
-# Maven工程：[junit5-maven-consumer](https://github.com/junit-team/junit5-samples/tree/r5.0.0-M4/junit5-maven-consumer).
+- Maven工程：[junit5-maven-consumer](https://github.com/junit-team/junit5-samples/tree/r5.0.0-M4/junit5-maven-consumer).
