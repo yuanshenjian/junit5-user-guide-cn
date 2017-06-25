@@ -28,3 +28,13 @@ The **JUnit Platform** serves as a foundation for [launching testing frameworks]
 
 - 常用工具关键字不用翻译，例如`Gradle`,`Maven`
 
+- 提价Git commit格式如下：
+
+```
+$ git commit -m "[chapter01] - Translate 1.1"
+$ git commit -m "[chapter03] - Translate 3.11"
+$ git commit -m "[chapter03] - Complete chapter03"
+
+$ git commit -m "[chapter03] - Review chapter03"
+```
+
