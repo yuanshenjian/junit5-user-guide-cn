@@ -550,3 +550,193 @@ class MyMockitoTest {
 }
 ```
 
+## 3.10. 测试接口和默认方法
+JUnit Jupiter允许将`@Test`、`@TestFactory`、`@BeforeEach`和`@AfterEach`注解声明在接口的默认方法上。除此之外，`@BeforeAll`和`@AfterAll`可以被声明在测试接口的静态方法上，而`@ExtendWith`和`@Tag`可以被声明在测试接口用来配置扩展和标签。下面来看一些示例：
+
+```java
+public interface TestLifecycleLogger {
+
+    static final Logger LOG = Logger.getLogger(TestLifecycleLogger.class.getName());
+
+    @BeforeAll
+    static void beforeAllTests() {
+        LOG.info("beforeAllTests");
+    }
+
+    @AfterAll
+    static void afterAllTests() {
+        LOG.info("afterAllTests");
+    }
+
+    @BeforeEach
+    default void beforeEachTest(TestInfo testInfo) {
+        LOG.info(() -> String.format("About to execute [%s]",
+            testInfo.getDisplayName()));
+    }
+
+    @AfterEach
+    default void afterEachTest(TestInfo testInfo) {
+        LOG.info(() -> String.format("Finished executing [%s]",
+            testInfo.getDisplayName()));
+    }
+
+}
+```
+
+```java
+interface TestInterfaceDynamicTestsDemo {
+
+    @TestFactory
+    default Collection<DynamicTest> dynamicTestsFromCollection() {
+        return Arrays.asList(
+            dynamicTest("1st dynamic test in test interface", () -> assertTrue(true)),
+            dynamicTest("2nd dynamic test in test interface", () -> assertEquals(4, 2 * 2))
+        );
+    }
+
+}
+```
+
+`@ExtendWith`和`@Tag`可以被声明在一个测试接口，从而那些实现了该接口的类会自动继承它的标签和扩展。参考 [TimingExtension](http://junit.org/junit5/docs/current/user-guide/#extensions-lifecycle-callbacks-timing-extension) 源码中的 [测试执行回调之前和之后]() 
+
+```java
+@Tag("timed")
+@ExtendWith(TimingExtension.class)
+public interface TimeExecutionLogger {
+}
+```
+
+在你的测试类中，你可以通过实现这些测试接口来获取那些配置信息。
+
+```java
+class TestInterfaceDemo implements TestLifecycleLogger, TimeExecutionLogger, TestInterfaceDynamicTestsDemo {
+
+    @Test
+    void isEqualValue() {
+        assertEquals(1, 1, "is always equal");
+    }
+
+}
+```
+
+运行`TestInterfaceDemo`，你会看到类似于如下的输出：
+
+```sh
+:junitPlatformTest
+18:28:13.967 [main] INFO  example.testinterface.TestLifecycleLogger - beforeAllTests
+18:28:13.982 [main] INFO  example.testinterface.TestLifecycleLogger - About to execute [dynamicTestsFromCollection()]
+18:28:14.000 [main] INFO  example.testinterface.TimingExtension - Method [dynamicTestsFromCollection] took 13 ms.
+18:28:14.004 [main] INFO  example.testinterface.TestLifecycleLogger - Finished executing [dynamicTestsFromCollection()]
+18:28:14.007 [main] INFO  example.testinterface.TestLifecycleLogger - About to execute [isEqualValue()]
+18:28:14.008 [main] INFO  example.testinterface.TimingExtension - Method [isEqualValue] took 1 ms.
+18:28:14.009 [main] INFO  example.testinterface.TestLifecycleLogger - Finished executing [isEqualValue()]
+18:28:14.011 [main] INFO  example.testinterface.TestLifecycleLogger - afterAllTests
+
+Test run finished after 190 ms
+[         3 containers found      ]
+[         0 containers skipped    ]
+[         3 containers started    ]
+[         0 containers aborted    ]
+[         3 containers successful ]
+[         0 containers failed     ]
+[         3 tests found           ]
+[         0 tests skipped         ]
+[         3 tests started         ]
+[         0 tests aborted         ]
+[         3 tests successful      ]
+[         0 tests failed          ]
+
+BUILD SUCCESSFUL
+```
+
+该功能其他一些可能的应用是编写接口合同的测试。例如，你可以为`Object.equals`或者 `Comparable.compareTo`的实现应该具备什么样的行为编写测试。
+
+
+```java
+public interface Testable<T> {
+
+    T createValue();
+
+}
+```
+
+```java
+public interface EqualsContract<T> extends Testable<T> {
+
+    T createNotEqualValue();
+
+    @Test
+    default void valueEqualsItself() {
+        T value = createValue();
+        assertEquals(value, value);
+    }
+
+    @Test
+    default void valueDoesNotEqualNull() {
+        T value = createValue();
+        assertFalse(value.equals(null));
+    }
+
+    @Test
+    default void valueDoesNotEqualDifferentValue() {
+        T value = createValue();
+        T differentValue = createNotEqualValue();
+        assertNotEquals(value, differentValue);
+        assertNotEquals(differentValue, value);
+    }
+
+}
+```
+
+```java
+public interface ComparableContract<T extends Comparable<T>> extends Testable<T> {
+
+    T createSmallerValue();
+
+    @Test
+    default void returnsZeroWhenComparedToItself() {
+        T value = createValue();
+        assertEquals(0, value.compareTo(value));
+    }
+
+    @Test
+    default void returnsPositiveNumberComparedToSmallerValue() {
+        T value = createValue();
+        T smallerValue = createSmallerValue();
+        assertTrue(value.compareTo(smallerValue) > 0);
+    }
+
+    @Test
+    default void returnsNegativeNumberComparedToSmallerValue() {
+        T value = createValue();
+        T smallerValue = createSmallerValue();
+        assertTrue(smallerValue.compareTo(value) < 0);
+    }
+
+}
+```
+
+在测试类中，你就可以实现这两个合同接口，从而继承相应的测试。当然，你得实现那些抽象方法。
+
+```java
+class StringTests implements ComparableContract<String>, EqualsContract<String> {
+
+    @Override
+    public String createValue() {
+        return "foo";
+    }
+
+    @Override
+    public String createSmallerValue() {
+        return "bar"; // 'b' < 'f' in "foo"
+    }
+
+    @Override
+    public String createNotEqualValue() {
+        return "baz";
+    }
+
+}
+```
+
+上述测试仅仅是作为示例，所以它们不是完整的。
