@@ -351,7 +351,21 @@ class TaggingDemo {
 }
 ```
 
-## 3.8. 内嵌测试
+## 3.8. 测试实例生命周期
+为了隔离地执行单个测试方法，以及避免由于不稳定的测试实例状态引发的非预期的副作用，JUnit会在执行每个测试方法执行之前创建一个新的实例（参考下面的注释说明如何定义一个测试方法）。“方法之前”测试实例的生命周期是JUnit Jupiter的默认行为，这点类似于JUnit所有之前的版本。
+
+如果你希望JUnit Jupiter在相同的实例上执行所有的测试方法，在你的测试类上加上注解`@TestInstance(Lifecycle.PER_CLASS)`即可。启用了该模式后，每一个测试类只会创建一次实例。因此，如果你的测试方法依赖实例变量存储的状态，你可能需要在`@BeforeEach` 或 `@AfterEach`方法中重置状态。
+
+“类之前”模式相比于默认的”方法之前“模式有一些额外的好处。尤其是，使用了”类方法“模式之后，你就可以在非静态方法上声明`@BeforeAll` 以及 `@AfterAll`，就像接口的默认方法一样。因此”类之前“模式使得在`@Nested`测试类中使用`@BeforeAll`和`@AfterAll`注解成为了可能。
+
+
+If you are authoring tests using the Kotlin programming language, you may also find it easier to implement `@BeforeAll` and `@AfterAll` methods by switching to the "per-class" test instance lifecycle mode.
+
+如果你使用Kotlin编程语言来编写测试，你会发现通过将测试实例的生命周期模式切换到”类之前“更容易实现`@BeforeAll`和`@AfterAll`方法。
+
+> 在测试实例生命周期的上下文中，任何使用了`@Test`, `@RepeatedTest`, `@ParameterizedTest`, `@TestFactory`, or `@TestTemplate`注解的方法都是一个测试方法。
+
+## 3.9. 内嵌测试
 内嵌测试使得测试编写者能够表示出几组测试用例之间的关系。下面来看一个精心设计的例子。
 
 *一个用于测试栈的内嵌测试套件*
@@ -445,7 +459,7 @@ class TestingAStackDemo {
 
 > Note: 用作`@Nested`的测试只能是非静态的内嵌类（i.e. 内部类）。内嵌可以是任意深度，那些内部类会被认为是一个该测试类家庭中的成员，但有一种特殊情况：`@BeforeAll`和`@AfterAll`，因为Java不允许内部类中存在`static`成员。
 
-## 3.9. 构造器和方法的依赖注入
+## 3.10. 构造器和方法的依赖注入
 JUnit之前所有的版本中，测试构造器和方法是不允许传入参数的（至少标准的`Runner`实现是不允许的）。JUnit Jupiter一个主要的改变是：测试类的构造器和方法都允许传入参数了。这带来了更大的灵活性，并且可以在构造器和方法上使用`依赖注入`。
 
 [ParameterResolver](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/ParameterResolver.html) 为测试扩展定义了API，它可以在运行时*动态*解析参数。如果一个测试的构造器或者`@Test`、`@TestFactory`、`@BeforeEach`、`@AfterEach`、`@BeforeAll`或者 `@AfterAll`方法接收一个参数，这个参数就必须在运行时被一个已注册的`ParameterResolver`所解析。
@@ -550,7 +564,7 @@ class MyMockitoTest {
 }
 ```
 
-## 3.10. 测试接口和默认方法
+## 3.11. 测试接口和默认方法
 JUnit Jupiter允许将`@Test`、`@TestFactory`、`@BeforeEach`和`@AfterEach`注解声明在接口的默认方法上。除此之外，`@BeforeAll`和`@AfterAll`可以被声明在测试接口的静态方法上，而`@ExtendWith`和`@Tag`可以被声明在测试接口用来配置扩展和标签。下面来看一些示例：
 
 ```java
