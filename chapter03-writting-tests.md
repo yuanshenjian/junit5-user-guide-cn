@@ -1141,6 +1141,135 @@ A @TestTemplate method is not a regular test case but rather a template for test
 
 `@TestTemplate`方法不是一个常规的实测用例，它是测试用例的模板。这样一来，设计它是用来被多次调用，而这取决于注册提供者返回的调用上下文数量。因此，它必须结合 [TestTemplateInvocationContextProvider](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestTemplateInvocationContextProvider.html) 扩展一起使用。测试模板方法每一次调用类似于常规`@Test`方法的执行，它也全部支持同样的生命周期回调和扩展。关于它的用例请参考 [为测试模板提供调用上下文]()。
 
+## 3.15. 动态测试
+The standard @Test annotation in JUnit Jupiter described in Annotations is very similar to the @Test annotation in JUnit 4. Both describe methods that implement test cases. These test cases are static in the sense that they are fully specified at compile time, and their behavior cannot be changed by anything happening at runtime. 
+在JUnit Juppiter的[Annotations]()章节描述的标准`@Test`注解跟JUnit4中的`@Test`注解非常类似。两者都表示方式是一个测试用例。这些测试用例都是静态的，并且都是在编译器就指定好的，以及它们的行为不能在运行期被改变。*假设提供了动态行为的基本形式，但在表现力上做有意的限制*。
+
+In addition to these standard tests a completely new kind of test programming model has been introduced in JUnit Jupiter. This new kind of test is a dynamic test which is generated at runtime by a factory method that is annotated with @TestFactory.
+
+除了那些标标准的测试，一个全新的测试编程模型已经被引入到JUnit Jupiter中。这个新型的测试就是*一个动态测试*，它们由一个使用了`@TestRactory`注解的工厂方法生成。
+
+相比于`@Test`方法，一个`@TestFactory`方法自身并不是一个测试，它是一个测试用例工厂。因此，一个动态测试是一个工厂的产品。从技术上将，`@TestFactory`方法必须一个返回`DynamicTest`实例的`Stream`、`Collection`、`Iterable`、`Iterator`。这些`DynamicTest`实例将被延迟执行，这恰恰允许动态以及不确定性地生成测试用例。
+
+任何由`@TestFactory`方法返回的`Stream`在调用`stream.close()`的时候会被正确地关闭 , 这使得我们可以安全地使用一个资源，例如：`Files.lines()`。；
+
+跟`@Test`方法一样，`@TestFactory`方法不能是`private`或`static`的。但可以声明被`ParameterResolvers`解析的参数。
+
+一个`DynamicTest`是一个在运行期生成的测试。它由一个展示名称和`Executable`组成。`Executable`是一个`@FunctionalInterface`，这意味着动态测试的实现可以是一个`lambda表达式`或方法引用。
+
+> #### 动态测试生命周期
+> 动态测试执行生命周期跟标准的`@Test`测试截然不同。具体地说，动态测试不存在任何生命周期阶段的回调。这意味着`@BeforeEach`和`@AfterEach`方法以及它们对应的扩展回调不会被动态执行。换言之，如果你在一个动态测试中的lambda表达式中去访问字段，那么在由同一个`@TestFactory`方法生成的动态测试之间的执行中，那些字段不会被回调方法或扩展重置掉。
+
+>译者注：同一个`@TestFactory`所生成的n个测试，`@BeforeEach`和`@AfterEach`只会在这n个测试开始前和结束后各执行一次，不会为每一个测试都执行。
+
+### 3.15.1. 动态测试示例
+下面的`DynamicTestsDemo`类演示了测试工厂和动态测试的几个示例：
+
+第一个方法返回一个非法的类型。由于非法类型不能在编译器被识别，所以运行期会抛出一个`JUnitException`。
+
+接下来5个方法是非常简单的示例，它们演示了生成一个`DynamicTest`实例的`Collection`、`Iterable`、`Iterator`、`Stream`。大部分例子不是为了展示动态行为，仅仅是为了演示所支持的类型。然而，`dynamicTestsFromStream()`和`dynamicTestsFromIntStream()`演示了为给定的字符串或数字范围的集合生成动态测试是一件非常容易的事情。
+
+最后一个方法是真正意义上动态的。`generateRandomNumberOfTests()`实现了一个生成随机数字的`Iterator`，一个展示名称生成器和一个测试执行器，然后将它们三者以`DynamicTest.stream()`的方式返回一个`Stream`。当然，`generateRandomNumberOfTests()`行为的不确定性与测试可重复性会产生冲突，而我们应该尽量小心避免这样使用，这里只是用它来演示动态测试的表现力和强大性。
+
+
+```java
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.DynamicTest.dynamicTest;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.function.ThrowingConsumer;
+
+class DynamicTestsDemo {
+
+    // This will result in a JUnitException!
+    @TestFactory
+    List<String> dynamicTestsWithInvalidReturnType() {
+        return Arrays.asList("Hello");
+    }
+
+    @TestFactory
+    Collection<DynamicTest> dynamicTestsFromCollection() {
+        return Arrays.asList(
+            dynamicTest("1st dynamic test", () -> assertTrue(true)),
+            dynamicTest("2nd dynamic test", () -> assertEquals(4, 2 * 2))
+        );
+    }
+
+    @TestFactory
+    Iterable<DynamicTest> dynamicTestsFromIterable() {
+        return Arrays.asList(
+            dynamicTest("3rd dynamic test", () -> assertTrue(true)),
+            dynamicTest("4th dynamic test", () -> assertEquals(4, 2 * 2))
+        );
+    }
+
+    @TestFactory
+    Iterator<DynamicTest> dynamicTestsFromIterator() {
+        return Arrays.asList(
+            dynamicTest("5th dynamic test", () -> assertTrue(true)),
+            dynamicTest("6th dynamic test", () -> assertEquals(4, 2 * 2))
+        ).iterator();
+    }
+
+    @TestFactory
+    Stream<DynamicTest> dynamicTestsFromStream() {
+        return Stream.of("A", "B", "C").map(
+            str -> dynamicTest("test" + str, () -> { /* ... */ }));
+    }
+
+    @TestFactory
+    Stream<DynamicTest> dynamicTestsFromIntStream() {
+        // Generates tests for the first 10 even integers.
+        return IntStream.iterate(0, n -> n + 2).limit(10).mapToObj(
+            n -> dynamicTest("test" + n, () -> assertTrue(n % 2 == 0)));
+    }
+
+    @TestFactory
+    Stream<DynamicTest> generateRandomNumberOfTests() {
+
+        // Generates random positive integers between 0 and 100 until
+        // a number evenly divisible by 7 is encountered.
+        Iterator<Integer> inputGenerator = new Iterator<Integer>() {
+
+            Random random = new Random();
+            int current;
+
+            @Override
+            public boolean hasNext() {
+                current = random.nextInt(100);
+                return current % 7 != 0;
+            }
+
+            @Override
+            public Integer next() {
+                return current;
+            }
+        };
+
+        // Generates display names like: input:5, input:37, input:85, etc.
+        Function<Integer, String> displayNameGenerator = (input) -> "input:" + input;
+
+        // Executes tests based on the current input value.
+        ThrowingConsumer<Integer> testExecutor = (input) -> assertTrue(input % 7 != 0);
+
+        // Returns a stream of dynamic tests.
+        return DynamicTest.stream(inputGenerator, displayNameGenerator, testExecutor);
+    }
+
+}
+```
 
 
 
