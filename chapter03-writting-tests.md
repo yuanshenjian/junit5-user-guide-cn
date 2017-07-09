@@ -754,3 +754,156 @@ class StringTests implements ComparableContract<String>, EqualsContract<String> 
 ```
 
 上述测试仅仅是作为示例，所以它们不是完整的。
+
+## 3.12. 重复的测试
+
+在JUnit Jupiter中，通过注解`@RepeatedTest`可以以指定次数地重复运行一个测试方法，并且可以指定重复的次数。重复测试的每一次调用就像执行一个完全支持相同生命周期回调和扩展的常规`@Test`方法。
+
+下面示例代码演示了如何将`repeatedTest()`方法声明为一个自动执行10次的测试方法。
+
+```java
+@RepeatedTest(10)
+void repeatedTest() {
+    // ...
+}
+```
+In addition to specifying the number of repetitions, a custom display name can be configured for each repetition via the name attribute of the @RepeatedTest annotation. Furthermore, the display name can be a pattern composed of a combination of static text and dynamic placeholders. The following placeholders are currently supported.
+
+除了指定重复的次数，我们可以通过`@RepeatedTest`注解的`name`属性来为每一次重复配置一个自定义的展示名称。而展示名字可以由静态文本和动态占位符组成。下面列出来的占位符是目前支持的。
+
+* `{displayName}`: `@RepeatedTest`方法的展示名称。
+
+* `{currentRepetition}`: 当前重复的计数。
+
+* `{totalRepetitions}`: 总重复次数。
+
+
+每一次重复的默认展示名称会基于下面的模式生成：`"repetition {currentRepetition} of {totalRepetitions}"`。因此，之前`repeatedTest()`例子中的每一次单独重复的展示名称就是：`repetition 1 of 10, repetition 2 of 10`，etc。如果你想让`RepeatedTest`方法的展示名称被包含在每一次重复中，你可以定义自己的模式或者使用预定义的`RepeatedTest.LONG_DISPLAY_NAME`。后者等同于`"{displayName} :: repetition {currentRepetition} of {totalRepetitions}"`，在这种模式下，`repeatedTest()`方法的每一次单独重复可能是这样子的：`repeatedTest() :: repetition 1 of 10, repeatedTest() :: repetition 2 of 10`，等等。
+
+想要通过代码来获取当前重复相关的信息以及总的重复次数，开发者可以选择往`@RepeatedTest`, `@BeforeEach`, 或者 `@AfterEach`方法注入一个`RepetitionInfo`实例。
+
+
+### 3.12.1. 重复测试的例子
+本章节末尾处`RepeatedTestsDemo`类演示了重复的测试的示例。
+
+`repeatedTest()`方法跟之间那个例子一样。`repeatedTestWithRepetitionInfo()`演示怎么通过往测试注入一个`RepetitionInfo`来访问当前测试的总重复次数。
+
+接下来两个方法演示了如何将`@RepeatedTest`方法的自定义的`@DisplayName`包含到每次重复的展示名称中。`customDisplayName()`组合了一个自定义的展示名城以及一个自定义的模式，然后使用`TestInfo`来验证生成的展示名城的格式。`Repeat!`的是来自于`@DisplayName`中声明的`{displayName}`，以及`{currentRepetition}/{totalRepetitions}`定义的`1/1`。对比可以看出，`customDisplayNameWithLongPattern()`使用了前面提到的预定义`RepeatedTest.LONG_DISPLAY_NAME`模式。
+
+`repeatedTestInGerman()`演示了将重复测试的展示名称翻译成外语的能力 - 比如例子中的德语，所以结果看起来像：`Wiederholung 1 von 5, Wiederholung 2 von 5`，等等。
+
+由于`beforeEach()`方法使用了`@BeforeEach`注解，它将在每一次重复之前执行。通过往方法中注入`TestInfo`和`RepetitionInfo`，我们可以看到有可能能够获取当前正在执行的重复测试的信息。启用`INFO`的log级别，执行`RepeatedTestsDemo`可以看到如下的输出：
+
+```sh
+INFO: About to execute repetition 1 of 10 for repeatedTest
+INFO: About to execute repetition 2 of 10 for repeatedTest
+INFO: About to execute repetition 3 of 10 for repeatedTest
+INFO: About to execute repetition 4 of 10 for repeatedTest
+INFO: About to execute repetition 5 of 10 for repeatedTest
+INFO: About to execute repetition 6 of 10 for repeatedTest
+INFO: About to execute repetition 7 of 10 for repeatedTest
+INFO: About to execute repetition 8 of 10 for repeatedTest
+INFO: About to execute repetition 9 of 10 for repeatedTest
+INFO: About to execute repetition 10 of 10 for repeatedTest
+INFO: About to execute repetition 1 of 5 for repeatedTestWithRepetitionInfo
+INFO: About to execute repetition 2 of 5 for repeatedTestWithRepetitionInfo
+INFO: About to execute repetition 3 of 5 for repeatedTestWithRepetitionInfo
+INFO: About to execute repetition 4 of 5 for repeatedTestWithRepetitionInfo
+INFO: About to execute repetition 5 of 5 for repeatedTestWithRepetitionInfo
+INFO: About to execute repetition 1 of 1 for customDisplayName
+INFO: About to execute repetition 1 of 1 for customDisplayNameWithLongPattern
+INFO: About to execute repetition 1 of 5 for repeatedTestInGerman
+INFO: About to execute repetition 2 of 5 for repeatedTestInGerman
+INFO: About to execute repetition 3 of 5 for repeatedTestInGerman
+INFO: About to execute repetition 4 of 5 for repeatedTestInGerman
+INFO: About to execute repetition 5 of 5 for repeatedTestInGerman
+```
+
+```java
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.logging.Logger;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
+import org.junit.jupiter.api.TestInfo;
+
+class RepeatedTestsDemo {
+
+    private Logger logger = // ...
+
+    @BeforeEach
+    void beforeEach(TestInfo testInfo, RepetitionInfo repetitionInfo) {
+        int currentRepetition = repetitionInfo.getCurrentRepetition();
+        int totalRepetitions = repetitionInfo.getTotalRepetitions();
+        String methodName = testInfo.getTestMethod().get().getName();
+        logger.info(String.format("About to execute repetition %d of %d for %s", //
+            currentRepetition, totalRepetitions, methodName));
+    }
+
+    @RepeatedTest(10)
+    void repeatedTest() {
+        // ...
+    }
+
+    @RepeatedTest(5)
+    void repeatedTestWithRepetitionInfo(RepetitionInfo repetitionInfo) {
+        assertEquals(5, repetitionInfo.getTotalRepetitions());
+    }
+
+    @RepeatedTest(value = 1, name = "{displayName} {currentRepetition}/{totalRepetitions}")
+    @DisplayName("Repeat!")
+    void customDisplayName(TestInfo testInfo) {
+        assertEquals(testInfo.getDisplayName(), "Repeat! 1/1");
+    }
+
+    @RepeatedTest(value = 1, name = RepeatedTest.LONG_DISPLAY_NAME)
+    @DisplayName("Details...")
+    void customDisplayNameWithLongPattern(TestInfo testInfo) {
+        assertEquals(testInfo.getDisplayName(), "Details... :: repetition 1 of 1");
+    }
+
+    @RepeatedTest(value = 5, name = "Wiederholung {currentRepetition} von {totalRepetitions}")
+    void repeatedTestInGerman() {
+        // ...
+    }
+
+}
+```
+
+When using the ConsoleLauncher or the junitPlatformTest Gradle plugin with the unicode theme enabled, execution of RepeatedTestsDemo results in the following output to the console.
+
+当使用了`ConsoleLauncher`或`junitPlatformTest` Gradle插件，并且开启了unicode theme的时候，执行`RepeatedTestsDemo`测试，在控制台你会看到如下输出：
+
+```sh
+├─ RepeatedTestsDemo ✔
+│  ├─ repeatedTest() ✔
+│  │  ├─ repetition 1 of 10 ✔
+│  │  ├─ repetition 2 of 10 ✔
+│  │  ├─ repetition 3 of 10 ✔
+│  │  ├─ repetition 4 of 10 ✔
+│  │  ├─ repetition 5 of 10 ✔
+│  │  ├─ repetition 6 of 10 ✔
+│  │  ├─ repetition 7 of 10 ✔
+│  │  ├─ repetition 8 of 10 ✔
+│  │  ├─ repetition 9 of 10 ✔
+│  │  └─ repetition 10 of 10 ✔
+│  ├─ repeatedTestWithRepetitionInfo(RepetitionInfo) ✔
+│  │  ├─ repetition 1 of 5 ✔
+│  │  ├─ repetition 2 of 5 ✔
+│  │  ├─ repetition 3 of 5 ✔
+│  │  ├─ repetition 4 of 5 ✔
+│  │  └─ repetition 5 of 5 ✔
+│  ├─ Repeat! ✔
+│  │  └─ Repeat! 1/1 ✔
+│  ├─ Details... ✔
+│  │  └─ Details... :: repetition 1 of 1 ✔
+│  └─ repeatedTestInGerman() ✔
+│     ├─ Wiederholung 1 von 5 ✔
+│     ├─ Wiederholung 2 von 5 ✔
+│     ├─ Wiederholung 3 von 5 ✔
+│     ├─ Wiederholung 4 von 5 ✔
+│     └─ Wiederholung 5 von 5 ✔
+```
