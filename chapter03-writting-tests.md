@@ -907,3 +907,231 @@ When using the ConsoleLauncher or the junitPlatformTest Gradle plugin with the u
 │     ├─ Wiederholung 4 von 5 ✔
 │     └─ Wiederholung 5 von 5 ✔
 ```
+
+## 3.13. 参数化的测试
+参数化测试使得有可能以不同的参数多次执行一个测试。除了使用`@ParameterizedTest`注解，它们的声明跟`@Test`的方法没有区别。除此之外，你必须声明至少一个源用于给每次调用提供参数。
+
+```java
+@ParameterizedTest
+@ValueSource(strings = { "Hello", "World" })
+void testWithStringParameter(String argument) {
+    assertNotNull(argument);
+}
+```
+
+该参数化测试使用`@ValueSource`注解来制定一个字符串数组参数源。当执行这个方法时，每次调用会被单独地记录。例如，`ConsoleLauncher`会打印类似下面的结果：
+
+```java
+testWithStringParameter(String) ✔
+├─ [1] Hello ✔
+└─ [2] World ✔
+```
+
+### 3.13.1. 必要的设置
+为了使用参数化测试，你必须添加`junit-jupiter-params`依赖。详情请参开[依赖元数据]()
+
+### 3.13.2. 参数源
+Junit Jupiter提供一些开箱即用的*源*注解。接下来每个子章节将提供一个简短的摘要以及一个示例。更多信息请参考 <http://junit.org/junit5/docs/current/api/org/junit/jupiter/params/provider/package-summary.html> 包中的JavaDoc。
+
+#### @ValueSource
+`@ValueSource`是最简单的合适的源。它允许你指定一个基本类型字面量数组（String、int、long或double）,并且它只能为每次调用提供一个参数。
+
+#### @EnumSource
+`@EnumSource`能够很方便地提供`Enum`常量。它还提供一个可选的`names`参数，你可以用它来指定那个常量会被使用。如果省略了，就意味着所有的常量将被使用，例如下面的例子：
+
+```java
+@ParameterizedTest
+@EnumSource(TimeUnit.class)
+void testWithEnumSource(TimeUnit timeUnit) {
+    assertNotNull(timeUnit.name());
+}
+```
+
+#### @MethodSource
+`@MethodSource`允许引用测试类中的一个或多个方法。被引用的方法的返回值必须是一个`Stream`、`Iterable`、`Iterator`或者参数数组。另外，每个方法必须是静态并且不能包含任何参数。
+
+如果你只需要一个参数，你可以直接返回参数类型的实例，正如下面示例所演示的：
+
+```java
+@ParameterizedTest
+@MethodSource(names = "stringProvider")
+void testWithSimpleMethodSource(String argument) {
+    assertNotNull(argument);
+}
+
+static Stream<String> stringProvider() {
+    return Stream.of("foo", "bar");
+}
+```
+
+如果你需要多个参数，你可以返回`Argument`实例，如下面代码所示：
+
+```java
+@ParameterizedTest
+@MethodSource(names = "stringAndIntProvider")
+void testWithMultiArgMethodSource(String first, int second) {
+    assertNotNull(first);
+    assertNotEquals(0, second);
+}
+
+static Stream<Arguments> stringAndIntProvider() {
+    return Stream.of(ObjectArrayArguments.create("foo", 1), ObjectArrayArguments.create("bar", 2));
+}
+```
+
+#### @CsvFileSource
+`@CsvFileSource`允许你使用类路径中的CSV文件。CSV文件的每一行会作为参数化测试的每次调用的参数：
+
+```java
+@ParameterizedTest
+@CsvFileSource(resources = "/two-column.csv")
+void testWithCsvFileSource(String first, int second) {
+    assertNotNull(first);
+    assertNotEquals(0, second);
+}
+```
+
+two-column.csv
+
+```sh
+foo, 1
+bar, 2
+"baz, qux", 3
+```
+
+#### @ArgumentsSource
+
+`@ArgumentsSource` 可以用来指定一个自定义且能够复用的`ArgumentsProvider`：
+
+```java
+@ParameterizedTest
+@ArgumentsSource(MyArgumentsProvider.class)
+void testWithArgumentsSource(String argument) {
+    assertNotNull(argument);
+}
+
+static class MyArgumentsProvider implements ArgumentsProvider {
+    @Override
+    public Stream<? extends Arguments> arguments(ContainerExtensionContext context) {
+        return Stream.of("foo", "bar").map(ObjectArrayArguments::create);
+    }
+}
+```
+
+### 3.13.3. 参数转换
+#### 隐式转换
+为了支持像`@CsvSource`这样的使用场景，JUnit Jupiter提供了一些内建的隐式类型转换器。转换的处理依赖于每个方法参数的声明类型。
+
+例如，一个`@ParameterizedTest`方法声明了一个`TimeUnit`类型的参数，而实际上提供了一个`String`，此时字符串会被自动转换成对应的`TimeUnit`枚举常量。
+
+```java
+@ParameterizedTest
+@ValueSource(strings = "SECONDS")
+void testWithImplicitArgumentConversion(TimeUnit argument) {
+    assertNotNull(argument.name());
+}
+```
+
+`String`实例目前会被隐式地转换成以下的目标类型：
+
+目标类型 | 类型示例
+:---|:---
+boolean/Boolean | "true" → true
+byte/Byte | "1" → (byte) 1
+char/Character | "o" → 'o'
+short/Short | "1" → (short) 1
+int/Integer | "1" → 1
+long/Long | "1" → 1L
+float/Float | "1.0" → 1.0f
+double/Double | "1.0" → 1.0d
+Enum subclass | "SECONDS" → TimeUnit.SECONDS
+java.time.Instant | "1970-01-01T00:00:00Z" → Instant.ofEpochMilli(0)
+java.time.LocalDate | "2017-03-14" → LocalDate.of(2017, 3, 14)
+java.time.LocalDateTime | "2017-03-14T12:34:56.789" → LocalDateTime.of(2017, 3, 14, 12, 34, 56, 789_000_000)
+java.time.LocalTime | "12:34:56.789" → LocalTime.of(12, 34, 56, 789_000_000)
+java.time.OffsetDateTime | "2017-03-14T12:34:56.789Z" → OffsetDateTime.of(2017, 3, 14, 12, 34, 56, 789_000_000, ZoneOffset.UTC)
+java.time.OffsetTime | "12:34:56.789Z" → OffsetTime.of(12, 34, 56, 789_000_000, ZoneOffset.UTC)
+java.time.Year | "2017" → Year.of(2017)
+java.time.YearMonth | "2017-03" → YearMonth.of(2017, 3)
+java.time.ZonedDateTime | "2017-03-14T12:34:56.789Z" → ZonedDateTime.of(2017, 3, 14, 12, 34, 56, 789_000_000, ZoneOffset.UTC)
+
+
+#### Explicit Conversion
+
+Instead of using implicit argument conversion you may explicitly specify an ArgumentConverter to use for a certain parameter using the @ConvertWith annotation like in the following example.
+除了使用隐式转换参数，你还可以针对一个特定使用了`@ConvertWith`注解的参数显式指定一个`ArgumentConverter`，例如下面代码所示：
+
+```java
+@ParameterizedTest
+@EnumSource(TimeUnit.class)
+void testWithExplicitArgumentConversion(@ConvertWith(ToStringArgumentConverter.class) String argument) {
+    assertNotNull(TimeUnit.valueOf(argument));
+}
+
+static class ToStringArgumentConverter extends SimpleArgumentConverter {
+    @Override
+    protected Object convert(Object source, Class<?> targetType) {
+        assertEquals(String.class, targetType, "Can only convert to String");
+        return String.valueOf(source);
+    }
+}
+```
+
+Explicit argument converters are meant to be implemented by test authors. Thus, junit-jupiter-params only provides a single explicit argument converter that may also serve as a reference implementation: JavaTimeArgumentConverter. It is used via the composed annotation JavaTimeConversionPattern.
+
+显式参数转换器意味着开发人员要自己去实现它。正因为这样，`junit-jupiter-params`仅仅提供了一个显式参数转换器，它还可以被用作引用实现：`JavaTimeArgumentConverter`。你可以通过组合注解`JavaTimeConversionPattern`来使用它。
+
+```java
+@ParameterizedTest
+@ValueSource(strings = { "01.01.2017", "31.12.2017" })
+void testWithExplicitJavaTimeConverter(@JavaTimeConversionPattern("dd.MM.yyyy") LocalDate argument) {
+    assertEquals(2017, argument.getYear());
+}
+```
+
+### 3.13.4. 自定义展示名称
+By default, the display name of a parameterized test invocation contains the invocation index and the String representation of all arguments for that specific invocation. However, you can customize invocation display names via the name attribute of the @ParameterizedTest annotation like in the following example.
+默认情况下，参数化测试执行调用时的展示名称包含了该调用的下标和所有参数的`String`表示形式。然而，你可以通过`@ParameterizedTest`注解的`name`属性来自定义调用的展示名称，如下面代码所示：
+
+```java
+@DisplayName("Display name of container")
+@ParameterizedTest(name = "{index} ==> first=''{0}'', second={1}")
+@CsvSource({ "foo, 1", "bar, 2", "'baz, qux', 3" })
+void testWithCustomDisplayNames(String first, int second) {
+}
+```
+
+使用`ConsoleLauncher`执行上面方法，你会看到类似于下面的输出：
+
+```sh
+Display name of container ✔
+├─ 1 ==> first='foo', second=1 ✔
+├─ 2 ==> first='bar', second=2 ✔
+└─ 3 ==> first='baz, qux', second=3 ✔
+```
+
+The following placeholders are supported within custom display names.
+下标列出了目前所支持用在定制展示名称上占位符：
+
+占位符 | 描述
+:---|:---
+{index} | 当前调用的下标 (1-based)
+{arguments} | 完整的参数列表，以逗号分隔
+{0}, {1}, …​ | 一个独立的参数
+
+### 3.13.5. 生命周期和互操作性
+Each invocation of a parameterized test has the same lifecycle as a regular @Test method. For example, @BeforeEach methods will be executed before each invocation. Similar to Dynamic Tests, invocations will appear one by one in the test tree of an IDE. You may at will mix regular @Test methods and @ParameterizedTest methods within the same test class.
+
+参数化测试的每一次调用拥有跟`@Test`方法相同的生命周期。例如，`@BeforeEach`方法将在每一次调用之前执行。类似于[动态测试]()，调用将一个接一个的出现在IED的测试树上。你可能想在一个测试类中混合使用`@Test`方法和`@ParameterizedTest`方法。
+
+You may use ParameterResolver extensions with @ParameterizedTest methods. However, method parameters that are resolved by argument sources need to come first in the argument list.
+
+你可以在`@ParameterizedTest`方法上使用`ParameterResolver`扩展。然而，被参数源解析的方法参数必须位于参数列表的第一个。
+
+```java
+@ParameterizedTest
+@ValueSource(strings = "foo")
+void testWithRegularParameterResolver(String argument, TestReporter testReporter) {
+    testReporter.publishEntry("argument", argument);
+}
+```
