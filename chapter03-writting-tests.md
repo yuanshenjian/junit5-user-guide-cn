@@ -1135,3 +1135,12 @@ void testWithRegularParameterResolver(String argument, TestReporter testReporter
     testReporter.publishEntry("argument", argument);
 }
 ```
+
+## 3.14. 测试模板
+A @TestTemplate method is not a regular test case but rather a template for test cases. As such, it is designed to be invoked multiple times depending on the number of invocation contexts returned by the registered providers. Thus, it must be used in conjunction with a registered TestTemplateInvocationContextProvider extension. Each invocation of a test template method behaves like the execution of a regular @Test method with full support for the same lifecycle callbacks and extensions. Please refer to Providing Invocation Contexts for Test Templates for usage examples.
+
+`@TestTemplate`方法不是一个常规的实测用例，它是测试用例的模板。这样一来，设计它是用来被多次调用，而这取决于注册提供者返回的调用上下文数量。因此，它必须结合 [TestTemplateInvocationContextProvider](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestTemplateInvocationContextProvider.html) 扩展一起使用。测试模板方法每一次调用类似于常规`@Test`方法的执行，它也全部支持同样的生命周期回调和扩展。关于它的用例请参考 [为测试模板提供调用上下文]()。
+
+
+
+
