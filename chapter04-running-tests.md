@@ -2,7 +2,7 @@
 
 ## 4.1 IDE支持
 
-###4.1.1 IntelliJ IDEA
+### 4.1.1 IntelliJ IDEA
 
 IntelliJ IDEA 从 2016.2 版本开始支持在JUnit平台上运行Java测试。更多的相关细节可以参考[IntelliJ IDEA的相关博客](https://blog.jetbrains.com/idea/2016/08/using-junit-5-in-intellij-idea/)。
 
