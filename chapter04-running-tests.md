@@ -206,4 +206,150 @@ Execution failed for task ':junitPlatformTest'.
 
 > **目前JUnit Gradle插件的限制**
 > 目前所有通过JUnit Gradle插件完成的测试结果都无法被包含在标准生成的的Gradle测试报告中；但是，这些测试结果可以像以往一样，被记录于持续集成的服务器上。通过`reportsDir `插件的属性可以找到报告。
+> 
+
+### 4.2.2. Maven
+为了能够通过`mvn test`运行JUnit 4和 JUnit Jupiter，JUnit团队为Maven Surefire提供了基础的支持保证。项目[`junit5-maven-consumer`](https://github.com/junit-team/junit5-samples/tree/r5.0.0-M4/junit5-maven-consumer)中的`pom.xml`文件展示了如何作为一个开始并使用的其的描述。
+
+```
+...
+<build>
+    <plugins>
+        ...
+        <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>2.19</version>
+            <dependencies>
+                <dependency>
+                    <groupId>org.junit.platform</groupId>
+                    <artifactId>junit-platform-surefire-provider</artifactId>
+                    <version>1.0.0-M4</version>
+                </dependency>
+            </dependencies>
+        </plugin>
+    </plugins>
+</build>
+...
+```
+
+### 配置测试引擎
+为了使 Maven Surefire 能够运行所有的测试，`TestEngine`的实现必须加到运行的路径中。
+
+如下所示演示了以下内容，包括：配置并为JUnit Jupiter的基本测试提供支持，为JUnit Jupiter API配置`test`依赖，为`maven-surefire-plugin`增加JUnit Jupiter的`TestEngine`实现依赖。
+
+```
+...
+<build>
+    <plugins>
+        ...
+        <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>2.19</version>
+            <dependencies>
+                <dependency>
+                    <groupId>org.junit.platform</groupId>
+                    <artifactId>junit-platform-surefire-provider</artifactId>
+                    <version>1.0.0-M4</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.junit.jupiter</groupId>
+                    <artifactId>junit-jupiter-engine</artifactId>
+                    <version>5.0.0-M4</version>
+                </dependency>
+            </dependencies>
+        </plugin>
+    </plugins>
+</build>
+...
+<dependencies>
+    ...
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>5.0.0-M4</version>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
+...
+```
+
+为了使 JUnit Platform Surefire Provider 运行 JUnit4 的基本测试，可以按照如下方法在JUnit4上配置`test`依赖，并增加`maven-surefire-plugin`的JUnit Vintage `TestEngine`实现依赖。
+
+```
+...
+<build>
+    <plugins>
+        ...
+        <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>2.19</version>
+            <dependencies>
+                <dependency>
+                    <groupId>org.junit.platform</groupId>
+                    <artifactId>junit-platform-surefire-provider</artifactId>
+                    <version>1.0.0-M4</version>
+                </dependency>
+                ...
+                <dependency>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                    <version>4.12.0-M4</version>
+                </dependency>
+            </dependencies>
+        </plugin>
+    </plugins>
+</build>
+...
+<dependencies>
+    ...
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.12</version>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
+...
+```
+
+### tag过滤测试
+使用以下结构属性，可以通过 tag 过滤测试方法：
+
+* 为了包含一个 tag，可以使用`groups`或者`includeTags`
+* 为了不包含一个 tag，可以使用`excludedGroups`或者`excludeTags`
+
+```
+...
+<build>
+    <plugins>
+        ...
+        <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>2.19</version>
+            <configuration>
+                <properties>
+                    <includeTags>acceptance</includeTags>
+                    <excludeTags>integration, regression</excludeTags>
+                </properties>
+            </configuration>
+            <dependencies>
+                ...
+            </dependencies>
+        </plugin>
+    </plugins>
+</build>
+...
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
