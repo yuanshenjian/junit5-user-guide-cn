@@ -341,6 +341,133 @@ Execution failed for task ':junitPlatformTest'.
 ...
 ```
 
+## 4.3 运行控制台
+[ConsoleLauncher](http://junit.org/junit5/docs/current/api/org/junit/platform/console/ConsoleLauncher.html)是一个命令行的Java应用程序，它能使得JUnit平台在命令行启动。例如，它可以用来运行 JUnit Vintage 和 JUnit Jupiter 测试，并在命令行输入测试结果。
+
+可运行的 `junit-platform-console-standalone-1.0.0-M4.jar`，包括所有的依赖，已经在 central Maven 库中发布了，路径是[junit-platform-console-standalone](https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/),可以通过以下命令单独[运行](https://docs.oracle.com/javase/tutorial/deployment/jar/run.html)`ConsoleLauncher `
+
+```
+java -jar junit-platform-console-standalone-1.0.0-M4.jar <Options>
+```
+如下所示为一个输出的例子：
+
+```
+├─ JUnit Vintage
+│  ├─ example.JUnit4Tests
+│  │  ├─ standardJUnit4Test ✔
+├─ JUnit Jupiter
+│  ├─ StandardTests
+│  │  ├─ succeedingTest() ✔
+│  │  ├─ skippedTest() ↷ for demonstration purposes
+│  ├─ A special test case
+│  │  ├─ Custom test name containing spaces ✔
+│  │  ├─ ╯°□°）╯ ✔
+│  │  ├─ 😱 ✔
+
+Test run finished after 64 ms
+[         5 containers found      ]
+[         0 containers skipped    ]
+[         5 containers started    ]
+[         0 containers aborted    ]
+[         5 containers successful ]
+[         0 containers failed     ]
+[         6 tests found           ]
+[         1 tests skipped         ]
+[         5 tests started         ]
+[         0 tests aborted         ]
+[         5 tests successful      ]
+[         0 tests failed          ]
+```
+
+> ##### 返回值
+> 如果[ConsoleLauncher](http://junit.org/junit5/docs/current/api/org/junit/platform/console/ConsoleLauncher.html)的返回的状态值为1，则代表有容器或测试运行失败，否则返回0.
+
+### Options
+
+为了最终的发布成功，options经常需要改变。
+
+```
+Option                                        Description
+------                                        -----------
+-h, --help                                    Display help information.
+--disable-ansi-colors                         Disable ANSI colors in output (not
+                                                supported by all terminals).
+--hide-details                                @Deprecated. Use '--details none' instead.
+--details <[none,flat,tree,verbose]>          Select an output details mode for when
+                                                tests are executed. Use one of: [none,
+                                                flat, tree, verbose]. If 'none' is
+                                                selected, then only the summary and test
+                                                failures are shown. (default: tree)
+--details-theme <[ascii,unicode]>             Select an output details tree theme for
+                                                when tests are executed. Use one of:
+                                                [ascii, unicode] (default: unicode)
+--class-path, --classpath, --cp <Path:        Provide additional classpath entries --
+  path1:path2:...>                              for example, for adding engines and
+                                                their dependencies. This option can be
+                                                repeated.
+--reports-dir <Path>                          Enable report output into a specified
+                                                local directory (will be created if it
+                                                does not exist).
+--scan-class-path, --scan-classpath [Path:    Scan all directories on the classpath or
+  path1:path2:...]                              explicit classpath roots. Without
+                                                arguments, only directories on the
+                                                system classpath as well as additional
+                                                classpath entries supplied via -cp
+                                                (directories and JAR files) are scanned.
+                                                Explicit classpath roots that are not on
+                                                the classpath will be silently ignored.
+                                                This option can be repeated.
+-u, --select-uri <URI>                        Select a URI for test discovery. This
+                                                option can be repeated.
+-f, --select-file <String>                    Select a file for test discovery. This
+                                                option can be repeated.
+-d, --select-directory <String>               Select a directory for test discovery.
+                                                This option can be repeated.
+-p, --select-package <String>                 Select a package for test discovery. This
+                                                option can be repeated.
+-c, --select-class <String>                   Select a class for test discovery. This
+                                                option can be repeated.
+-m, --select-method <String>                  Select a method for test discovery. This
+                                                option can be repeated.
+-r, --select-resource <String>                Select a classpath resource for test
+                                                discovery. This option can be repeated.
+-n, --include-classname <String>              Provide a regular expression to include
+                                                only classes whose fully qualified names
+                                                match. To avoid loading classes
+                                                unnecessarily, the default pattern only
+                                                includes class names that end with
+                                                "Test" or "Tests". When this option is
+                                                repeated, all patterns will be combined
+                                                using OR semantics. (default: ^.*Tests?$)
+-N, --exclude-classname <String>              Provide a regular expression to exclude
+                                                those classes whose fully qualified
+                                                names match. When this option is
+                                                repeated, all patterns will be combined
+                                                using OR semantics.
+--include-package <String>                    Provide a package to be included in the
+                                                test run. This option can be repeated.
+--exclude-package <String>                    Provide a package to be excluded from the
+                                                test run. This option can be repeated.
+-t, --include-tag <String>                    Provide a tag to be included in the test
+                                                run. This option can be repeated.
+-T, --exclude-tag <String>                    Provide a tag to be excluded from the test
+                                                run. This option can be repeated.
+-e, --include-engine <String>                 Provide the ID of an engine to be included
+                                                in the test run. This option can be
+                                                repeated.
+-E, --exclude-engine <String>                 Provide the ID of an engine to be excluded
+                                                from the test run. This option can be
+                                                repeated.
+```
+
+
+
+
+
+
+
+
+
 
 
 
