@@ -55,7 +55,7 @@ class MyTestsV2 {
 
 除了[声明式的扩展注册]()支持使用注解完成外，JUnit Jupiter 同样也支持通过Java的`java.util.ServiceLoader` 加载机制完成全局的扩展注册。采用这种类加载机制的自动注册方式，可以在给定的`classpath`下，自动的检测第三方扩展，并完成该扩展的注册。
 
-另外，还可以通过在相关的JAR文件的`/META-INF/services`文件夹下找到`org.junit.jupiter.api.extension.Extension`文件，对于一般的扩展而言，可以在该文件中使用扩展的*fully qualified class*名称，完成扩展的注册。
+另外，还可以通过在相关的JAR文件的`/META-INF/services`文件夹下找到`org.junit.jupiter.api.extension.Extension`文件，对于一般的扩展而言，可以在该文件中使用扩展完整的类名称名称，完成扩展的注册。
 
 ### 使用自动扩展检测
 
@@ -92,7 +92,7 @@ class MyTestsV2 {
 
 ### 句法模式匹配
 
-如果`junit.conditions.deactivate`模式仅由星号（`*`）组成，则所有条件都将被禁用。 否则，该模式将用于匹配每个注册条件的*fully qualified class名称*（*FQCN*）。 模式中的任何点（`.`）将与FQCN中的点（`.`）或美元符号（`$`）匹配。 任何星号（`*`）将与FQCN中的一个或多个字符匹配。 该模式中的所有其他字符将与FQCN一对一匹配。
+如果`junit.conditions.deactivate`模式仅由星号（`*`）组成，则所有条件都将被禁用。 否则，该模式将用于匹配每个注册条件的完整的类名称（*FQCN*）。 模式中的任何点（`.`）将与FQCN中的点（`.`）或美元符号（`$`）匹配。 任何星号（`*`）将与FQCN中的一个或多个字符匹配。 该模式中的所有其他字符将与FQCN一对一匹配。
 
 举例：
 
@@ -224,3 +224,67 @@ public class IgnoreIOExceptionExtension implements TestExecutionExceptionHandler
     }
 }
 ```
+
+### 5.8 为测试模板提供调用上下文
+
+只有当至少有一个[`TestTemplateInvocationContextProvider`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestTemplateInvocationContextProvider.html)被注册后，被[`@TestTemplate`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/TestTemplate.html)标注的方法才能执行。每个provider都必须提供一系列的[`TestTemplateInvocationContext`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestTemplateInvocationContext.html)实例。每个上下文都可以指定自定义显示名称和仅用于下一次调用[`@TestTemplate`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/TestTemplate.html)方法的其他扩展名列表。
+
+以下示例显示了如何编写测试模板以及如何注册和实现[`TestTemplateInvocationContextProvider`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestTemplateInvocationContextProvider.html).
+
+*一个带有附带扩展名的测试模板*
+
+```
+@TestTemplate
+@ExtendWith(MyTestTemplateInvocationContextProvider.class)
+void testTemplate(String parameter) {
+    assertEquals(3, parameter.length());
+}
+
+static class MyTestTemplateInvocationContextProvider implements TestTemplateInvocationContextProvider {
+    @Override
+    public boolean supportsTestTemplate(ExtensionContext context) {
+        return true;
+    }
+
+    @Override
+    public Stream<TestTemplateInvocationContext> provideTestTemplateInvocationContexts(ExtensionContext context) {
+        return Stream.of(invocationContext("foo"), invocationContext("bar"));
+    }
+
+    private TestTemplateInvocationContext invocationContext(String parameter) {
+        return new TestTemplateInvocationContext() {
+            @Override
+            public String getDisplayName(int invocationIndex) {
+                return parameter;
+            }
+
+            @Override
+            public List<Extension> getAdditionalExtensions() {
+                return Collections.singletonList(new ParameterResolver() {
+                    @Override
+                    public boolean supportsParameter(ParameterContext parameterContext,
+                            ExtensionContext extensionContext) {
+                        return parameterContext.getParameter().getType().equals(String.class);
+                    }
+
+                    @Override
+                    public Object resolveParameter(ParameterContext parameterContext,
+                            ExtensionContext extensionContext) {
+                        return parameter;
+                    }
+                });
+            }
+        };
+    }
+}
+```
+
+在这个例子中，测试模板将被调用两次。 调用的显示名称是调用上下文指定的“foo”和“bar”。 每个调用都会注册一个自定义的[`ParameterResolver`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/ParameterResolver.html)，用于解析方法参数。 使用ConsoleLauncher时的输出如下。
+
+```
+└─ testTemplate(String) ✔
+   ├─ foo ✔
+   └─ bar ✔
+```
+
+[`TestTemplateInvocationContextProvider`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestTemplateInvocationContextProvider.html)扩展API主要用于实现不同类型的测试，这些测试依赖于重复调用在不同的上下文中类似于测试的方法 - 例如，使用不同的参数，通过不同的准备测试类实例，或多次调用而不修改上下文。 请参阅使用此扩展点的[重复测试](http://junit.org/junit5/docs/current/user-guide/#writing-tests-repeated-tests)或[参数化测试](http://junit.org/junit5/docs/current/user-guide/#writing-tests-parameterized-tests)的实现来提供其功能。
