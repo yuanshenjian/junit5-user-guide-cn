@@ -288,3 +288,11 @@ static class MyTestTemplateInvocationContextProvider implements TestTemplateInvo
 ```
 
 [`TestTemplateInvocationContextProvider`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestTemplateInvocationContextProvider.html)扩展API主要用于实现不同类型的测试，这些测试依赖于重复调用在不同的上下文中类似于测试的方法 - 例如，使用不同的参数，通过不同的准备测试类实例，或多次调用而不修改上下文。 请参阅使用此扩展点的[重复测试](http://junit.org/junit5/docs/current/user-guide/#writing-tests-repeated-tests)或[参数化测试](http://junit.org/junit5/docs/current/user-guide/#writing-tests-parameterized-tests)的实现来提供其功能。
+
+### 5.9 在扩展中保持状态
+
+通常地，一个扩展实例只能初始化一次。那么问题来了：开发者如何能够在两次调用之间保持扩展的状态？`ExtensionContext`API提供了一个`Store`用来解决这一问题。扩展可以将值保存在Store中，以备之后检索。查看[`TimingExtension`](http://junit.org/junit5/docs/current/user-guide/#extensions-lifecycle-callbacks-timing-extension)可以看到在方法级范围使用`Store`的示例。值得一提的是，在测试执行期间，被存储在一个`ExtensionContext`中的值，在其他的`ExtensionContext`中是不可用的。由于ExtensionContexts可能嵌套，因此内部上下文的范围也可能受到限制。 请参阅相应的Javadoc，了解有关通过[Store](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/ExtensionContext.Store.html)存储和检索值的方法的详细信息。
+
+### 5.10 扩展中支持的工具
+
+ JUnit Platform Commons 人为公开了一个名为[`org.junit.platform.commons.support `](http://junit.org/junit5/docs/current/api/org/junit/platform/commons/support/package-summary.html) 的包，该包包含了用于处理注释，反射和类路径扫描任务的维护实用方法。`TestEngine`和`Extension`的开发者被鼓励去使用这些支持的方法，以便与JUnit Platform的行为保持一致。
