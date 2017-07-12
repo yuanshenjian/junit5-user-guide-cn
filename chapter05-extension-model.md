@@ -73,3 +73,32 @@ class MyTestsV2 {
 
 扩展的继承在测试类中是表现为语义上自顶向下的形式的。也就是说，一个class级别的注册扩展是可以被mothod级的扩展所继承的。而且，每个特定的注册的实现对于给定的上下文而言，无论子扩展，还是其父扩展，都只能被注册一次。因此，任何对扩展的重复注册的尝试都将会被忽略掉。
 
+### 5.3 附加条件测试的执行
+
+[`ExecutionCondition`]()为附加条件的测试及其纲领定义了 `Extension` API。
+
+对每个容器（例如，测试类）评估`ExecutionCondition`，以确定是否应根据提供的`ExtensionContext`执行其包含的所有测试. 类似地，对每个测试评估一个`ExecutionCondition`，以确定是否应该根据提供的`ExtensionContext`执行给定的测试方法。
+
+当多个`ExecutionCondition`扩展被注册，只要其中一个条件没有被满足，那么这个容器或者测试就会失效。由于可能在某个条件被评估到之前，容器就因为另一个失败的条件而失效，因此，没有办法保证每个条件都被评估到。也就是说，对于条件的评估工作等价于“短路或”(符号为`||`)操作。
+
+开发者可以参考[`DisabledCondition`](https://github.com/junit-team/junit5/tree/r5.0.0-M5/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/DisabledCondition.java)和[`@Disable`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Disabled.html)的源码来获取具体的案例。
+
+### 5.3.1 停用条件
+
+有时，在没有明确的附加条件下运行测试集可能更有用。例如，有时开发者可能想要运行一些被标注了`@Disable`的测试，以便观察这些测试是否真的*挂了*。为了完成这些工作，只需提供一个用于junit.conditions.deactivate的关键词配置，以指定当前测试运行的哪些条件应该被停用（即不被评估）。该模式可以作为JVM系统属性提供，也可以作为`LauncherDiscoveryRequest`中的配置参数提供给`Launcher`。
+
+举例而言，停用JUnit的 `@Disable`条件，开发者可以通过在JVM启动时传入系统参数完成：
+`-Djunit.conditions.deactivate=org.junit.*DisabledCondition`
+
+### 句法模式匹配
+
+如果junit.conditions.deactivate模式仅由星号（`*`）组成，则所有条件都将被禁用。 否则，该模式将用于匹配每个注册条件的*fully qualified class名称*（*FQCN*）。 模式中的任何点（`.`）将与FQCN中的点（`.`）或美元符号（`$`）匹配。 任何星号（`*`）将与FQCN中的一个或多个字符匹配。 该模式中的所有其他字符将与FQCN一对一匹配。
+
+举例：
+
+- `*`: 停用所有条件。
+- `org.junit.*`: 停用org.junit基础包及其任何子包下的每个条件。
+- `*.MyCondition`: 停用其简单类名称完全是MyCondition的每个条件。
+- `*System*`: 停用其简单类名称包含`System`的每个条件。
+- `org.example.MyCondition`: 停用FQCN为`org.example.MyCondition`的条件。
+
