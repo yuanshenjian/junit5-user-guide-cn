@@ -296,3 +296,34 @@ static class MyTestTemplateInvocationContextProvider implements TestTemplateInvo
 ### 5.10 扩展中支持的工具
 
  JUnit Platform Commons 人为公开了一个名为[`org.junit.platform.commons.support `](http://junit.org/junit5/docs/current/api/org/junit/platform/commons/support/package-summary.html) 的包，该包包含了用于处理注释，反射和类路径扫描任务的维护实用方法。`TestEngine`和`Extension`的开发者被鼓励去使用这些支持的方法，以便与JUnit Platform的行为保持一致。
+ 
+### 5.11 用户代码和扩展的相对执行顺序
+
+当执行包含一个或多个测试方法的测试类时，除了用户提供的测试和生命周期方法之外，还会调用多个扩展回调。 下图说明了用户提供的代码和扩展代码的相对顺序。
+
+![](http://junit.org/junit5/docs/current/user-guide/images/extensions_lifecycle.png)
+
+*用户代码和扩展代码*
+
+用户提供的测试和生命周期方法以橙色显示，回调代码由蓝色显示。 灰色框表示单个测试方法的执行，并将在测试类中对每个测试方法重复执行。
+
+下表进一步说明了[用户代码和扩展代码]()图中的十二个步骤。
+
+|步骤|接口/注解|描述|
+|:---|:---|:---|
+|1|接口org.junit.jupiter.api.extension.BeforeAllCallback|执行所有容器测试之前执行的扩展代码|
+|2|注解 org.junit.jupiter.api.BeforeAll|执行所有容器测试之前执行的用户代码|
+|3|接口org.junit.jupiter.api.extension.BeforeEachCallback
+|在每次执行测试之前执行的扩展代码|
+|4|注解 org.junit.jupiter.api.BeforeEach|每次执行测试之前执行的用户代码|
+|5|接口 org.junit.jupiter.api.extension.BeforeTestExecutionCallback|在执行测试之前立即执行扩展代码|
+|6|注解org.junit.jupiter.api.Test|用户代码的实际测试方法|
+|7|接口org.junit.jupiter.api.extension.TestExecutionExceptionHandler|用于处理测试期间抛出的异常的扩展代码|
+|8|接口org.junit.jupiter.api.extension.AfterTestExecutionCallback|测试执行后立即执行扩展代码及其相应的异常处理程序
+|
+|9|注解 org.junit.jupiter.api.AfterEach|每次执行测试后执行的用户代码|
+|10|接口 org.junit.jupiter.api.extension.AfterEachCallback|每次执行测试后执行的扩展代码|
+|11|注解org.junit.jupiter.api.AfterAll|执行所有容器测试后执行的用户代码|
+|12|接口org.junit.jupiter.api.extension.AfterAllCallback|执行所有容器测试后执行的扩展代码|
+
+上述情况在最简单的情况下，仅执行实际的测试方法（步骤6）; 所有其他步骤都是可选的，具体包含的步骤将取决于用户代码的存在或相应生命周期回调的扩展支持。 有关各种生命周期回调的更多详细信息，请参阅相应的JavaDoc以获取每个注释和扩展名。
