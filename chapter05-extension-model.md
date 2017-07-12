@@ -176,7 +176,7 @@ public class TimingExtension implements BeforeTestExecutionCallback, AfterTestEx
 
 由于TimingExtensionTests类通过`@ExtendWith`注册了TimingExtension，所以它的测试在执行时会应用计时。
 
-*下面是一个测试类应用了 TimingExample 的示例：
+*下面是一个测试类应用了 TimingExample 的示例：*
 
 ```
 @ExtendWith(TimingExtension.class)
@@ -194,6 +194,7 @@ class TimingExtensionTests {
 
 }
 ```
+
 以下是运行TimingExtensionTests时生成的日志记录的示例。
 
 ```
@@ -201,4 +202,25 @@ INFO: Method [sleep20ms] took 24 ms.
 INFO: Method [sleep50ms] took 53 ms.
 ```
 
+### 5.7 异常处理
 
+[`TestExecutionExceptionHandler`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestExecutionExceptionHandler.html)为扩展定义了异常处理API，可以在执行测试时处理抛出的异常。
+
+下面的例子将展示一个扩展，它将收到的`IOException`重新包装并抛出为其他类型的异常。
+
+*一个异常处理扩展*
+
+```
+public class IgnoreIOExceptionExtension implements TestExecutionExceptionHandler {
+
+    @Override
+    public void handleTestExecutionException(ExtensionContext context, Throwable throwable)
+            throws Throwable {
+
+        if (throwable instanceof IOException) {
+            return;
+        }
+        throw throwable;
+    }
+}
+```
