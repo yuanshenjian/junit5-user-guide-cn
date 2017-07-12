@@ -92,7 +92,7 @@ class MyTestsV2 {
 
 ### 句法模式匹配
 
-如果junit.conditions.deactivate模式仅由星号（`*`）组成，则所有条件都将被禁用。 否则，该模式将用于匹配每个注册条件的*fully qualified class名称*（*FQCN*）。 模式中的任何点（`.`）将与FQCN中的点（`.`）或美元符号（`$`）匹配。 任何星号（`*`）将与FQCN中的一个或多个字符匹配。 该模式中的所有其他字符将与FQCN一对一匹配。
+如果`junit.conditions.deactivate`模式仅由星号（`*`）组成，则所有条件都将被禁用。 否则，该模式将用于匹配每个注册条件的*fully qualified class名称*（*FQCN*）。 模式中的任何点（`.`）将与FQCN中的点（`.`）或美元符号（`$`）匹配。 任何星号（`*`）将与FQCN中的一个或多个字符匹配。 该模式中的所有其他字符将与FQCN一对一匹配。
 
 举例：
 
@@ -115,4 +115,90 @@ class MyTestsV2 {
 [`ParameterResolver`]()定义了用于在运行时动态解析参数的`Extension`API。
 
 如果一个测试构造器或者`@Test`、`@TestFactory`、`@BeforeEach`、`@AfterEach`、`@BeforeAll`或者`@AfterAll`方法接收了一个参数，那么这个参数一定会在运行时被`ParameterResolver `所解析。`ParameterResolver`可以被开发者构建（参考[`TestInfoParameterResolver`]()）或注册。一般而言，参数可能被按照其*名称*、*类型*、*注解*或在任何一种上述方式的组合所解析。具体示例，可以参照[`CustomTypeParameterResolver`](https://github.com/junit-team/junit5/tree/r5.0.0-M5/junit-jupiter-engine/src/test/java/org/junit/jupiter/engine/execution/injection/sample/CustomTypeParameterResolver.java)和[`CustomAnnotationParameterResolver`](https://github.com/junit-team/junit5/tree/r5.0.0-M5/junit-jupiter-engine/src/test/java/org/junit/jupiter/engine/execution/injection/sample/CustomAnnotationParameterResolver.java)的源码。
+
+## 5.6 测试生命周期回调
+
+下列接口定义了用于在测试执行的不同生命周期的时间点完成测试扩展的API。可以参考下一小节的示例，也可以通过官方文档中的[`org.junit.jupiter.api.extension`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/package-summary.html)包，获取每个接口的详细信息。
+
+- [`BeforeAllCallback`]()
+	- [`BeforeEachCallback`]()
+		- [`BeforeTestExecutionCallback`]()
+		- [`AfterTestExecutionCallback
+`]()
+	- [`AfterEachCallback`]()
+- [`AfterAllCallback`]() 
+
+> 实现多种扩展API
+> 扩展开发人员可以选择在单个扩展中实现任意数量的这些接口。参考[`Consult the source code of the SpringExtension for a concrete example.`](https://github.com/spring-projects/spring-framework/tree/master/spring-test/src/main/java/org/springframework/test/context/junit/jupiter/SpringExtension.java)的源代码以获取具体示例。
+
+### 5.6.1 Before和After的测试扩展回调
+
+[`BeforeTestExecutionCallback`]()和[`AfterTestExecutionCallback`]()分别定义了希望添加将在执行测试方法之前和之后立即执行的行为的扩展API。因此，这些回调非常适合于定时，跟踪以及其他类似的用例。如果需要实现在`@BeforeEach`和`@AfterEach`方法下调用的回调，请改用`BeforeEachCallback`和`AfterEachCallback`。
+
+以下示例显示如何使用这些回调来计算和记录测试方法的执行时间。 TimingExtension实现了BeforeTestExecutionCallback和AfterTestExecutionCallback之间测试执行的时间和日志。
+	
+*一个关于测试执行的时间和日志的扩展示例：*
+
+```
+import java.lang.reflect.Method;
+import java.util.logging.Logger;
+
+import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
+import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
+import org.junit.jupiter.api.extension.ExtensionContext.Store;
+
+public class TimingExtension implements BeforeTestExecutionCallback, AfterTestExecutionCallback {
+
+    private static final Logger LOG = Logger.getLogger(TimingExtension.class.getName());
+
+    @Override
+    public void beforeTestExecution(ExtensionContext context) throws Exception {
+        getStore(context).put(context.getTestMethod().get(), System.currentTimeMillis());
+    }
+
+    @Override
+    public void afterTestExecution(ExtensionContext context) throws Exception {
+        Method testMethod = context.getTestMethod().get();
+        long start = getStore(context).remove(testMethod, long.class);
+        long duration = System.currentTimeMillis() - start;
+
+        LOG.info(() -> String.format("Method [%s] took %s ms.", testMethod.getName(), duration));
+    }
+
+    private Store getStore(ExtensionContext context) {
+        return context.getStore(Namespace.create(getClass(), context));
+    }
+
+}
+```
+
+由于TimingExtensionTests类通过`@ExtendWith`注册了TimingExtension，所以它的测试在执行时会应用计时。
+
+*下面是一个测试类应用了 TimingExample 的示例：
+
+```
+@ExtendWith(TimingExtension.class)
+class TimingExtensionTests {
+
+    @Test
+    void sleep20ms() throws Exception {
+        Thread.sleep(20);
+    }
+
+    @Test
+    void sleep50ms() throws Exception {
+        Thread.sleep(50);
+    }
+
+}
+```
+以下是运行TimingExtensionTests时生成的日志记录的示例。
+
+```
+INFO: Method [sleep20ms] took 24 ms.
+INFO: Method [sleep50ms] took 53 ms.
+```
+
 
