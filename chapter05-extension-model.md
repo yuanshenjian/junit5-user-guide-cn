@@ -313,8 +313,7 @@ static class MyTestTemplateInvocationContextProvider implements TestTemplateInvo
 |:---|:---|:---|
 |1|接口org.junit.jupiter.api.extension.BeforeAllCallback|执行所有容器测试之前执行的扩展代码|
 |2|注解 org.junit.jupiter.api.BeforeAll|执行所有容器测试之前执行的用户代码|
-|3|接口org.junit.jupiter.api.extension.BeforeEachCallback
-|在每次执行测试之前执行的扩展代码|
+|3|接口org.junit.jupiter.api.extension.BeforeEachCallback|在每次执行测试之前执行的扩展代码|
 |4|注解 org.junit.jupiter.api.BeforeEach|每次执行测试之前执行的用户代码|
 |5|接口 org.junit.jupiter.api.extension.BeforeTestExecutionCallback|在执行测试之前立即执行扩展代码|
 |6|注解org.junit.jupiter.api.Test|用户代码的实际测试方法|
