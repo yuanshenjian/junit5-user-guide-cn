@@ -4,12 +4,15 @@
 然而，JUnit通过*JUnit Vintage测试引擎*提供了一个平缓的迁移路径，该引擎能够允许那些基于JUnit3和JUnit4的已存在测试可以在JUnit平台下执行。由于JUnit Jupiter所有类和注解的规范存在于`org.junit.jupiter`基础包中，JUnit4和JUnit Jupiter的测试同时存在类路径中就不会产生冲突了。因此，维护已存在的JUnit4测试和JUnit Jupiter测试是安全的。除此之外，JUnit团队会继续为JUnit4.x基线提供维护和bug修复的版本发布，所以开发人员将有大量的时间可以按照自己的进程去完成到JUnit Jupiter的迁移。
 
 
-## 6.1. Running JUnit 4 Tests on the JUnit Platform
+## 6.1. 在JUnit Platform上运行JUnit4测试
 Just make sure that the junit-vintage-engine artifact is in your test runtime path. In that case JUnit 3 and JUnit 4 tests will automatically be picked up by the JUnit Platform launcher.
+只要确保`junit-vintage-engine`包存在于你的测试运行时路径下。这样一来，基于JUnit3和JUnit4的测试将自动被JUnit Platform加载器加载。
 
-See the example projects in the junit5-samples repository to find out how this is done with Gradle and Maven.
+具体如何实现，可以参考 [junit5-samples](https://github.com/junit-team/junit5-samples) 仓库中那些以Gradle和Maven来实现的样例工程。
 
-## 6.2. Migration Tips
+
+## 6.2. 迁移技巧
+
 The following are things you have to watch out for when migrating existing JUnit 4 tests to JUnit Jupiter.
 
 Annotations reside in the org.junit.jupiter.api package.
