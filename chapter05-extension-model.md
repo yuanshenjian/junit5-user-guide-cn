@@ -73,7 +73,7 @@ class MyTestsV2 {
 
 扩展的继承在测试类中是表现为语义上自顶向下的形式的。也就是说，一个class级别的注册扩展是可以被mothod级的扩展所继承的。而且，每个特定的注册的实现对于给定的上下文而言，无论子扩展，还是其父扩展，都只能被注册一次。因此，任何对扩展的重复注册的尝试都将会被忽略掉。
 
-### 5.3 附加条件测试的执行
+## 5.3 附加条件测试的执行
 
 [`ExecutionCondition`]()为附加条件的测试及其纲领定义了 `Extension` API。
 
@@ -101,4 +101,18 @@ class MyTestsV2 {
 - `*.MyCondition`: 停用其简单类名称完全是MyCondition的每个条件。
 - `*System*`: 停用其简单类名称包含`System`的每个条件。
 - `org.example.MyCondition`: 停用FQCN为`org.example.MyCondition`的条件。
+
+## 5.4 测试实例的后期处理
+
+[`TestInstancePostProcessor`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestInstancePostProcessor.html) 定义需要后期处理的`Extensions`API。
+
+通常的用例包括注入依赖到测试实例中，在测试实例中调用自定义的初始化方法等。
+
+对于具体事例，可以参考[`MockitoExtension`]()和[`SpringExtension`]()的源代码.
+
+## 5.5 参数解析
+
+[`ParameterResolver`]()定义了用于在运行时动态解析参数的`Extension`API。
+
+如果一个测试构造器或者`@Test`、`@TestFactory`、`@BeforeEach`、`@AfterEach`、`@BeforeAll`或者`@AfterAll`方法接收了一个参数，那么这个参数一定会在运行时被`ParameterResolver `所解析。`ParameterResolver`可以被开发者构建（参考[`TestInfoParameterResolver`]()）或注册。一般而言，参数可能被按照其*名称*、*类型*、*注解*或在任何一种上述方式的组合所解析。具体示例，可以参照[`CustomTypeParameterResolver`](https://github.com/junit-team/junit5/tree/r5.0.0-M5/junit-jupiter-engine/src/test/java/org/junit/jupiter/engine/execution/injection/sample/CustomTypeParameterResolver.java)和[`CustomAnnotationParameterResolver`](https://github.com/junit-team/junit5/tree/r5.0.0-M5/junit-jupiter-engine/src/test/java/org/junit/jupiter/engine/execution/injection/sample/CustomAnnotationParameterResolver.java)的源码。
 
