@@ -12,29 +12,28 @@ Just make sure that the junit-vintage-engine artifact is in your test runtime pa
 
 
 ## 6.2. 迁移技巧
+以下是当你在将现存的JUnit4测试迁移到JUnit Jupiter上的时候要注意的东西：
 
-The following are things you have to watch out for when migrating existing JUnit 4 tests to JUnit Jupiter.
+* `org.junit.jupiter.api`包中的注解。
 
-Annotations reside in the org.junit.jupiter.api package.
+* `org.junit.jupiter.api.Assertions`类中的断言。
 
-Assertions reside in org.junit.jupiter.api.Assertions.
+* `org.junit.jupiter.api.Assumptions`类中的假设。
 
-Assumptions reside in org.junit.jupiter.api.Assumptions.
+* `@Before` 和 `@After` 已经不存在; 取而代之的是`@BeforeEach` 和 `@AfterEach`。
 
-@Before and @After no longer exist; use @BeforeEach and @AfterEach instead.
+* `@BeforeClass` 和 `@AfterClass` 已经不存在; 取而代之的是 `@BeforeAll` 和 `@AfterAll`。
 
-@BeforeClass and @AfterClass no longer exist; use @BeforeAll and @AfterAll instead.
+* `@Ignore` 已经不存在: 取而代之的是`@Disabled`。
+* `@Category` 已经不存在: 取而代之的是`@Tag`。
+* `@RunWith` 已经不存在: 取而代之的是`@ExtendWith`。
+* `@Rule` 和 `@ClassRule` 已经不存在; 取而代之的是`@ExtendWith`; 请参阅后续章节关于对JUnit规则的有限支持。
 
-@Ignore no longer exists: use @Disabled instead.
-
-@Category no longer exists; use @Tag instead.
-
-@RunWith no longer exists; superseded by @ExtendWith.
-
-@Rule and @ClassRule no longer exist; superseded by @ExtendWith; see the following section for partial rule support.
-
-## 6.3. Limited JUnit 4 Rule Support
+## 6.3. 对JUnit4规则的有限支持
 As stated above, JUnit Jupiter does not and will not support JUnit 4 rules natively. The JUnit team realizes, however, that many organizations, especially large ones, are likely to have large JUnit 4 codebases including custom rules. To serve these organizations and enable a gradual migration path the JUnit team has decided to support a selection of JUnit 4 rules verbatim within JUnit Jupiter. This support is based on adapters and is limited to those rules that are semantically compatible to the JUnit Jupiter extension model, i.e. those that do not completely change the overall execution flow of the test.
+
+如上一章节所述，JUnit Jupiter不再原生支持JUnit4的规则。然而，JUnit团队意识到一点，很多组织，尤其是一些大组织，很可能已经拥用一个包含了自定义规则且很庞大的JUnit4代码库。为了给这些组织提供服务，并提供一个平缓的迁移路线，JUnit团队已经决定在JUnit Jupiter中逐步地支持JUnit4中的规则。
+
 
 JUnit Jupiter currently supports the following three Rule types including subclasses of those types:
 
