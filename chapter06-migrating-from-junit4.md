@@ -32,19 +32,23 @@ Just make sure that the junit-vintage-engine artifact is in your test runtime pa
 ## 6.3. 对JUnit4规则的有限支持
 As stated above, JUnit Jupiter does not and will not support JUnit 4 rules natively. The JUnit team realizes, however, that many organizations, especially large ones, are likely to have large JUnit 4 codebases including custom rules. To serve these organizations and enable a gradual migration path the JUnit team has decided to support a selection of JUnit 4 rules verbatim within JUnit Jupiter. This support is based on adapters and is limited to those rules that are semantically compatible to the JUnit Jupiter extension model, i.e. those that do not completely change the overall execution flow of the test.
 
-如上一章节所述，JUnit Jupiter不再原生支持JUnit4的规则。然而，JUnit团队意识到一点，很多组织，尤其是一些大组织，很可能已经拥用一个包含了自定义规则且很庞大的JUnit4代码库。为了给这些组织提供服务，并提供一个平缓的迁移路线，JUnit团队已经决定在JUnit Jupiter中逐步地支持JUnit4中的规则。
+如上一章节所述，JUnit Jupiter不再原生支持JUnit4的规则。然而，JUnit团队意识到一点，很多组织，尤其是一些大组织，很可能已经拥用一个包含了自定义规则且很庞大的JUnit4代码库。为了给这些组织提供服务，并提供一个平缓的迁移路线，JUnit团队已经决定在JUnit Jupiter中逐步地支持JUnit4中的规则。这些支持是基于适配器的，并且仅限于那些语义上兼容JUnit Jupiter扩展模型的规则，即那些不会完全改变整个执行流的测试：
 
 
 JUnit Jupiter currently supports the following three Rule types including subclasses of those types:
+JUnit Jupiter 目前支持一下三种规则类型以及它们的子类：
 
-org.junit.rules.ExternalResource (including org.junit.rules.TemporaryFolder)
+* `org.junit.rules.ExternalResource` (包含 `org.junit.rules.TemporaryFolder`)
 
-org.junit.rules.Verifier (including org.junit.rules.ErrorCollector)
+* `org.junit.rules.Verifier` (包含`org.junit.rules.ErrorCollector`)
 
-org.junit.rules.ExpectedException
+* `org.junit.rules.ExpectedException`
 
 As in JUnit 4, Rule-annotated fields as well as methods are supported. By using these class-level extensions on a test class such Rule implementations in legacy codebases can be left unchanged including the JUnit 4 rule import statements.
 
-This limited form of Rule support can be switched on by the class-level annotation org.junit.jupiter.migrationsupport.rules.EnableRuleMigrationSupport. This annotation is a composed annotation which enables all migration support extensions: VerifierSupport, ExternalResourceSupport, and ExpectedExceptionSupport.
+因为在JUnit4中，规则注解的字段跟方法一样是被支持的。通过在测试类使用这些类级别的扩展，这种在遗留代码库中规则实现*可以继续保留下来*，其中还包括JUnit4规则import语句。
 
-However, if you intend to develop a new extension for JUnit 5 please use the new extension model of JUnit Jupiter instead of the rule-based model of JUnit 4.
+这种有限形式的规则支持通过类级别的注解`org.junit.jupiter.migrationsupport.rules.EnableRuleMigrationSupport`来开启。该注解是一个组合注解，它会开启所有支持迁移的扩展：`VerifierSupport`、`ExternalResourceSupport` 和 `ExpectedExceptionSupport`
+
+然而，如果你想开发一个新的JUnit5扩展，请使用JUnit Jupiter中新的扩展模型，而不要去使用JUnit4中基于规则的模型。
+
