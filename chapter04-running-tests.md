@@ -460,6 +460,27 @@ Option                                        Description
                                                 repeated.
 ```
 
+## 4.4 使用JUnit4运行JUnit Platform
+`JunitPlatform`是一个基于JUnit4的运行器，它可以运行任何在JUnit4环境中使用JUnit Platform编写的程序，例如，JUnit Jupiter测试类。
+
+对一个类使用`@RunWith(JUnitPlatform.class)`注释，就可以使支持JUnit4但是还不支持JUnit Platform的程序直接在IDE中编译并运行。
+
+> 由于JUnit Platform的一些功能JUnit4没有，运行器只能部分支持JUnit Platform的功能，尤其针对报告中的一些内容（见[Display Names vs. Technical Names](http://junit.org/junit5/docs/current/user-guide/#running-tests-junit-platform-runner-technical-names)）但对于刚开始启动`JUnitPlatform`运行器，还是比较容易的。
+
+### 4.4.1 启动
+可以在项目的路径中设置artifacts和其相关依赖，可以在[依赖元数据](http://junit.org/junit5/docs/current/user-guide/#dependency-metadata)中查看关于group ID, artifact ID 和版本的细节问题。
+
+### 详细依赖
+* `junit-4.12.jar` 在测试范围内：使用JUnit4运行测试
+* `junit-platform-runner` 在测试范围内：定位于`JUnitPlatform`运行器
+* `junit-jupiter-api`在测试范围内：使用API编写测试用力，包括`@Test`等
+* `junit-jupiter-engine`在测试运行范围内：为JUnit Jupiter实现Engine的API方法
+
+### 传递依赖关系
+* `junit-platform-launcher` 在测试范围内
+*  `junit-platform-engine` 在测试范围内
+*  `junit-platform-commons` 在测试范围内
+*  `opentest4j` 在测试范围内
 
 
 
