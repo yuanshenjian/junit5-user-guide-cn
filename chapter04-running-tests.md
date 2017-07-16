@@ -465,7 +465,7 @@ Option                                        Description
 
 对一个类使用`@RunWith(JUnitPlatform.class)`注释，就可以使支持JUnit4但是还不支持JUnit Platform的程序直接在IDE中编译并运行。
 
-> 由于JUnit Platform的一些功能JUnit4没有，运行器只能部分支持JUnit Platform的功能，尤其针对报告中的一些内容（见[Display Names vs. Technical Names](http://junit.org/junit5/docs/current/user-guide/#running-tests-junit-platform-runner-technical-names)）但对于刚开始启动`JUnitPlatform`运行器，还是比较容易的。
+> 由于JUnit Platform的一些功能JUnit4没有，运行器只能部分支持JUnit Platform的功能，尤其针对报告中的一些内容（见[命名显示 vs 科学命名](http://junit.org/junit5/docs/current/user-guide/#running-tests-junit-platform-runner-technical-names)）但对于刚开始启动`JUnitPlatform`运行器，还是比较容易的。
 
 ### 4.4.1 启动
 可以在项目的路径中设置artifacts和其相关依赖，可以在[依赖元数据](http://junit.org/junit5/docs/current/user-guide/#dependency-metadata)中查看关于group ID, artifact ID 和版本的细节问题。
@@ -483,7 +483,8 @@ Option                                        Description
 *  `opentest4j` 在测试范围内
 
 
-
+### 4.4.2 命名显示 vs 科学命名
+默认情况下，命名会被使用在test artifacts上，但是当`JUnitPlatform`运行器使用Gradle或者Maven等编译工具来运行测试，生成的测试报告需要使用test artifacts的科学命名方式，例如，使用完整类名，而不是使用缩写类名，或者自定义的包含特殊字符的类名。为了达到测试报告的科学命名，可以在`@RunWith(JUnitPlatform.class)`注释旁边简单的声明`@UseTechnicalNames`注释。
 
 
 
