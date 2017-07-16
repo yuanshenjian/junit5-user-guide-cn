@@ -513,11 +513,24 @@ public class JUnit4ClassDemo {
 }
 ```
 
+### 4.4.4 测试套件
+如果有多个测试类，可以通过创建测试套件完成测试，如下例子所示：
 
+```
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.platform.suite.api.SelectPackages;
+import org.junit.runner.RunWith;
 
+@RunWith(JUnitPlatform.class)
+@SelectPackages("example")
+public class JUnit4SuiteDemo {
+}
+```
 
+`JUnit4SuiteDemo`类会寻找并运行所有在`example`包及其子包下的测试。默认情况下，它只包含名字符合正则表达式的`^.*Tests?$`测试类。
 
-
+>### 附加配置选项
+> 注释 `@SelectPackages`可以用来额外配置更多的选项，用来寻找和过滤测试。更多相关介绍见[Javadoc](http://junit.org/junit5/docs/current/api/org/junit/platform/suite/api/package-summary.html).
 
 
 
