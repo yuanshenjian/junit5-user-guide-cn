@@ -487,6 +487,31 @@ Option                                        Description
 默认情况下，命名会被使用在test artifacts上，但是当`JUnitPlatform`运行器使用Gradle或者Maven等编译工具来运行测试，生成的测试报告需要使用test artifacts的科学命名方式，例如，使用完整类名，而不是使用缩写类名，或者自定义的包含特殊字符的类名。为了达到测试报告的科学命名，可以在`@RunWith(JUnitPlatform.class)`注释旁边简单的声明`@UseTechnicalNames`注释。
 
 
+### 4.4.3 Single测试类
+使用`JUnitPlatform`运行器的方法之一是，直接用`@RunWith(JUnitPlatform.class)`注释测试类，注意下面例子中的测试类的注释使用`org.junit.jupiter.api.Test`（JUnit Jupiter）,而不是`org.junit.Test`(JUnit Vintage)。同时，这个类中的测试用例必须是`public`，否则，IDE不能将其识别为JUnit4的测试类。
+
+```
+import static org.junit.jupiter.api.Assertions.fail;
+
+import org.junit.jupiter.api.Test;
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.runner.RunWith;
+
+@RunWith(JUnitPlatform.class)
+public class JUnit4ClassDemo {
+
+    @Test
+    void succeedingTest() {
+        /* no-op */
+    }
+
+    @Test
+    void failingTest() {
+        fail("Failing for failing's sake.");
+    }
+
+}
+```
 
 
 
