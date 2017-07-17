@@ -32,10 +32,9 @@ Just make sure that the junit-vintage-engine artifact is in your test runtime pa
 ## 6.3. 对JUnit4规则的有限支持
 As stated above, JUnit Jupiter does not and will not support JUnit 4 rules natively. The JUnit team realizes, however, that many organizations, especially large ones, are likely to have large JUnit 4 codebases including custom rules. To serve these organizations and enable a gradual migration path the JUnit team has decided to support a selection of JUnit 4 rules verbatim within JUnit Jupiter. This support is based on adapters and is limited to those rules that are semantically compatible to the JUnit Jupiter extension model, i.e. those that do not completely change the overall execution flow of the test.
 
-如上一章节所述，JUnit Jupiter不再原生支持JUnit4的规则。然而，JUnit团队意识到一点，很多组织，尤其是一些大组织，很可能已经拥用一个包含了自定义规则且很庞大的JUnit4代码库。为了给这些组织提供服务，并提供一个平缓的迁移路线，JUnit团队已经决定在JUnit Jupiter中逐步地支持JUnit4中的规则。这些支持是基于适配器的，并且仅限于那些语义上兼容JUnit Jupiter扩展模型的规则，即那些不会完全改变整个执行流的测试：
+如上一章节所述，JUnit Jupiter不再原生支持JUnit4的规则。然而，JUnit团队意识到一点：很多组织，尤其是一些大组织，很可能已经拥用一个包含了自定义规则且很庞大的JUnit4代码库。为了给这些组织提供服务，并提供一个平缓的迁移路线，JUnit团队已经决定在JUnit Jupiter中逐步地支持JUnit4中的规则。这些支持是基于适配器的，并且仅限于那些语义上兼容JUnit Jupiter扩展模型的规则，即那些不会完全改变整个执行流的测试：
 
 
-JUnit Jupiter currently supports the following three Rule types including subclasses of those types:
 JUnit Jupiter 目前支持一下三种规则类型以及它们的子类：
 
 * `org.junit.rules.ExternalResource` (包含 `org.junit.rules.TemporaryFolder`)
