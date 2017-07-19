@@ -6,6 +6,50 @@
 
 IntelliJ IDEA 从 2016.2 版本开始支持在JUnit平台上运行Java测试。更多的相关细节可以参考[IntelliJ IDEA的相关博客](https://blog.jetbrains.com/idea/2016/08/using-junit-5-in-intellij-idea/)。
 
+###### 表格1. Junit5 版本对应的 IntelliJ IDEA
+ **IntelliJ IDEA Version** | **Bundled JUnit5 Version**
+ --------|---------
+ 2016.2 | M2
+ 2016.3.1 | M3
+ 2017.1.2 | M4
+ 
+ > IntelliJ IDEA 绑定了 JUnit5的一个特定版本，也就是说，如果想使用Jupiter API的 newer milestone版本，并运行测试，可能会失败。直到JUnit5的GA版本发布，这种情况才会有所改善，在这之前，可以在IntelliJ IDEA中按照下面所示的方法使用JUnit5的newer版本。
+ 
+为了能够使用JUnit5的不同版本，需要在classpath中手动添加`junit-platform-launcher`,`junit-jupiter-engine`,`junit-vintage-engine`的JARs文件。
+
+###### *添加Gradle依赖*
+```
+// Only needed to run tests in an IntelliJ IDEA that bundles an older version
+testRuntime("org.junit.platform:junit-platform-launcher:1.0.0-M5")
+testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.0-M5")
+testRuntime("org.junit.vintage:junit-vintage-engine:4.12.0-M5")
+```
+
+###### *添加Maven依赖*
+```
+<!-- Only required to run tests in an IntelliJ IDEA that bundles an older version -->
+<dependency>
+    <groupId>org.junit.platform</groupId>
+    <artifactId>junit-platform-launcher</artifactId>
+    <version>1.0.0-M5</version>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter-engine</artifactId>
+    <version>5.0.0-M5</version>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.junit.vintage</groupId>
+    <artifactId>junit-vintage-engine</artifactId>
+    <version>4.12.0-M5</version>
+    <scope>test</scope>
+</dependency>
+```
+
+
+ 
 ### 4.1.2 Eclipse 测试版支持
 
 Eclipse 4.7（Oxygen）的测试版支持JUnit平台和Junit Jupiter。而关于如何让 JUnit 5 在Eclipse上运行起来，可以参考[Eclipse JDT UI/JUnit 5](https://wiki.eclipse.org/JDT_UI/JUnit_5)的wiki页面。
