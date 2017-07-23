@@ -509,34 +509,34 @@ Option                                        Description
 ```
 
 ## 4.4 使用JUnit4运行JUnit Platform
-`JunitPlatform`是一个基于JUnit4的运行器，它可以运行任何在JUnit4环境中使用JUnit Platform编写的程序，例如，JUnit Jupiter测试类。
+`JunitPlatform`运行器是一个基于JUnit4的`Runner`，它可以运行任何在JUnit Platform上以JUnint4环境所支持的编程模型的测试，例如，JUnit Jupiter测试类。
 
-对一个类使用`@RunWith(JUnitPlatform.class)`注释，就可以使支持JUnit4但是还不支持JUnit Platform的程序直接在IDE中编译并运行。
+如果某个类上标注了`@RunWith(JUnitPlatform.class)`注解，它就可以在那些支持JUnit4但是还不支持JUnit Platform 的IDE和构建系统中上直接运行。
 
-> 由于JUnit Platform的一些功能JUnit4没有，运行器只能部分支持JUnit Platform的功能，尤其针对报告中的一些内容（见[命名显示 vs 科学命名](http://junit.org/junit5/docs/current/user-guide/#running-tests-junit-platform-runner-technical-names)）但对于刚开始启动`JUnitPlatform`运行器，还是比较容易的。
+> 由于JUnit Platform具备一些JUnit4不具备的功能，运行器只能部分支持JUnit Platform的功能，尤其针对报告中的一些内容（见[命名显示 vs 科学命名](http://junit.org/junit5/docs/current/user-guide/#running-tests-junit-platform-runner-technical-names)）。但是就目前来说，`JUnitPlatform`运行器是一个开启学习的简单方式。
 
-### 4.4.1 启动
-可以在项目的路径中设置artifacts和其相关依赖，可以在[依赖元数据](http://junit.org/junit5/docs/current/user-guide/#dependency-metadata)中查看关于group ID, artifact ID 和版本的细节问题。
+### 4.4.1 设置
+你需要在类路径中添加以下的组件和它们的依赖。可以在[依赖元数据](http://junit.org/junit5/docs/current/user-guide/#dependency-metadata)中查看关于group ID, artifact ID 和版本的细节信息。
 
-### 显示依赖
-* `junit-4.12.jar` 在测试范围内：使用JUnit4运行测试
-* `junit-platform-runner` 在测试范围内：定位于`JUnitPlatform`运行器
-* `junit-jupiter-api`在测试范围内：使用API编写测试用力，包括`@Test`等
-* `junit-jupiter-engine`在测试运行范围内：为JUnit Jupiter实现Engine的API方法
+### 显式依赖
+* `junit-4.12.jar` 在*test*范围内：使用JUnit4运行测试
+* `junit-platform-runner` 在*test*范围内：`JUnitPlatform`运行器的位置
+* `junit-jupiter-api`在*test*范围内：使用API编写测试，包括`@Test`等
+* `junit-jupiter-engine`在*test*运行范围内：为JUnit Jupiter实现Engine的API方法
 
-### 传递依赖关系
-* `junit-platform-launcher` 在测试范围内
-*  `junit-platform-engine` 在测试范围内
-*  `junit-platform-commons` 在测试范围内
-*  `opentest4j` 在测试范围内
+### 传递的依赖
+* `junit-platform-launcher` 在*test*范围内
+*  `junit-platform-engine` 在*test*范围内
+*  `junit-platform-commons` 在*test*范围内
+*  `opentest4j` 在*test*范围内
 
 
-### 4.4.2 命名显示 vs 科学命名
-默认情况下，命名会被使用在test artifacts上，但是当`JUnitPlatform`运行器使用Gradle或者Maven等编译工具来运行测试，生成的测试报告需要使用test artifacts的科学命名方式，例如，使用完整类名，而不是使用缩写类名，或者自定义的包含特殊字符的类名。为了达到测试报告的科学命名，可以在`@RunWith(JUnitPlatform.class)`注释旁边简单的声明`@UseTechnicalNames`注释。
+### 4.4.2 展示名称 vs 技术名称
+默认情况下，*展示名称*会被使用在测试产出物上，但是当`JUnitPlatform`运行器使用Gradle或者Maven等编译工具来运行测试时，生成的测试报告需要使用测试产出物的*技术名称*，例如，使用完整类名，而不是使用简写类名，或者自定义的包含特殊字符的展示名称。为了在测试报告中使用技术名称，在`@RunWith(JUnitPlatform.class)`注解旁边声明`@UseTechnicalNames`注解即可。
 
 
 ### 4.4.3 Single测试类
-使用`JUnitPlatform`运行器的方法之一是，直接用`@RunWith(JUnitPlatform.class)`注释测试类，注意下面例子中的测试类的注释使用`org.junit.jupiter.api.Test`（JUnit Jupiter）,而不是`org.junit.Test`(JUnit Vintage)。同时，这个类中的测试用例必须是`public`，否则，IDE不能将其识别为JUnit4的测试类。
+使用`JUnitPlatform`运行器的方式之一是直接在测试类上添加`@RunWith(JUnitPlatform.class)`注解。注意下面例子中的测试方法使用的是`org.junit.jupiter.api.Test`（JUnit Jupiter）,而不是`org.junit.Test`(JUnit Vintage)。同时，这个类中的测试用例必须是`public`，否则，IDE不能将其识别为JUnit4的测试类。
 
 ```
 import static org.junit.jupiter.api.Assertions.fail;
@@ -575,10 +575,10 @@ public class JUnit4SuiteDemo {
 }
 ```
 
-`JUnit4SuiteDemo`类会寻找并运行所有在`example`包及其子包下的测试。默认情况下，它只包含名字符合正则表达式的`^.*Tests?$`测试类。
+`JUnit4SuiteDemo`类会寻找并运行所有在`example`包及其子包下的测试。默认情况下，它只包含类名符合正则表达式`^.*Tests?$`的测试类。
 
 >### 附加配置选项
-> 注释 `@SelectPackages`可以用来额外配置更多的选项，用来寻找和过滤测试。更多相关介绍见[Javadoc](http://junit.org/junit5/docs/current/api/org/junit/platform/suite/api/package-summary.html).
+> 相比于值使用`@SelectPackages`注解，还有很多配置选项可以用来寻找和过滤测试。详细内容参考[Javadoc](http://junit.org/junit5/docs/current/api/org/junit/platform/suite/api/package-summary.html).
 
 
 
