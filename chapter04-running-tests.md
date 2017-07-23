@@ -13,9 +13,9 @@ IntelliJ IDEA 从 2016.2 版本开始支持在JUnit平台上运行Java测试。�
  2016.3.1 | M3
  2017.1.2 | M4
  
- > IntelliJ IDEA 绑定了 JUnit5的一个特定版本，也就是说，如果想使用Jupiter API的 newer milestone版本，并运行测试，可能会失败。直到JUnit5的GA版本发布，这种情况才会有所改善，在这之前，可以在IntelliJ IDEA中按照下面所示的方法使用JUnit5的newer版本。
+ > IntelliJ IDEA 绑定了 JUnit5的一个特定版本，也就是说，如果你想使用Jupiter API新的里程碑版本，可能在运行测试的时候会失败。直到JUnit5的GA版本发布，这种情况才有所改善。在这之前，你可以在IntelliJ IDEA中按照下面所示的方法使用JUnit5的新版本。
  
-为了能够使用JUnit5的不同版本，需要在classpath中手动添加`junit-platform-launcher`,`junit-jupiter-engine`,`junit-vintage-engine`的JARs文件。
+为了能够使用JUnit5的不同版本，你需要在classpath中手动添加`junit-platform-launcher`,`junit-jupiter-engine`,`junit-vintage-engine`的JARs文件。
 
 ###### *添加Gradle依赖*
 ```
@@ -62,11 +62,11 @@ Eclipse 4.7（Oxygen）的测试版支持JUnit平台和Junit Jupiter。而关于
 
 ### 4.2.1 Gradle
 
-JUnit 开发团队已经开发了一款基于Gradle的Junit 5 插件，它可以让使用者运行任何一种已经被支持的`TestEngine`（例如：JUnit 3、JUnit 4、JUnit Jupiter以及[Specsy](http://specsy.org/)等）。可以通过查看[`junit5-gradle-consumer`](https://github.com/junit-team/junit5-samples/tree/r5.0.0-M4/junit5-gradle-consumer)中的`build.gradle`文件，将其作为一个使用插件的例子学习。
+JUnit 开发团队已经开发了一款基于Gradle的Junit 5 插件，它可以让使用者运行任何一种已经被支持的`TestEngine`（例如：JUnit 3、JUnit 4、JUnit Jupiter以及[Specsy](http://specsy.org/)等）。可以通过查看[`junit5-gradle-consumer`](https://github.com/junit-team/junit5-samples/tree/r5.0.0-M4/junit5-gradle-consumer)项目中的`build.gradle`文件，将其作为一个使用插件的例子学习。
 
 ### 使用JUnit Gradle插件
 
-要想使用 JUnit Gradle 插件，开发者首先需要确认当前的 Gradle 版本是2.5或更高。只要确认无误，就可以按以下模板配置项目中的`build.gradle`文件了。
+要使用 JUnit Gradle 插件，确保你使用的Gradle版本是2.5或更高以后，就可以按以下模板配置项目中的`build.gradle`文件了。
 
 ```
 buildscript {
@@ -85,9 +85,9 @@ apply plugin: 'org.junit.platform.gradle.plugin'
 
 ### 配置 JUnit Gradle 插件
 
-只要 JUnit Gradle 插件被使用，开发者就可以按照如下方式进行配置。
+一旦应用了 JUnit Gradle 插件，开发者就可以按照如下方式进行配置。
 
->这里配置的的选项在开发工作的过程中，很有可能是需要不断变更的。
+>这里配置的的选项在开发的过程中，很有可能是需要不断变更的。
 
 ```
 junitPlatform {
@@ -100,9 +100,9 @@ junitPlatform {
 }
 ```
 
-设置`logManager`可以使得JUnit Gradle 插件去设置`java.util.logging.manager`的系统参数以便确保使用`java.util.logging.LogManager`的实现的*fully qualified class*名称。如上述例子就展示了如何将log4j配置为`LogManager`。
+设置`logManager`可以让JUnit Gradle 插件去设置`java.util.logging.manager`的系统参数，但要使用`java.util.logging.LogManager`的全类名。如上述例子就展示了如何将log4j配置为`LogManager`。
 
-JUnit Gradle 插件在默认情况下是无法使用标准的 Gradle task 指令`test`的，但是可以通过重写`enableStandardTestTask `任务标志来修改。
+JUnit Gradle 插件在默认情况下会禁用标准的 Gradle `test`任务，但是你可以通过`enableStandardTestTask`标记来启用。
 
 ### 配置Selectors
 
@@ -134,8 +134,8 @@ junitPlatform {
 
 ### 配置Filters
 
-开发者可以通过使用`Filter`扩展完成对测试计划的过滤配置。默认情况下，所有的引擎和标签都会被包含在测试计划中。这时，只有默认的`includeClassNamePattern 
-(^.*Tests?$)`被使用。开发者可应通过重写默认的匹配器就像下面的示例一样。当开发者表明要使用多种匹配器时，可以通过逻辑或将它们合并使用。
+开发者可以使用`Filter`扩展来配置测试计划的过滤器。默认情况下，所有的引擎和标签都会被包含在测试计划中。默认使用的是`includeClassNamePattern 
+(^.*Tests?$)`。你可以重写默认的匹配器就像下面的示例一样。当使用了多种匹配器时，JUnit Platform会使用逻辑或将它们合并起来使用。
 
 ```
 junitPlatform {
@@ -160,13 +160,13 @@ junitPlatform {
 }
 ```
 
-如果开发者为`engines {include …​} `或`engines {exclude …​}`的提供了*测试引擎ID*，那么JUnit Gradle插件将会只去运行开发者所希望运行的那个测试引擎。相似地，如果开发者为`tags {include …​}`或者`tags {exclude …​}`提供了*标签*，JUnit Gradle插件将只会处理含有这个标签的测试（例如，通过一个`@Tag`注解标注基于JUnit Jupiter测试）。相同的使用方式还可以应用在package名称上，例如`packages {include …​}`或者`packages {exclude …​}`。
+如果你为`engines {include …​} `或`engines {exclude …​}`的提供了*测试引擎ID*，那么JUnit Gradle插件将会只去运行开发者所希望运行的那个测试引擎。同样，如果你为`tags {include …​}`或者`tags {exclude …​}`提供了*标签*，JUnit Gradle插件将只会处理含有这个标签的测试（例如，通过一个`@Tag`注解标注基于JUnit Jupiter测试）。这点还可以应用在package名称上，例如`packages {include …​}`或者`packages {exclude …​}`。
 
 ### 配置测试引擎
 
 为了能够使 JUnit Gradle 插件运行任何一个测试，必须给出`TestEngine`的实现的classpath。
 
-要配置支持基于JUnit Jupiter的测试的应用，就需要在`testCompile `完成JUnit Jupiter API的项目构建依赖配置以及在`testRuntime `完成对 JUnit Jupiter `TestEngine`实现的运行时依赖配置.具体如下：
+要配置基于JUnit Jupiter的测试支持，你需要配置一个JUnit Jupiter API 的`testCompile`依赖以及JUnit Jupiter`TestEngine`实现的`testRuntime`依赖。具体配置如下：
 
 ```
 dependencies {
@@ -175,7 +175,7 @@ dependencies {
 }
 ```
 
-JUnit Gradle 插件可以运行基于JUnit 4 的测试就需要开发者配置`testCompile`依赖为JUnit 4 以及 `testRuntime`依赖为JUnit Vintage 的`TestEngine`实现。具体代码如下：
+只要你配置了一个JUnit4的`testCompile`依赖以及JUnit Vintage `TestEngine`的`testRuntime `依赖，JUnit Gradle 插件就可以运行基于JUnit 4 的测试。具体配置如下：
 
 ```
 dependencies {
@@ -186,10 +186,10 @@ dependencies {
 
 ### 使用 JUnit Gradle 插件
 
-只要 JUnit Gradle插件被应用且配置完毕，
-在Gralde的task中，就会多出一个`junitPlatformTest `task。
+一旦JUnit Gradle插件配置完全完毕，
+，在你可用的Gralde的task中就会多出一个`junitPlatformTest `task。
 
-通过在命令行调用`gradlew junitPlatformTest` (or `gradlew test`)指令，可以执行项目中所有满足当前`includeClassNamePattern `配置的测试。（默认匹配`^.*Tests?$`）
+在命令行中调用`gradlew junitPlatformTest` (or `gradlew test`)指令，项目中所有满足当前`includeClassNamePattern `配置的测试会被执行。（默认匹配`^.*Tests?$`）
 
 在[`junit5-gradle-consumer`](https://github.com/junit-team/junit5-samples/tree/r5.0.0-M4/junit5-gradle-consumer)项目中，执行`junitPlatformTest`任务的输出结果如下：
 
@@ -248,12 +248,16 @@ Execution failed for task ':junitPlatformTest'.
 
 > 当任何一个容器有误或者测试失败时，退出值为1；否则，值为0.
 
-> **目前JUnit Gradle插件的限制**
-> 目前所有通过JUnit Gradle插件完成的测试结果都无法被包含在标准生成的的Gradle测试报告中；但是，这些测试结果可以像以往一样，被记录于持续集成的服务器上。通过`reportsDir `插件的属性可以找到报告。
-> 
+> ⚠️  
+> **当前JUnit Gradle插件的限制**
+> 目前所有通过JUnit Gradle插件完成的测试结果都无法被包含在标准生成的的Gradle测试报告中；但这些测试结果通常可以被记录于持续集成服务器上。通过插件的`reportsDir`属性可以找到报告。
+
 
 ### 4.2.2. Maven
 为了能够通过`mvn test`运行JUnit 4和 JUnit Jupiter，JUnit团队为Maven Surefire提供了基础的支持保证。项目[`junit5-maven-consumer`](https://github.com/junit-team/junit5-samples/tree/r5.0.0-M4/junit5-maven-consumer)中的`pom.xml`文件展示了如何作为一个开始并使用的其的描述。
+
+> ⚠️  
+> 由于Surefire2.20中的内存泄漏，`junit-platform-surefire-provider`仅仅在Surefire 2.19.1中可用。
 
 ```
 ...
@@ -277,9 +281,9 @@ Execution failed for task ':junitPlatformTest'.
 ```
 
 ### 配置测试引擎
-为了使 Maven Surefire 能够运行所有的测试，`TestEngine`的实现必须加到运行的路径中。
+为了使 Maven Surefire 能够运行所有的测试，`TestEngine`的实现必须加到运行时路径中。
 
-如下所示演示了以下内容，包括：配置并为JUnit Jupiter的基本测试提供支持，为JUnit Jupiter API配置`test`依赖，为`maven-surefire-plugin`增加JUnit Jupiter的`TestEngine`实现依赖。
+要配置针对JUnit Jupiter测试的支持，你需要为JUnit Jupiter API配置`test`依赖，为`maven-surefire-plugin`增加JUnit Jupiter的`TestEngine`实现的依赖。
 
 ```
 ...
@@ -317,7 +321,7 @@ Execution failed for task ':junitPlatformTest'.
 ...
 ```
 
-为了使 JUnit Platform Surefire Provider 运行 JUnit4 的基本测试，可以按照如下方法在JUnit4上配置`test`依赖，并增加`maven-surefire-plugin`的JUnit Vintage `TestEngine`实现依赖。
+只要你配置了JUnit4的`test`依赖，并增加`maven-surefire-plugin`的JUnit Vintage `TestEngine`实现的依赖，Unit Platform Surefire Provider 就可以运行基于JUnit4 的测试。具体配置如下：
 
 ```
 ...
@@ -357,10 +361,10 @@ Execution failed for task ':junitPlatformTest'.
 ```
 
 ### tag过滤测试
-使用以下结构属性，可以通过 tag 过滤测试方法：
+使用以下配置属性，你可以通过tag来过滤测试：
 
 * 为了包含一个 tag，可以使用`groups`或者`includeTags`
-* 为了不包含一个 tag，可以使用`excludedGroups`或者`excludeTags`
+* 为了排除一个 tag，可以使用`excludedGroups`或者`excludeTags`
 
 ```
 ...
@@ -386,9 +390,9 @@ Execution failed for task ':junitPlatformTest'.
 ```
 
 ## 4.3 运行控制台
-[ConsoleLauncher](http://junit.org/junit5/docs/current/api/org/junit/platform/console/ConsoleLauncher.html)是一个命令行的Java应用程序，它能使得JUnit平台在命令行启动。例如，它可以用来运行 JUnit Vintage 和 JUnit Jupiter 测试，并在命令行输入测试结果。
+[ConsoleLauncher](http://junit.org/junit5/docs/current/api/org/junit/platform/console/ConsoleLauncher.html)是一个Java的命令行应用程序，它允许你通过命令行来启动JUnit平台。例如，它可以用来运行 JUnit Vintage 和 JUnit Jupiter 测试，并在命令行中打印测试结果。
 
-可运行的 `junit-platform-console-standalone-1.0.0-M4.jar`，包括所有的依赖，已经在 central Maven 库中发布了，路径是[junit-platform-console-standalone](https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/),可以通过以下命令单独[运行](https://docs.oracle.com/javase/tutorial/deployment/jar/run.html)`ConsoleLauncher `
+`junit-platform-console-standalone-1.0.0-M4.jar`这个可执行的jar包，包括了所有的依赖，它已经被发布在Maven中心库中了，路径是[junit-platform-console-standalone](https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/)，可以通过以下命令[运行](https://docs.oracle.com/javase/tutorial/deployment/jar/run.html)单机版的`ConsoleLauncher `
 
 ```
 java -jar junit-platform-console-standalone-1.0.0-M4.jar <Options>
@@ -423,12 +427,12 @@ Test run finished after 64 ms
 [         0 tests failed          ]
 ```
 
-> ##### 返回值
+> ##### 退出码
 > 如果[ConsoleLauncher](http://junit.org/junit5/docs/current/api/org/junit/platform/console/ConsoleLauncher.html)的返回的状态值为1，则代表有容器或测试运行失败，否则返回0.
 
 ### Options
 
-为了最终的发布成功，options经常需要改变。
+为了最终的成功发布，options经常需要改变。
 
 ```
 Option                                        Description
@@ -514,7 +518,7 @@ Option                                        Description
 ### 4.4.1 启动
 可以在项目的路径中设置artifacts和其相关依赖，可以在[依赖元数据](http://junit.org/junit5/docs/current/user-guide/#dependency-metadata)中查看关于group ID, artifact ID 和版本的细节问题。
 
-### 详细依赖
+### 显示依赖
 * `junit-4.12.jar` 在测试范围内：使用JUnit4运行测试
 * `junit-platform-runner` 在测试范围内：定位于`JUnitPlatform`运行器
 * `junit-jupiter-api`在测试范围内：使用API编写测试用力，包括`@Test`等
