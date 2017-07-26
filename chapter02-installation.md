@@ -8,7 +8,7 @@
 
 * **Group ID**: `org.junit.platform`
 
-* **Version**: `1.0.0-M4`
+* **Version**: `1.0.0-M5`
 
 * **Artifact IDs:**
 
@@ -55,7 +55,7 @@ jUnit 内部通用类库/工具。这些工具是专门给JUnit框架自身使�
 ### 2.1.2. JUnit Jupiter
 * **Group ID**: `org.junit.jupiter`
 
-* **Version**: `5.0.0-M4`
+* **Version**: `5.0.0-M5`
 
 * **Artifact IDs**:
 
@@ -80,13 +80,13 @@ JUnit Jupiter测试引擎的实现，仅仅用在运行时。
 
 * **Group ID**: `org.junit.vintage`
 
-* **Version**: `4.12.0-M4`
+* **Version**: `4.12.0-M5`
 
 * **Artifact ID**:
 
 `junit-vintage-engine`
 
-JUnit Vintage测试引擎实现，允许在行的JUnit平台上运行古老的JUnit测试，即那些使用JUnit 3或JUnit 4风格编写的测试。
+JUnit Vintage测试引擎实现，允许在JUnit平台上运行低版本的JUnit测试，即使用JUnit 3或JUnit 4风格编写的测试。
 
 ## 2.2. 依赖关系图
 
