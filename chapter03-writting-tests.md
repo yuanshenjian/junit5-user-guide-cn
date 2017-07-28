@@ -28,7 +28,7 @@ JUnit Jupiter 支持使用下面表格中所列的注解来配置测试及扩展
 | @RepeatedTest | 表示该方法是一个[重复测试]()的测试模板 |
 | @TestFactory  | 表示该方法是一个[动态测试]()的测试工厂 |
 | @DisplayName  | 为测试类或测试方法声明一个定制化的展示名字 |
-| @BeforeEach   | 使用该注解的方法应该在当前类中每一个使用了`@Test`注解的方法之前执行；类似于JUnit4的 `@Before`，该方法是可被继承的 |
+| @BeforeEach   | 使用该注解的方法应该在当前类中每一个使用了`@Test`,`@RepeatedTest`,`@ParameterizedTest`或者``注解的方法之前执行；类似于JUnit4的 `@Before`，该方法是可被继承的 |
 | @AfterEach    | 使用该注解的方法应该在当前类中每一个使用了`@Test`注解的方法之后执行；类似于JUnit4的 `@After`，该方法是可被继承的 |
 | @BeforeAll    | 使用该注解的方法应该在当前类中所有使用了`@Test`注解的方法之前执行；类似于JUnit4的 `@BeforeClass`，该方法必须是 `static`方法，它也可以被继承 |
 | @AfterAll     | 使用该注解的方法应该在当前类中所有使用了`@Test`注解的方法之后执行；类似于JUnit4的 `@AfterClass`，该方法必须是 `static`方法，它也可以被继承 |
@@ -140,7 +140,7 @@ class DisplayNameDemo {
 ```
 
 ## 3.4. 断言
-JUnit Jupiter自带了很多JUnit4就已经存在的断言方法，以及添加了一些在Java8中更好用的断言。JUnit Jupiter中所有断言都是`static`方法，它们存在 [org.junit.jupiter.Assertions](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Assertions.html)于类中。
+JUnit Jupiter自带了很多JUnit4就已经存在的断言方法，以及添加了一些在Java8 Lambda表达式中更好用的断言。JUnit Jupiter中所有断言都是`static`方法，它们存在 [org.junit.jupiter.Assertions](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Assertions.html)于类中。
 
 ```java
 import static java.time.Duration.ofMillis;
@@ -260,7 +260,7 @@ class HamcrestAssertionDemo {
 
 
 ## 3.5. 假设
-JUnit Jupiter自带了JUnit4所提供的假设方法的一个子集，以及添加了一些在Java8中更好用的假设。JUnit Jupiter中所有假设都是静态方法，它们存在于 [org.junit.jupiter.Assumptions](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Assumptions.html) 类中。
+JUnit Jupiter自带了JUnit4所提供的假设方法的一个子集，以及添加了一些在Java8 Lambdas中更好用的假设。JUnit Jupiter中所有假设都是静态方法，它们存在于 [org.junit.jupiter.Assumptions](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Assumptions.html) 类中。
 
 ```java
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -363,7 +363,7 @@ If you are authoring tests using the Kotlin programming language, you may also f
 
 如果你使用Kotlin编程语言来编写测试，你会发现通过将测试实例的生命周期模式切换到”类之前“更容易实现`@BeforeAll`和`@AfterAll`方法。
 
-> 在测试实例生命周期的上下文中，任何使用了`@Test`, `@RepeatedTest`, `@ParameterizedTest`, `@TestFactory`, or `@TestTemplate`注解的方法都是一个测试方法。
+> 在测试实例生命周期的上下文中，任何使用了`@Test`, `@RepeatedTest`, `@ParameterizedTest`, `@TestFactory`, 或者`@TestTemplate`注解的方法都是一个测试方法。
 
 ## 3.9. 内嵌测试
 内嵌测试使得测试编写者能够表示出几组测试用例之间的关系。下面来看一个精心设计的例子。
@@ -457,7 +457,7 @@ class TestingAStackDemo {
 }
 ```
 
-> Note: 用作`@Nested`的测试只能是非静态的内嵌类（i.e. 内部类）。内嵌可以是任意深度，那些内部类会被认为是一个该测试类家庭中的成员，但有一种特殊情况：`@BeforeAll`和`@AfterAll`，因为Java不允许内部类中存在`static`成员。
+> Note: 用作`@Nested`的测试只能是非静态的内嵌类（i.e. 内部类）。内嵌可以是任意深度，那些内部类会被认为是一个该测试类家庭中的成员，但有一种特殊情况：`@BeforeAll`和`@AfterAll`，因为Java不允许内部类中存在`static`成员。但是这种限制可以通过`@Nested`注解，并未类添加`@TestInstance(Lifecycle.PER_CLASS)`的方式来避免（见[Test Instance Lifecycle](http://junit.org/junit5/docs/current/user-guide/#writing-tests-test-instance-lifecycle)）
 
 ## 3.10. 构造器和方法的依赖注入
 JUnit之前所有的版本中，测试构造器和方法是不允许传入参数的（至少标准的`Runner`实现是不允许的）。JUnit Jupiter一个主要的改变是：测试类的构造器和方法都允许传入参数了。这带来了更大的灵活性，并且可以在构造器和方法上使用`依赖注入`。
@@ -565,7 +565,7 @@ class MyMockitoTest {
 ```
 
 ## 3.11. 测试接口和默认方法
-JUnit Jupiter允许将`@Test`、`@TestFactory`、`@BeforeEach`和`@AfterEach`注解声明在接口的默认方法上。除此之外，`@BeforeAll`和`@AfterAll`可以被声明在测试接口的静态方法上，而`@ExtendWith`和`@Tag`可以被声明在测试接口用来配置扩展和标签。下面来看一些示例：
+JUnit Jupiter允许将`@Test`、`@RepeatedTest`、`@ParameterizedTest`、`@TestFactory`、`TestTemplate`、`@BeforeEach`和`@AfterEach`注解声明在接口的默认方法上。除此之外，`@BeforeAll`和`@AfterAll`可以被声明在测试接口的静态方法上，而`@TestInstance(Lifecycle.PER_CLASS)`(见[Test Instance Lifecycle](http://junit.org/junit5/docs/current/user-guide/#writing-tests-test-instance-lifecycle))的测试接口或方法可以在`default`方法的接口上使用 。下面来看一些示例：
 
 ```java
 public interface TestLifecycleLogger {
@@ -936,6 +936,14 @@ Junit Jupiter提供一些开箱即用的*源*注解。接下来每个子章节�
 #### @ValueSource
 `@ValueSource`是最简单的合适的源。它允许你指定一个基本类型字面量数组（String、int、long或double）,并且它只能为每次调用提供一个参数。
 
+```
+@ParameterizedTest
+@ValueSource(ints = { 1, 2, 3 })
+void testWithValueSource(int argument) {
+    assertNotNull(argument);
+}
+```
+
 #### @EnumSource
 `@EnumSource`能够很方便地提供`Enum`常量。它还提供一个可选的`names`参数，你可以用它来指定那个常量会被使用。如果省略了，就意味着所有的常量将被使用，例如下面的例子：
 
@@ -943,7 +951,15 @@ Junit Jupiter提供一些开箱即用的*源*注解。接下来每个子章节�
 @ParameterizedTest
 @EnumSource(TimeUnit.class)
 void testWithEnumSource(TimeUnit timeUnit) {
-    assertNotNull(timeUnit.name());
+    assertNotNull(timeUnit);
+}
+```
+
+```
+@ParameterizedTest
+@EnumSource(value = TimeUnit.class, names = { "DAYS", "HOURS" })
+void testWithEnumSourceInclude(TimeUnit timeUnit) {
+    assertTrue(EnumSet.of(TimeUnit.DAYS, TimeUnit.HOURS).contains(timeUnit));
 }
 ```
 
