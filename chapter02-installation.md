@@ -8,7 +8,7 @@
 
 * **Group ID**: `org.junit.platform`
 
-* **Version**: `1.0.0-M5`
+* **Version**: `1.0.0-M6`
 
 * **Artifact IDs:**
 
@@ -55,7 +55,7 @@ jUnit 内部通用类库/工具。这些工具是专门给JUnit框架自身使�
 ### 2.1.2. JUnit Jupiter
 * **Group ID**: `org.junit.jupiter`
 
-* **Version**: `5.0.0-M5`
+* **Version**: `5.0.0-M6`
 
 * **Artifact IDs**:
 
@@ -80,7 +80,7 @@ JUnit Jupiter测试引擎的实现，仅仅用在运行时。
 
 * **Group ID**: `org.junit.vintage`
 
-* **Version**: `4.12.0-M5`
+* **Version**: `4.12.0-M6`
 
 * **Artifact ID**:
 

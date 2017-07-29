@@ -27,12 +27,14 @@ JUnit Jupiter 支持使用下面表格中所列的注解来配置测试及扩展
 | @Test         | 表示该该方法是一个测试方法。不像JUnit4的 @Test 注解，该注解没有声明任何属性，由于JUnit Jupiter操作中，测试扩展都是基于它们自身专用的注解 |
 | @RepeatedTest | 表示该方法是一个[重复测试]()的测试模板 |
 | @TestFactory  | 表示该方法是一个[动态测试]()的测试工厂 |
+| @TestInstance  | 用来为所标注的测试类配置[测试实例生命周期]() |
+| @TestTemplate  | 表示某个方法是一个[测试用例的模板]()，它会依据注册的[提供者]()所返回的的调用上下文的数量被多次调用。 |
 | @DisplayName  | 为测试类或测试方法声明一个定制化的展示名字 |
-| @BeforeEach   | 使用该注解的方法应该在当前类中每一个使用了`@Test`,`@RepeatedTest`,`@ParameterizedTest`或者``注解的方法之前执行；类似于JUnit4的 `@Before`，该方法是可被继承的 |
-| @AfterEach    | 使用该注解的方法应该在当前类中每一个使用了`@Test`注解的方法之后执行；类似于JUnit4的 `@After`，该方法是可被继承的 |
-| @BeforeAll    | 使用该注解的方法应该在当前类中所有使用了`@Test`注解的方法之前执行；类似于JUnit4的 `@BeforeClass`，该方法必须是 `static`方法，它也可以被继承 |
-| @AfterAll     | 使用该注解的方法应该在当前类中所有使用了`@Test`注解的方法之后执行；类似于JUnit4的 `@AfterClass`，该方法必须是 `static`方法，它也可以被继承 |
-| @Nested       | 使用该注解的类是一个内嵌、非静态的测试类。受限于Java语言，`@BeforeAll`和`@AfterAll`方法不能在`@Nested`测试类中使用 |
+| @BeforeEach   | 使用该注解的方法应该在当前类中每一个使用了`@Test`,`@RepeatedTest`,`@ParameterizedTest`或者`@TestFactory`注解的方法之前执行；类似于JUnit4的 `@Before`，该方法是可被继承的 |
+| @AfterEach    | 使用该注解的方法应该在当前类中每一个使用了`@Test`,`@RepeatedTest`,`@ParameterizedTest`或者`@TestFactory`注解的方法之后执行；类似于JUnit4的 `@After`，该方法是可被继承的 |
+| @BeforeAll    | 使用该注解的方法应该在当前类中所有使用了`@Test`,`@RepeatedTest`,`@ParameterizedTest`或者`@TestFactory`注解的方法之前执行；类似于JUnit4的 `@BeforeClass`，该方法可以被继承。它必须是 `static`方法，除非测试类或测试接口使用了`@TestInstance(Lifecycle.PER_CLASS)`注解。|
+| @AfterAll     | 使用该注解的方法应该在当前类中所有使用了`@Test`,`@RepeatedTest`,`@ParameterizedTest`或者`@TestFactory`注解的方法之后执行；类似于JUnit4的 `@AfterClass`。该方法可以被继承。它必须是 `static`方法，除非测试类或测试接口使用了`@TestInstance(Lifecycle.PER_CLASS)`注解。|
+| @Nested       | 使用该注解的类是一个内嵌、非静态的测试类。受限于Java语言，`@BeforeAll`和`@AfterAll`方法不能直接在`@Nested`测试类中使用，除非测试类使用了`@TestInstance(Lifecycle.PER_CLASS)`注解。 |
 | @Tag          | 声明用于过滤测试的*tags*，该注解可以用在方法或类上；类似于TesgNG的测试组以及JUnit4的分类。
 | @Disable      | 禁用一个测试类或测试方法；类似于JUnit4的`@Ignore` |
 | @ExtendWith   | 注册自定义[扩展]() |
@@ -334,6 +336,15 @@ class DisabledTestsDemo {
 
 ## 3.7. 标记和过滤
 测试类和测试方法可以被标记。那些标签可以在后面被用来过滤 [测试发现和执行]()
+
+### 3.7.1. 标记的语法规则
+* 标记不能为`null`或空。
+
+* *trimmed*标记不能包含空格。
+
+* *trimmed*标记不能包含IOS字符。
+
+>上述的"trimmed"指的是两端的空格字符被移除掉了。
 
 ```java
 import org.junit.jupiter.api.Tag;
@@ -931,7 +942,7 @@ testWithStringParameter(String) ✔
 为了使用参数化测试，你必须添加`junit-jupiter-params`依赖。详情请参开[依赖元数据]()
 
 ### 3.13.2. 参数源
-Junit Jupiter提供一些开箱即用的*源*注解。接下来每个子章节将提供一个简短的摘要以及一个示例。更多信息请参考 <http://junit.org/junit5/docs/current/api/org/junit/jupiter/params/provider/package-summary.html> 包中的JavaDoc。
+Junit Jupiter提供一些开箱即用的*源*注解。接下来每个子章节将提供一个简短的摘要以及一个示例。更多信息请参考 [`org.junit.jupiter.params.provider`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/params/provider/package-summary.html)包中的JavaDoc。
 
 #### @ValueSource
 `@ValueSource`是最简单的合适的源。它允许你指定一个基本类型字面量数组（String、int、long或double）,并且它只能为每次调用提供一个参数。
@@ -955,11 +966,32 @@ void testWithEnumSource(TimeUnit timeUnit) {
 }
 ```
 
-```
+```java
 @ParameterizedTest
 @EnumSource(value = TimeUnit.class, names = { "DAYS", "HOURS" })
 void testWithEnumSourceInclude(TimeUnit timeUnit) {
     assertTrue(EnumSet.of(TimeUnit.DAYS, TimeUnit.HOURS).contains(timeUnit));
+}
+```
+
+`@EnumSource`注解还提供了一个可选的`mode`参数，它能够加细粒度地控制了什么参数会被传递给测试方法。例如，你可以排除枚举常量池中的名字，或者跟下面代码所示一样指定一个正则表达式：
+
+```java
+@ParameterizedTest
+@EnumSource(value = TimeUnit.class, mode = EXCLUDE, names = { "DAYS", "HOURS" })
+void testWithEnumSourceExclude(TimeUnit timeUnit) {
+    assertFalse(EnumSet.of(TimeUnit.DAYS, TimeUnit.HOURS).contains(timeUnit));
+    assertTrue(timeUnit.name().length() > 5);
+}
+```
+
+```java
+@ParameterizedTest
+@EnumSource(value = TimeUnit.class, mode = MATCH_ALL, names = "^(M|N).+SECONDS$")
+void testWithEnumSourceRegex(TimeUnit timeUnit) {
+    String name = timeUnit.name();
+    assertTrue(name.startsWith("M") || name.startsWith("N"));
+    assertTrue(name.endsWith("SECONDS"));
 }
 ```
 
@@ -980,7 +1012,21 @@ static Stream<String> stringProvider() {
 }
 ```
 
-如果你需要多个参数，你可以返回`Argument`实例，如下面代码所示：
+还支持基本类型(`DoubleStream`、`IntStream`、`LongStream`)的Stream:
+
+```java
+@ParameterizedTest
+@MethodSource("range")
+void testWithRangeMethodSource(int argument) {
+    assertNotEquals(9, argument);
+}
+
+static IntStream range() {
+    return IntStream.range(0, 20).skip(10);
+}
+```
+
+如果你需要多个参数，你可以返回`Argument`实例，如下面代码所示。注意`Arguments.of(Object…​)` 是接口自身的以个的一个静态工厂方法。
 
 ```java
 @ParameterizedTest
@@ -992,6 +1038,18 @@ void testWithMultiArgMethodSource(String first, int second) {
 
 static Stream<Arguments> stringAndIntProvider() {
     return Stream.of(ObjectArrayArguments.create("foo", 1), ObjectArrayArguments.create("bar", 2));
+}
+```
+
+#### @CsvSource
+`@CsvSource`允许你定义的参数列表是以逗号分隔的值（例如 `String`字面值）。
+
+```java
+@ParameterizedTest
+@CsvSource({ "foo, 1", "bar, 2", "'baz, qux', 3" })
+void testWithCsvSource(String first, int second) {
+    assertNotNull(first);
+    assertNotEquals(0, second);
 }
 ```
 
@@ -1075,6 +1133,7 @@ java.time.ZonedDateTime | "2017-03-14T12:34:56.789Z" → ZonedDateTime.of(2017, 
 #### Explicit Conversion
 
 Instead of using implicit argument conversion you may explicitly specify an ArgumentConverter to use for a certain parameter using the @ConvertWith annotation like in the following example.
+
 除了使用隐式转换参数，你还可以针对一个特定使用了`@ConvertWith`注解的参数显式指定一个`ArgumentConverter`，例如下面代码所示：
 
 ```java
