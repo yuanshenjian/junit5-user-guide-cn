@@ -1218,6 +1218,7 @@ A @TestTemplate method is not a regular test case but rather a template for test
 
 ## 3.15. 动态测试
 The standard @Test annotation in JUnit Jupiter described in Annotations is very similar to the @Test annotation in JUnit 4. Both describe methods that implement test cases. These test cases are static in the sense that they are fully specified at compile time, and their behavior cannot be changed by anything happening at runtime. 
+
 在JUnit Juppiter的[Annotations]()章节描述的标准`@Test`注解跟JUnit4中的`@Test`注解非常类似。两者都表示方式是一个测试用例。这些测试用例都是静态的，并且都是在编译器就指定好的，以及它们的行为不能在运行期被改变。*假设提供了动态行为的基本形式，但在表现力上做有意的限制*。
 
 In addition to these standard tests a completely new kind of test programming model has been introduced in JUnit Jupiter. This new kind of test is a dynamic test which is generated at runtime by a factory method that is annotated with @TestFactory.
