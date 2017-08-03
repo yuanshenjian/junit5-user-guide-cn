@@ -72,4 +72,16 @@ launcher.execute(request);
 
 目前没有结果对象，但是你可以轻松地使用侦听器将最终结果聚合到你自己的对象中。 有关示例，请参阅[`SummaryGeneratingListener`](http://junit.org/junit5/docs/current/api/org/junit/platform/launcher/listeners/SummaryGeneratingListener.html)。
 
-###7.1.3 
+### 7.1.3 引入自定义测试引擎插件
+
+Junit 目前提供了两种 [`TestEngine`](http://junit.org/junit5/docs/current/api/org/junit/platform/engine/TestEngine.html) 的实现方式：
+
+- [`junit-jupiter-engine`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/engine/package-summary.html): JUnit Jupiter 的核心。
+
+- [`junit-vintage-engine`](http://junit.org/junit5/docs/current/api/org/junit/vintage/engine/package-summary.html): 在JUnit 4之上的一个掩盖层，它允许使用启动器基础架构运行老式测试。
+
+第三方也可以通过在[`junit-platform-engine`](http://junit.org/junit5/docs/current/api/org/junit/platform/engine/package-summary.html)模块中实现接口并*注册*引擎来为自己的`TestEngine`做出贡献。 目前通过`Java的java.util.ServiceLoader`机制支持引擎注册。 例如，`junit-jupiter`引擎模块将其`org.junit.jupiter.engine.JupiterTestEngine`注册到`junit-jupiter-engine` JAR中的`/ META-INF / services`内的名为`org.junit.platform.engine.TestEngine`的文件中。
+
+### 7.1.4 引入自定义的测试执行监听器
+
+除了以编程方式注册测试执行侦听器的公共[`Launcher`](http://junit.org/junit5/docs/current/api/org/junit/platform/launcher/Launcher.html) API方法外，通过Java的`java.util.ServiceLoader`工具在运行时发现的自定义[`TestExecutionListener`](http://junit.org/junit5/docs/current/api/org/junit/platform/launcher/TestExecutionListener.html)实现也会自动向`DefaultLauncher`注册。 例如，一个实现[`TestExecutionListener`](http://junit.org/junit5/docs/current/api/org/junit/platform/launcher/TestExecutionListener.html)并在`/META-INF/services/org.junit.platform.launcher.TestExecutionListener`文件中声明的`example.TestInfoPrinter`类被自动加载和注册。
