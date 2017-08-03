@@ -10,9 +10,9 @@ JUnit 5 引入了`Launcher`的概念，它可以被用来发现、过滤，以�
 
 加载API的一个具体示例示[`junit-platform-console`](http://junit.org/junit5/docs/current/api/org/junit/platform/console/package-summary.html)项目中的[`ConsoleLauncher`](http://junit.org/junit5/docs/current/api/org/junit/platform/console/ConsoleLauncher.html)
 
-### 7.1.1 发现测试
+### 7.1.1 探索测试
 
-引入 *测试发现* 作为平台本身的一个重要特性（希望）以便从过去确定测试类和测试方法时遇到的大多数困难中，将 IDE 和 项目构建工具解放出来。
+引入 *探索测试* 作为平台本身的一个重要特性（希望）以便从过去确定测试类和测试方法时遇到的大多数困难中，将 IDE 和 项目构建工具解放出来。
 
 使用示例：
 
@@ -42,3 +42,8 @@ TestPlan plan = LauncherFactory.create().discover(request);
 
 ```
 
+目前，探索范围包括了类、方法、包中的所有类，以及所有给定路径中的测试。探索功能贯穿所有参与的测试引擎。
+
+所产生的测试计划基本上是适合规范对象的所有引擎、类、和测试方法的分层（和只读）描述。客户端可以遍历树，检索关于节点的细节，并获取到原始源的链接（如类，方法或文件位置）。测试计划树中的每个节点都有一个唯一的ID，可以用于调用特定的测试或一组测试。
+
+### 7.1.2 执行测试
