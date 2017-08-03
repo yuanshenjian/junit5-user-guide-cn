@@ -47,3 +47,29 @@ TestPlan plan = LauncherFactory.create().discover(request);
 所产生的测试计划基本上是适合规范对象的所有引擎、类、和测试方法的分层（和只读）描述。客户端可以遍历树，检索关于节点的细节，并获取到原始源的链接（如类，方法或文件位置）。测试计划树中的每个节点都有一个唯一的ID，可以用于调用特定的测试或一组测试。
 
 ### 7.1.2 执行测试
+
+执行测试有两种方法。一种是客户端可以使用与探索测试相同的测试规范对象，或者使用另一种稍快一些的方式，通过先前探索步骤中准备好的`TestPlan`对象完成。
+
+测试的进度和结果报告可以通过[`TestExecutionListener`](http://junit.org/junit5/docs/current/api/org/junit/platform/launcher/TestExecutionListener.html)获取：
+
+```
+LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
+    .selectors(
+        selectPackage("com.example.mytests"),
+        selectClass(MyTestClass.class)
+    )
+    .filters(includeClassNamePatterns(".*Test"))
+    .build();
+
+Launcher launcher = LauncherFactory.create();
+
+// Register a listener of your choice
+TestExecutionListener listener = new SummaryGeneratingListener();
+launcher.registerTestExecutionListeners(listener);
+
+launcher.execute(request);
+```
+
+目前没有结果对象，但是你可以轻松地使用侦听器将最终结果聚合到你自己的对象中。 有关示例，请参阅[`SummaryGeneratingListener`](http://junit.org/junit5/docs/current/api/org/junit/platform/launcher/listeners/SummaryGeneratingListener.html)。
+
+###7.1.3 
