@@ -227,11 +227,11 @@ public class IgnoreIOExceptionExtension implements TestExecutionExceptionHandler
 
 ## 5.8 为测试模板提供调用上下文
 
-只有当至少有一个[`TestTemplateInvocationContextProvider`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestTemplateInvocationContextProvider.html)被注册后，被[`@TestTemplate`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/TestTemplate.html)标注的方法才能执行。每个provider都必须提供一系列的[`TestTemplateInvocationContext`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestTemplateInvocationContext.html)实例。每个上下文都可以指定自定义显示名称和仅用于下一次调用[`@TestTemplate`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/TestTemplate.html)方法的其他扩展名列表。
+只有当至少有一个[`TestTemplateInvocationContextProvider`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestTemplateInvocationContextProvider.html)被注册后，标注了[`@TestTemplate`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/TestTemplate.html)的方法才能被执行。每个provider都必须提供[`TestTemplateInvocationContext`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestTemplateInvocationContext.html)实例的`Stream`。每个上下文都可以指定一个自定义的展示名称和仅用于[`@TestTemplate`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/TestTemplate.html)方法下一次调用的额外扩展列表。
 
-以下示例显示了如何编写测试模板以及如何注册和实现[`TestTemplateInvocationContextProvider`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestTemplateInvocationContextProvider.html).
+以下示例展示了如何编写测试模板以及如何注册和实现一个[`TestTemplateInvocationContextProvider`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestTemplateInvocationContextProvider.html).
 
-*一个带有附带扩展名的测试模板*
+*一个带有附加扩展名的测试模板*
 
 ```
 @TestTemplate
@@ -279,7 +279,7 @@ static class MyTestTemplateInvocationContextProvider implements TestTemplateInvo
 }
 ```
 
-在这个例子中，测试模板将被调用两次。 调用的显示名称是调用上下文指定的“foo”和“bar”。 每个调用都会注册一个自定义的[`ParameterResolver`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/ParameterResolver.html)，用于解析方法参数。 使用ConsoleLauncher时的输出如下。
+在这个例子中，测试模板将被调用两次。调用的展示名称是调用上下文指定的“foo”和“bar”。 每个调用都会注册一个自定义的[`ParameterResolver`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/ParameterResolver.html)用于解析方法参数。 下面输出是使用`ConsoleLauncher`时产生的。
 
 ```
 └─ testTemplate(String) ✔
@@ -287,7 +287,7 @@ static class MyTestTemplateInvocationContextProvider implements TestTemplateInvo
    └─ bar ✔
 ```
 
-[`TestTemplateInvocationContextProvider`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestTemplateInvocationContextProvider.html)扩展API主要用于实现不同类型的测试，这些测试依赖于重复调用在不同的上下文中类似于测试的方法 - 例如，使用不同的参数，通过不同的准备测试类实例，或多次调用而不修改上下文。 请参阅使用此扩展点的[重复测试](http://junit.org/junit5/docs/current/user-guide/#writing-tests-repeated-tests)或[参数化测试](http://junit.org/junit5/docs/current/user-guide/#writing-tests-parameterized-tests)的实现来提供其功能。
+[`TestTemplateInvocationContextProvider`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestTemplateInvocationContextProvider.html)扩展API主要用于实现不同类型的测试，这些测试依赖于某个类似于测试的方法重复调用，即便它们不在同一个上下文中 - 例如，使用不同的参数，通过准备不同的测试类实例，或多次调用而不修改上下文。 请参阅使用[重复测试]()或[参数化测试]()的实现，这些章节使用了这个扩展点来提供相关的功能。
 
 ## 5.9 在扩展中保持状态
 
