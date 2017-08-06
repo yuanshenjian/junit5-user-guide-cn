@@ -133,9 +133,9 @@ class MyTestsV2 {
 
 ### 5.6.1 Before和After的测试扩展回调
 
-[`BeforeTestExecutionCallback`]()和[`AfterTestExecutionCallback`]()分别定义了希望添加将在执行测试方法之前和之后立即执行的行为的扩展API。因此，这些回调非常适合于定时，跟踪以及其他类似的用例。如果需要实现在`@BeforeEach`和`@AfterEach`方法下调用的回调，请改用`BeforeEachCallback`和`AfterEachCallback`。
+[`BeforeTestExecutionCallback`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/BeforeTestExecutionCallback.html)和[`AfterTestExecutionCallback`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/AfterTestExecutionCallback.html)分别为`Extensions`定义了用于在执行测试方法之前和之后添加立即执行行为的API。因此，这些回调非常适合于定时器、跟踪器以及其他类似的场景。如果你需要实现在`@BeforeEach`和`@AfterEach`方法下调用的回调，可以实现`BeforeEachCallback`和`AfterEachCallback`。
 
-以下示例显示如何使用这些回调来计算和记录测试方法的执行时间。 TimingExtension实现了BeforeTestExecutionCallback和AfterTestExecutionCallback之间测试执行的时间和日志。
+以下示例展示了如何使用这些回调来统计和记录测试方法的执行时间。`TimingExtension`同时实现了`BeforeTestExecutionCallback`和`AfterTestExecutionCallback`接口从而给测试执行做时间统计和日志记录。
 	
 *一个关于测试执行的时间和日志的扩展示例：*
 
@@ -174,7 +174,7 @@ public class TimingExtension implements BeforeTestExecutionCallback, AfterTestEx
 }
 ```
 
-由于TimingExtensionTests类通过`@ExtendWith`注册了TimingExtension，所以它的测试在执行时会应用计时。
+由于`TimingExtensionTests`类通过`@ExtendWith`注册了`TimingExtension`，所以它的测试在执行时会被计时。
 
 *下面是一个测试类应用了 TimingExample 的示例：*
 
@@ -195,7 +195,7 @@ class TimingExtensionTests {
 }
 ```
 
-以下是运行TimingExtensionTests时生成的日志记录的示例。
+以下是运行TimingExtensionTests时生成的日志的示例。
 
 ```
 INFO: Method [sleep20ms] took 24 ms.
@@ -204,9 +204,9 @@ INFO: Method [sleep50ms] took 53 ms.
 
 ## 5.7 异常处理
 
-[`TestExecutionExceptionHandler`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestExecutionExceptionHandler.html)为扩展定义了异常处理API，可以在执行测试时处理抛出的异常。
+[`TestExecutionExceptionHandler`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestExecutionExceptionHandler.html)为`扩展`定义了异常处理的API，可以在执行测试时处理抛出的异常。
 
-下面的例子将展示一个扩展，它将收到的`IOException`重新包装并抛出为其他类型的异常。
+下面的例子展示了一个扩展，它将收到的`IOException`重新包装并抛出为其他类型的异常。
 
 *一个异常处理扩展*
 
