@@ -305,7 +305,7 @@ static class MyTestTemplateInvocationContextProvider implements TestTemplateInvo
 
 *用户代码和扩展代码*
 
-用户提供的测试和生命周期方法以橙色显示，回调代码由蓝色显示。 灰色框表示单个测试方法的执行，并将在测试类中对每个测试方法重复执行。
+用户提供的测试和生命周期方法以橙色表示，扩展提供的回调代码由蓝色显示。 灰色框表示单个测试方法的执行，并将在测试类中对每个测试方法重复执行。
 
 下表进一步说明了[用户代码和扩展代码]()图中的十二个步骤。
 
@@ -316,7 +316,7 @@ static class MyTestTemplateInvocationContextProvider implements TestTemplateInvo
 |3|接口org.junit.jupiter.api.extension.BeforeEachCallback|在每次执行测试之前执行的扩展代码|
 |4|注解 org.junit.jupiter.api.BeforeEach|每次执行测试之前执行的用户代码|
 |5|接口 org.junit.jupiter.api.extension.BeforeTestExecutionCallback|在执行测试之前立即执行扩展代码|
-|6|注解org.junit.jupiter.api.Test|用户代码的实际测试方法|
+|6|注解org.junit.jupiter.api.Test|用户代码的真实测试方法|
 |7|接口org.junit.jupiter.api.extension.TestExecutionExceptionHandler|用于处理测试期间抛出的异常的扩展代码|
 |8|接口org.junit.jupiter.api.extension.AfterTestExecutionCallback|测试执行后立即执行扩展代码及其相应的异常处理程序|
 |9|注解 org.junit.jupiter.api.AfterEach|每次执行测试后执行的用户代码|
