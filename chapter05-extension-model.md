@@ -102,34 +102,34 @@ class MyTestsV2 {
 - `*System*`: 停用简单类名称包含`System`类中的每个条件。
 - `org.example.MyCondition`: 停用FQCN为`org.example.MyCondition`的条件。
 
-## 5.4 测试实例的后期处理
+## 5.4 测试实例的后处理
 
-[`TestInstancePostProcessor`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestInstancePostProcessor.html) 定义需要后期处理的`Extensions`API。
+[`TestInstancePostProcessor`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestInstancePostProcessor.html) 为`Extensions`定义了测试实例后处理的API。
 
-通常的用例包括注入依赖到测试实例中，在测试实例中调用自定义的初始化方法等。
+通常的用法涵盖了将依赖注入到测试实例中，在测试实例中调用自定义的初始化方法等。
 
-对于具体事例，可以参考[`MockitoExtension`]()和[`SpringExtension`]()的源代码.
+对于具体示例，可以查看[`MockitoExtension`](https://github.com/junit-team/junit5-samples/tree/r5.0.0-RC2/junit5-mockito-extension/src/main/java/com/example/mockito/MockitoExtension.java)和[`SpringExtension`](https://github.com/spring-projects/spring-framework/tree/master/spring-test/src/main/java/org/springframework/test/context/junit/jupiter/SpringExtension.java)的源代码。
 
 ## 5.5 参数解析
 
-[`ParameterResolver`]()定义了用于在运行时动态解析参数的`Extension`API。
+[`ParameterResolver`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/ParameterResolver.html)定义了用于在运行时动态解析参数的`Extension`API。
 
-如果一个测试构造器或者`@Test`、`@TestFactory`、`@BeforeEach`、`@AfterEach`、`@BeforeAll`或者`@AfterAll`方法接收了一个参数，那么这个参数一定会在运行时被`ParameterResolver `所解析。`ParameterResolver`可以被开发者构建（参考[`TestInfoParameterResolver`]()）或注册。一般而言，参数可能被按照其*名称*、*类型*、*注解*或在任何一种上述方式的组合所解析。具体示例，可以参照[`CustomTypeParameterResolver`](https://github.com/junit-team/junit5/tree/r5.0.0-M5/junit-jupiter-engine/src/test/java/org/junit/jupiter/engine/execution/injection/sample/CustomTypeParameterResolver.java)和[`CustomAnnotationParameterResolver`](https://github.com/junit-team/junit5/tree/r5.0.0-M5/junit-jupiter-engine/src/test/java/org/junit/jupiter/engine/execution/injection/sample/CustomAnnotationParameterResolver.java)的源码。
+如果一个测试构造器或者`@Test`、`@TestFactory`、`@BeforeEach`、`@AfterEach`、`@BeforeAll`或者`@AfterAll`方法接收了一个参数，那么该参数一定会在运行时被`ParameterResolver`*解析*。开发人员可以使用内建的`ParameterResolver`（参考[`TestInfoParameterResolver`](https://github.com/junit-team/junit5/tree/r5.0.0-RC2/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/TestInfoParameterResolver.java)），也可以自己注册一个。一般而言，参数可能被按照其*名称*、*类型*、*注解*或在任何一种上述方式的组合所解析。具体示例可以参照[`CustomTypeParameterResolver`](https://github.com/junit-team/junit5/tree/r5.0.0-M5/junit-jupiter-engine/src/test/java/org/junit/jupiter/engine/execution/injection/sample/CustomTypeParameterResolver.java)和[`CustomAnnotationParameterResolver`](https://github.com/junit-team/junit5/tree/r5.0.0-M5/junit-jupiter-engine/src/test/java/org/junit/jupiter/engine/execution/injection/sample/CustomAnnotationParameterResolver.java)的源码。
 
 ## 5.6 测试生命周期回调
 
-下列接口定义了用于在测试执行的不同生命周期的时间点完成测试扩展的API。可以参考下一小节的示例，也可以通过官方文档中的[`org.junit.jupiter.api.extension`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/package-summary.html)包，获取每个接口的详细信息。
+下列接口定义了用于在测试执行生命周期的不同阶段来扩展测试的API。可以参考后续章节的示例，也可以查阅[`org.junit.jupiter.api.extension`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/package-summary.html)包中的Javadoc，获取每个接口的详细信息。
 
-- [`BeforeAllCallback`]()
-	- [`BeforeEachCallback`]()
-		- [`BeforeTestExecutionCallback`]()
+- [`BeforeAllCallback`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/BeforeAllCallback.html)
+	- [`BeforeEachCallback`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/BeforeEachCallback.html)
+		- [`BeforeTestExecutionCallback`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/BeforeTestExecutionCallback.html)
 		- [`AfterTestExecutionCallback
-`]()
-	- [`AfterEachCallback`]()
-- [`AfterAllCallback`]() 
+`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/AfterTestExecutionCallback.html)
+	- [`AfterEachCallback`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/AfterEachCallback.html)
+- [`AfterAllCallback`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/AfterAllCallback.html) 
 
 > 实现多种扩展API
-> 扩展开发人员可以选择在单个扩展中实现任意数量的这些接口。参考[`Consult the source code of the SpringExtension for a concrete example.`](https://github.com/spring-projects/spring-framework/tree/master/spring-test/src/main/java/org/springframework/test/context/junit/jupiter/SpringExtension.java)的源代码以获取具体示例。
+> 扩展开发人员可以选择在单个扩展中实现任意数量的上述接口。参考[`Consult the source code of the SpringExtension for a concrete example.`](https://github.com/spring-projects/spring-framework/tree/master/spring-test/src/main/java/org/springframework/test/context/junit/jupiter/SpringExtension.java)的源代码以获取具体示例。
 
 ### 5.6.1 Before和After的测试扩展回调
 
