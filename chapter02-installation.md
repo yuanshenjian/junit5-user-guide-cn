@@ -4,6 +4,7 @@
 快照版本被部署到 [Sonatype快照库](https://oss.sonatype.org/content/repositories/snapshots) 中的 [/org/junit](https://oss.sonatype.org/content/repositories/snapshots/org/junit/)目录下。
 
 ### 2.1. 依赖元数据
+
 #### 2.1.1. JUnit Platform
 
 * **Group ID**: `org.junit.platform`

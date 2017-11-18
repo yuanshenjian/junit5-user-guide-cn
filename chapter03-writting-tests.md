@@ -235,7 +235,7 @@ class AssertionsDemo {
 }
 ```
 
-### 3.4.1. 第三方断言类库
+#### 3.4.1. 第三方断言类库
 虽然JUnit Jupiter提供的断言工具包已经满足了很多测试场景，但有时候我们会遇到需要更加强大且具备例如*匹配器*功能的场景。这个时候，JUnit团队推荐使用第三方断言类库，例如：[AssertJ](http://joel-costigliola.github.io/assertj/)、[Hamcrest](http://hamcrest.org/JavaHamcrest/)、[Truth](http://google.github.io/truth/) 等等。所以说，使用哪个断言类库完全取决于开发人员自己的喜好。
 
 举个例子，*匹配器*和一个流式调用的API的组合可以使得断言更加具有描述性和可读性。然而，JUnit Jupiter的 [org.junit.jupiter.Assertions](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Assertions.html)类没有提供类似于JUnit4`org.junit.Assert`类中的 [assertThat()](http://junit.org/junit4/javadoc/latest/org/junit/Assert.html#assertThat) 方法，我们知道该方法能够接受一个 Hamcrest [Matcher](http://junit.org/junit4/javadoc/latest/org/hamcrest/Matcher.html)。所以，我们鼓励开发人员去使用第三方断言类库提供的內建匹配器。
@@ -794,7 +794,7 @@ In addition to specifying the number of repetitions, a custom display name can b
 想要通过代码来获取当前重复相关的信息以及总的重复次数，开发者可以选择往`@RepeatedTest`, `@BeforeEach`, 或者 `@AfterEach`方法注入一个`RepetitionInfo`实例。
 
 
-### 3.12.1. 重复测试的例子
+#### 3.12.1. 重复测试的例子
 本章节末尾处`RepeatedTestsDemo`类演示了重复的测试的示例。
 
 `repeatedTest()`方法跟之间那个例子一样。`repeatedTestWithRepetitionInfo()`演示怎么通过往测试注入一个`RepetitionInfo`来访问当前测试的总重复次数。
