@@ -6,6 +6,8 @@
 ## 翻译说明
 
 - 统一使用Markdown格式编辑，推荐使用[MacDown](http://macdown.uranusjr.com/)工具编辑。
+- 标题前的 # 个数，一级标题 ##，二级标题 ###，以此类推。比如：
+	- 1. 概述  ==> ## 1. 概述 
 - 可以只出现译文，也可以中英段落间隔开，一段英文，紧接着是一段中文翻译。建议翻译中存在意思拿不准的就保留英文方便快速校对，例如：
 
 The **JUnit Platform** serves as a foundation for [launching testing frameworks](#) on the JVM. It also defines the [TestEngine](http://junit.org/junit5/docs/current/api/org/junit/platform/engine/TestEngine.html) API for developing a testing framework that runs on the platform. Furthermore, the platform provides a [Console Launcher](#) to launch the platform from the command line and build plugins for[Gradle](#) and [Maven](#) as well as a [JUnit 4 based Runner](#) for running any `TestEngine` on the platform.  
