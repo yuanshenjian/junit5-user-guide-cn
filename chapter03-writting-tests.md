@@ -1,4 +1,4 @@
-# 3. 编写测试
+## 3. 编写测试
 
 *第一个测试用例*
 
@@ -17,7 +17,7 @@ class FirstJUnit5Tests {
 }
 ```
 
-## 3.1. 注解
+### 3.1. 注解
 JUnit Jupiter 支持使用下面表格中所列的注解来配置测试及扩展框架。
 
 所有的核心注解位于`junit-jupiter-api`模块的 [org.junit.jupiter.api ](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/package-summary.html) 包中。
@@ -40,7 +40,7 @@ JUnit Jupiter 支持使用下面表格中所列的注解来配置测试及扩展
 | @ExtendWith   | 注册自定义[扩展]() |
 
 
-### 3.1.1. 元注解即组合注解
+#### 3.1.1. 元注解即组合注解
 JUnit Jupiter注解可以被用作元注解。这意味着你可以定义你自己的组合注解，该注解会自动继承其元注解的语义。
 
 例如，为了避免在代码库中到处复制粘贴`@Tag("fast")`（见 [标记和过滤]()），你可以创建一个名为`@Fast`自定义*组合注解*。`@Fast`就可以被用来替换`@Tag("fast")`了。如下面代码所示：
@@ -61,7 +61,7 @@ public @interface Fast {
 ```
 
 
-## 3.2. 标准测试类
+### 3.2. 标准测试类
 *一个标准的测试用例*
 
 ```java
@@ -113,7 +113,7 @@ class StandardTests {
 > Note: 测试类和测试方法都可以不是 `public`
 
 
-## 3.3. 展示名字
+### 3.3. 展示名字
 测试类和测试方法可以声明自定义的显示名字--空格、特殊字符以及emojis表情--都可以显示在测试运行器和测试报告中。
 
 ```java
@@ -141,7 +141,7 @@ class DisplayNameDemo {
 }
 ```
 
-## 3.4. 断言
+### 3.4. 断言
 JUnit Jupiter自带了很多JUnit4就已经存在的断言方法，以及添加了一些在Java8 Lambda表达式中更好用的断言。JUnit Jupiter中所有断言都是`static`方法，它们存在 [org.junit.jupiter.Assertions](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Assertions.html)于类中。
 
 ```java
@@ -261,7 +261,7 @@ class HamcrestAssertionDemo {
 当然，那些基于JUnit4编程模型的遗留测试可以继续使用`org.junit.Assert#assertThat`。
 
 
-## 3.5. 假设
+### 3.5. 假设
 JUnit Jupiter自带了JUnit4所提供的假设方法的一个子集，以及添加了一些在Java8 Lambdas中更好用的假设。JUnit Jupiter中所有假设都是静态方法，它们存在于 [org.junit.jupiter.Assumptions](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Assumptions.html) 类中。
 
 ```java
@@ -300,7 +300,7 @@ public class AssumptionsDemo {
 
 }
 ```
-## 3.6. 禁用测试
+### 3.6. 禁用测试
 下面是一个被禁用的测试用例：
 
 ```java
@@ -334,10 +334,10 @@ class DisabledTestsDemo {
 }
 ```
 
-## 3.7. 标记和过滤
+### 3.7. 标记和过滤
 测试类和测试方法可以被标记。那些标签可以在后面被用来过滤 [测试发现和执行]()
 
-### 3.7.1. 标记的语法规则
+#### 3.7.1. 标记的语法规则
 * 标记不能为`null`或空。
 
 * *trimmed*标记不能包含空格。
@@ -362,7 +362,7 @@ class TaggingDemo {
 }
 ```
 
-## 3.8. 测试实例生命周期
+### 3.8. 测试实例生命周期
 为了隔离地执行单个测试方法，以及避免由于不稳定的测试实例状态引发的非预期的副作用，JUnit会在执行每个测试方法执行之前创建一个新的实例（参考下面的注释说明如何定义一个测试方法）。“方法之前”测试实例的生命周期是JUnit Jupiter的默认行为，这点类似于JUnit所有之前的版本。
 
 如果你希望JUnit Jupiter在相同的实例上执行所有的测试方法，在你的测试类上加上注解`@TestInstance(Lifecycle.PER_CLASS)`即可。启用了该模式后，每一个测试类只会创建一次实例。因此，如果你的测试方法依赖实例变量存储的状态，你可能需要在`@BeforeEach` 或 `@AfterEach`方法中重置状态。
@@ -376,7 +376,7 @@ If you are authoring tests using the Kotlin programming language, you may also f
 
 > 在测试实例生命周期的上下文中，任何使用了`@Test`, `@RepeatedTest`, `@ParameterizedTest`, `@TestFactory`, 或者`@TestTemplate`注解的方法都是一个测试方法。
 
-## 3.9. 内嵌测试
+### 3.9. 内嵌测试
 内嵌测试使得测试编写者能够表示出几组测试用例之间的关系。下面来看一个精心设计的例子。
 
 *一个用于测试栈的内嵌测试套件*
@@ -470,7 +470,7 @@ class TestingAStackDemo {
 
 > Note: 用作`@Nested`的测试只能是非静态的内嵌类（i.e. 内部类）。内嵌可以是任意深度，那些内部类会被认为是一个该测试类家庭中的成员，但有一种特殊情况：`@BeforeAll`和`@AfterAll`，因为Java不允许内部类中存在`static`成员。但是这种限制可以通过`@Nested`注解，并未类添加`@TestInstance(Lifecycle.PER_CLASS)`的方式来避免（见[Test Instance Lifecycle](http://junit.org/junit5/docs/current/user-guide/#writing-tests-test-instance-lifecycle)）
 
-## 3.10. 构造器和方法的依赖注入
+### 3.10. 构造器和方法的依赖注入
 JUnit之前所有的版本中，测试构造器和方法是不允许传入参数的（至少标准的`Runner`实现是不允许的）。JUnit Jupiter一个主要的改变是：测试类的构造器和方法都允许传入参数了。这带来了更大的灵活性，并且可以在构造器和方法上使用`依赖注入`。
 
 [ParameterResolver](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/ParameterResolver.html) 为测试扩展定义了API，它可以在运行时*动态*解析参数。如果一个测试的构造器或者`@Test`、`@TestFactory`、`@BeforeEach`、`@AfterEach`、`@BeforeAll`或者 `@AfterAll`方法接收一个参数，这个参数就必须在运行时被一个已注册的`ParameterResolver`所解析。
@@ -575,7 +575,7 @@ class MyMockitoTest {
 }
 ```
 
-## 3.11. 测试接口和默认方法
+### 3.11. 测试接口和默认方法
 JUnit Jupiter允许将`@Test`、`@RepeatedTest`、`@ParameterizedTest`、`@TestFactory`、`TestTemplate`、`@BeforeEach`和`@AfterEach`注解声明在接口的默认方法上。除此之外，`@BeforeAll`和`@AfterAll`可以被声明在测试接口的静态方法上，而`@TestInstance(Lifecycle.PER_CLASS)`(见[Test Instance Lifecycle](http://junit.org/junit5/docs/current/user-guide/#writing-tests-test-instance-lifecycle))的测试接口或方法可以在`default`方法的接口上使用 。下面来看一些示例：
 
 ```java
@@ -766,7 +766,7 @@ class StringTests implements ComparableContract<String>, EqualsContract<String> 
 
 上述测试仅仅是作为示例，所以它们不是完整的。
 
-## 3.12. 重复的测试
+### 3.12. 重复的测试
 
 在JUnit Jupiter中，通过注解`@RepeatedTest`可以以指定次数地重复运行一个测试方法，并且可以指定重复的次数。重复测试的每一次调用就像执行一个完全支持相同生命周期回调和扩展的常规`@Test`方法。
 
@@ -919,7 +919,7 @@ When using the ConsoleLauncher or the junitPlatformTest Gradle plugin with the u
 │     └─ Wiederholung 5 von 5 ✔
 ```
 
-## 3.13. 参数化的测试
+### 3.13. 参数化的测试
 参数化测试使得有可能以不同的参数多次执行一个测试。除了使用`@ParameterizedTest`注解，它们的声明跟`@Test`的方法没有区别。除此之外，你必须声明至少一个源用于给每次调用提供参数。
 
 ```java
@@ -938,13 +938,13 @@ testWithStringParameter(String) ✔
 └─ [2] World ✔
 ```
 
-### 3.13.1. 必要的设置
+#### 3.13.1. 必要的设置
 为了使用参数化测试，你必须添加`junit-jupiter-params`依赖。详情请参开[依赖元数据]()
 
-### 3.13.2. 参数源
+#### 3.13.2. 参数源
 Junit Jupiter提供一些开箱即用的*源*注解。接下来每个子章节将提供一个简短的摘要以及一个示例。更多信息请参考 [`org.junit.jupiter.params.provider`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/params/provider/package-summary.html)包中的JavaDoc。
 
-#### @ValueSource
+##### @ValueSource
 `@ValueSource`是最简单的合适的源。它允许你指定一个基本类型字面量数组（String、int、long或double）,并且它只能为每次调用提供一个参数。
 
 ```
@@ -955,7 +955,7 @@ void testWithValueSource(int argument) {
 }
 ```
 
-#### @EnumSource
+##### @EnumSource
 `@EnumSource`能够很方便地提供`Enum`常量。它还提供一个可选的`names`参数，你可以用它来指定那个常量会被使用。如果省略了，就意味着所有的常量将被使用，例如下面的例子：
 
 ```java
@@ -995,7 +995,7 @@ void testWithEnumSourceRegex(TimeUnit timeUnit) {
 }
 ```
 
-#### @MethodSource
+##### @MethodSource
 `@MethodSource`允许引用测试类中的一个或多个方法。被引用的方法的返回值必须是一个`Stream`、`Iterable`、`Iterator`或者参数数组。另外，每个方法必须是静态并且不能包含任何参数。
 
 如果你只需要一个参数，你可以直接返回参数类型的实例，正如下面示例所演示的：
@@ -1041,7 +1041,7 @@ static Stream<Arguments> stringAndIntProvider() {
 }
 ```
 
-#### @CsvSource
+##### @CsvSource
 `@CsvSource`允许你定义的参数列表是以逗号分隔的值（例如 `String`字面值）。
 
 ```java
@@ -1053,7 +1053,7 @@ void testWithCsvSource(String first, int second) {
 }
 ```
 
-#### @CsvFileSource
+##### @CsvFileSource
 `@CsvFileSource`允许你使用类路径中的CSV文件。CSV文件的每一行会作为参数化测试的每次调用的参数：
 
 ```java
@@ -1073,7 +1073,7 @@ bar, 2
 "baz, qux", 3
 ```
 
-#### @ArgumentsSource
+##### @ArgumentsSource
 
 `@ArgumentsSource` 可以用来指定一个自定义且能够复用的`ArgumentsProvider`：
 
@@ -1092,8 +1092,8 @@ static class MyArgumentsProvider implements ArgumentsProvider {
 }
 ```
 
-### 3.13.3. 参数转换
-#### 隐式转换
+#### 3.13.3. 参数转换
+##### 隐式转换
 为了支持像`@CsvSource`这样的使用场景，JUnit Jupiter提供了一些内建的隐式类型转换器。转换的处理依赖于每个方法参数的声明类型。
 
 例如，一个`@ParameterizedTest`方法声明了一个`TimeUnit`类型的参数，而实际上提供了一个`String`，此时字符串会被自动转换成对应的`TimeUnit`枚举常量。
@@ -1130,7 +1130,7 @@ java.time.YearMonth | "2017-03" → YearMonth.of(2017, 3)
 java.time.ZonedDateTime | "2017-03-14T12:34:56.789Z" → ZonedDateTime.of(2017, 3, 14, 12, 34, 56, 789_000_000, ZoneOffset.UTC)
 
 
-#### Explicit Conversion
+##### Explicit Conversion
 
 Instead of using implicit argument conversion you may explicitly specify an ArgumentConverter to use for a certain parameter using the @ConvertWith annotation like in the following example.
 
@@ -1164,7 +1164,7 @@ void testWithExplicitJavaTimeConverter(@JavaTimeConversionPattern("dd.MM.yyyy") 
 }
 ```
 
-### 3.13.4. 自定义展示名称
+#### 3.13.4. 自定义展示名称
 By default, the display name of a parameterized test invocation contains the invocation index and the String representation of all arguments for that specific invocation. However, you can customize invocation display names via the name attribute of the @ParameterizedTest annotation like in the following example.
 默认情况下，参数化测试执行调用时的展示名称包含了该调用的下标和所有参数的`String`表示形式。然而，你可以通过`@ParameterizedTest`注解的`name`属性来自定义调用的展示名称，如下面代码所示：
 
@@ -1194,7 +1194,7 @@ The following placeholders are supported within custom display names.
 {arguments} | 完整的参数列表，以逗号分隔
 {0}, {1}, …​ | 一个独立的参数
 
-### 3.13.5. 生命周期和互操作性
+#### 3.13.5. 生命周期和互操作性
 Each invocation of a parameterized test has the same lifecycle as a regular @Test method. For example, @BeforeEach methods will be executed before each invocation. Similar to Dynamic Tests, invocations will appear one by one in the test tree of an IDE. You may at will mix regular @Test methods and @ParameterizedTest methods within the same test class.
 
 参数化测试的每一次调用拥有跟`@Test`方法相同的生命周期。例如，`@BeforeEach`方法将在每一次调用之前执行。类似于[动态测试]()，调用将一个接一个的出现在IED的测试树上。你可能想在一个测试类中混合使用`@Test`方法和`@ParameterizedTest`方法。
@@ -1211,12 +1211,12 @@ void testWithRegularParameterResolver(String argument, TestReporter testReporter
 }
 ```
 
-## 3.14. 测试模板
+### 3.14. 测试模板
 A @TestTemplate method is not a regular test case but rather a template for test cases. As such, it is designed to be invoked multiple times depending on the number of invocation contexts returned by the registered providers. Thus, it must be used in conjunction with a registered TestTemplateInvocationContextProvider extension. Each invocation of a test template method behaves like the execution of a regular @Test method with full support for the same lifecycle callbacks and extensions. Please refer to Providing Invocation Contexts for Test Templates for usage examples.
 
 `@TestTemplate`方法不是一个常规的实测用例，它是测试用例的模板。这样一来，设计它是用来被多次调用，而这取决于注册提供者返回的调用上下文数量。因此，它必须结合 [TestTemplateInvocationContextProvider](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestTemplateInvocationContextProvider.html) 扩展一起使用。测试模板方法每一次调用类似于常规`@Test`方法的执行，它也全部支持同样的生命周期回调和扩展。关于它的用例请参考 [为测试模板提供调用上下文]()。
 
-## 3.15. 动态测试
+### 3.15. 动态测试
 The standard @Test annotation in JUnit Jupiter described in Annotations is very similar to the @Test annotation in JUnit 4. Both describe methods that implement test cases. These test cases are static in the sense that they are fully specified at compile time, and their behavior cannot be changed by anything happening at runtime. 
 
 在JUnit Juppiter的[Annotations]()章节描述的标准`@Test`注解跟JUnit4中的`@Test`注解非常类似。两者都表示方式是一个测试用例。这些测试用例都是静态的，并且都是在编译器就指定好的，以及它们的行为不能在运行期被改变。*假设提供了动态行为的基本形式，但在表现力上做有意的限制*。
@@ -1233,12 +1233,12 @@ In addition to these standard tests a completely new kind of test programming mo
 
 一个`DynamicTest`是一个在运行期生成的测试。它由一个展示名称和`Executable`组成。`Executable`是一个`@FunctionalInterface`，这意味着动态测试的实现可以是一个`lambda表达式`或方法引用。
 
-> #### 动态测试生命周期
+> ##### 动态测试生命周期
 > 动态测试执行生命周期跟标准的`@Test`测试截然不同。具体地说，动态测试不存在任何生命周期阶段的回调。这意味着`@BeforeEach`和`@AfterEach`方法以及它们对应的扩展回调不会被动态执行。换言之，如果你在一个动态测试中的lambda表达式中去访问字段，那么在由同一个`@TestFactory`方法生成的动态测试之间的执行中，那些字段不会被回调方法或扩展重置掉。
 
 >译者注：同一个`@TestFactory`所生成的n个测试，`@BeforeEach`和`@AfterEach`只会在这n个测试开始前和结束后各执行一次，不会为每一个测试都执行。
 
-### 3.15.1. 动态测试示例
+#### 3.15.1. 动态测试示例
 下面的`DynamicTestsDemo`类演示了测试工厂和动态测试的几个示例：
 
 第一个方法返回一个非法的类型。由于非法类型不能在编译器被识别，所以运行期会抛出一个`JUnitException`。

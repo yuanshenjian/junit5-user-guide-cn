@@ -2,10 +2,10 @@
 `Stefan Bechtold•Sam Brannen•Johannes Link•Matthias Merdes•Marc Philipp•Christian Stein•Version 5.0.0-M4`
 
 
-# 1. 概述
+## 1. 概述
 本文档的目标是为编写测试、扩展作者和引擎作者以及构建工具和IDE供应商的程序员提供全面的参考文档。
 
-## 1.1. JUnit 5 是什么?
+### 1.1. JUnit 5 是什么?
 跟jUnit之前的版本不一样的是，jUnit5由几个不同的模块组成，它们分别来自于三个不同的子项目。
 
 ***JUnit 5 = JUnit Platform + JUnit Jupiter + JUnit Vintage***  
@@ -18,10 +18,10 @@
 
 **JUnit Vintage** 提供了一个`TestEngine`，用于在平台上运行基于JUnit 3和JUnit4 编写的测试。
 
-## 1.2. 所支持的Java版本
+### 1.2. 所支持的Java版本
 JUnit 5需要Java 8的运行时环境。然而，你仍然可以测试那些由老版本JDK所编译的代码。
 
-## 1.3. 更多帮助
+### 1.3. 更多帮助
 与JUnit5相关问题，可以在[Stack Overflow](https://stackoverflow.com/questions/tagged/junit5)
 进行提问，或者与我们在[Gitter](https://gitter.im/junit-team/junit5)上进行交流。
 
