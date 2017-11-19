@@ -121,8 +121,8 @@ class StandardTests {
 > 🔑 👉 不必将测试类和测试方法声明为`public`
 
 
-### 3.3. 展示名字
-测试类和测试方法可以声明自定义的显示名字--空格、特殊字符以及emojis表情--都可以显示在测试运行器和测试报告中。
+### 3.3. 显示名称
+测试类和测试方法可以声明自定义的显示名称 -- 空格、特殊字符甚至是emojis表情 -- 都可以显示在测试运行器和测试报告中。
 
 ```java
 import org.junit.jupiter.api.DisplayName;
@@ -150,13 +150,14 @@ class DisplayNameDemo {
 ```
 
 ### 3.4. 断言
-JUnit Jupiter自带了很多JUnit4就已经存在的断言方法，以及添加了一些在Java8 Lambda表达式中更好用的断言。JUnit Jupiter中所有断言都是`static`方法，它们存在 [org.junit.jupiter.Assertions](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Assertions.html)于类中。
+JUnit Jupiter沿用了很多JUnit 4就已经存在的断言方法，并且增加了一些适合与Java8 Lambda一起使用的断言。所有的JUnit Jupiter断言都是 [org.junit.jupiter.Assertions](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Assertions.html) 类中`static`方法。
 
 ```java
 import static java.time.Duration.ofMillis;
 import static java.time.Duration.ofMinutes;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
@@ -178,9 +179,39 @@ class AssertionsDemo {
     void groupedAssertions() {
         // In a grouped assertion all assertions are executed, and any
         // failures will be reported together.
-        assertAll("address",
-            () -> assertEquals("John", address.getFirstName()),
-            () -> assertEquals("User", address.getLastName())
+        assertAll("person",
+            () -> assertEquals("John", person.getFirstName()),
+            () -> assertEquals("Doe", person.getLastName())
+        );
+    }
+
+    @Test
+    void dependentAssertions() {
+        // Within a code block, if an assertion fails the
+        // subsequent code in the same block will be skipped.
+        assertAll("properties",
+            () -> {
+                String firstName = person.getFirstName();
+                assertNotNull(firstName);
+
+                // Executed only if the previous assertion is valid.
+                assertAll("first name",
+                    () -> assertTrue(firstName.startsWith("J")),
+                    () -> assertTrue(firstName.endsWith("n"))
+                );
+            },
+            () -> {
+                // Grouped assertion, so processed independently
+                // of results of first name assertions.
+                String lastName = person.getLastName();
+                assertNotNull(lastName);
+
+                // Executed only if the previous assertion is valid.
+                assertAll("last name",
+                    () -> assertTrue(lastName.startsWith("D")),
+                    () -> assertTrue(lastName.endsWith("e"))
+                );
+            }
         );
     }
 
@@ -244,9 +275,9 @@ class AssertionsDemo {
 ```
 
 #### 3.4.1. 第三方断言类库
-虽然JUnit Jupiter提供的断言工具包已经满足了很多测试场景，但有时候我们会遇到需要更加强大且具备例如*匹配器*功能的场景。这个时候，JUnit团队推荐使用第三方断言类库，例如：[AssertJ](http://joel-costigliola.github.io/assertj/)、[Hamcrest](http://hamcrest.org/JavaHamcrest/)、[Truth](http://google.github.io/truth/) 等等。所以说，使用哪个断言类库完全取决于开发人员自己的喜好。
+虽然JUnit Jupiter提供的断言工具包已经满足了很多测试场景，但有时候我们会遇到需要更加强大且具备例如*匹配器*功能的场景。在这些场景中，JUnit团队推荐使用第三方断言类库，例如：[AssertJ](http://joel-costigliola.github.io/assertj/)、[Hamcrest](http://hamcrest.org/JavaHamcrest/)、[Truth](http://google.github.io/truth/) 等等。所以说，使用哪个断言类库完全取决于开发人员自己的喜好。
 
-举个例子，*匹配器*和一个流式调用的API的组合可以使得断言更加具有描述性和可读性。然而，JUnit Jupiter的 [org.junit.jupiter.Assertions](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Assertions.html)类没有提供类似于JUnit4`org.junit.Assert`类中的 [assertThat()](http://junit.org/junit4/javadoc/latest/org/junit/Assert.html#assertThat) 方法，我们知道该方法能够接受一个 Hamcrest [Matcher](http://junit.org/junit4/javadoc/latest/org/hamcrest/Matcher.html)。所以，我们鼓励开发人员去使用第三方断言类库提供的內建匹配器。
+举个例子，*匹配器*和一个流式调用的API的组合可以使得断言更加具有描述性和可读性。然而，JUnit Jupiter的 [org.junit.jupiter.Assertions](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Assertions.html) 类没有提供一个类似于JUnit 4的`org.junit.Assert`类中 [assertThat()](http://junit.org/junit4/javadoc/latest/org/junit/Assert.html#assertThat) 方法，该方法接受一个Hamcrest [Matcher](http://junit.org/junit4/javadoc/latest/org/hamcrest/Matcher.html)。所以，我们鼓励开发人员使用由第三方断言库提供的匹配器的内置支持。
 
 下面的例子演示如何在JUnit Jupiter中使用Hamcrest提供的`assertThat()`。只要Hamcrest库已经被添加到classpath中，你就可以静态导入诸如`assertThat()`、`is()`以及`equalTo()`方法，然后在测试方法中使用它们，如下面代码所示的`assertWithHamcrestMatcher()`方法：
 
@@ -266,6 +297,7 @@ class HamcrestAssertionDemo {
 
 }
 ```
+
 当然，那些基于JUnit4编程模型的遗留测试可以继续使用`org.junit.Assert#assertThat`。
 
 
