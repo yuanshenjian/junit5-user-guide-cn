@@ -118,7 +118,7 @@ class StandardTests {
 }
 ```
 
-> 🔑 👉 不必将测试类和测试方法声明为`public`
+>📒 不必将测试类和测试方法声明为`public`
 
 
 ### 3.3. 显示名称
@@ -150,7 +150,7 @@ class DisplayNameDemo {
 ```
 
 ### 3.4. 断言
-JUnit Jupiter沿用了很多JUnit 4就已经存在的断言方法，并且增加了一些适合与Java8 Lambda一起使用的断言。所有的JUnit Jupiter断言都是 [org.junit.jupiter.Assertions](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Assertions.html) 类中`static`方法。
+JUnit Jupiter附带了很多JUnit 4就已经存在的断言方法，并增加了一些适合与Java8 Lambda一起使用的断言。所有的JUnit Jupiter断言都是 [org.junit.jupiter.Assertions](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Assertions.html) 类中`static`方法。
 
 ```java
 import static java.time.Duration.ofMillis;
@@ -302,7 +302,7 @@ class HamcrestAssertionDemo {
 
 
 ### 3.5. 假设
-JUnit Jupiter自带了JUnit4所提供的假设方法的一个子集，以及添加了一些在Java8 Lambdas中更好用的假设。JUnit Jupiter中所有假设都是静态方法，它们存在于 [org.junit.jupiter.Assumptions](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Assumptions.html) 类中。
+JUnit Jupiter附带了JUnit4所提供的假设方法的一个子集，并增加了一些适合与Java 8 lambda一起使用的假设方法。所有的JUnit Jupiter假设都是 [org.junit.jupiter.Assumptions](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Assumptions.html) 类中的静态方法。
 
 ```java
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -311,7 +311,7 @@ import static org.junit.jupiter.api.Assumptions.assumingThat;
 
 import org.junit.jupiter.api.Test;
 
-public class AssumptionsDemo {
+class AssumptionsDemo {
 
     @Test
     void testOnlyOnCiServer() {
@@ -340,6 +340,7 @@ public class AssumptionsDemo {
 
 }
 ```
+
 ### 3.6. 禁用测试
 下面是一个被禁用的测试用例：
 
@@ -378,13 +379,14 @@ class DisabledTestsDemo {
 测试类和测试方法可以被标记。那些标签可以在后面被用来过滤 [测试发现和执行]()
 
 #### 3.7.1. 标记的语法规则
-* 标记不能为`null`或空。
+* 标记不能为`null`或*空*。
+* *trimmed* 的标记不能包含空格。
+* *trimmed* 的标记不能包含IOS字符。
+* *trimmed* 的标记不能包含一下*保留*字符。
+	* `,`, `(`, `)`, `&`, `|`, `!`
 
-* *trimmed*标记不能包含空格。
 
-* *trimmed*标记不能包含IOS字符。
-
->上述的"trimmed"指的是两端的空格字符被移除掉了。
+>📒 上述的"trimmed"指的是两端的空格字符被去除掉。
 
 ```java
 import org.junit.jupiter.api.Tag;
@@ -403,18 +405,32 @@ class TaggingDemo {
 ```
 
 ### 3.8. 测试实例生命周期
-为了隔离地执行单个测试方法，以及避免由于不稳定的测试实例状态引发的非预期的副作用，JUnit会在执行每个测试方法执行之前创建一个新的实例（参考下面的注释说明如何定义一个测试方法）。“方法之前”测试实例的生命周期是JUnit Jupiter的默认行为，这点类似于JUnit所有之前的版本。
+为了隔离地执行单个测试方法，以及避免由于不稳定的测试实例状态引发的非预期的副作用，JUnit会在执行每个测试方法执行之前创建一个新的实例（参考下面的注释说明如何定义一个*测试*方法）。这个"per-method"测试实例生命周期是JUnit Jupiter的默认行为，这点类似于JUnit以前的所有版本。
 
-如果你希望JUnit Jupiter在相同的实例上执行所有的测试方法，在你的测试类上加上注解`@TestInstance(Lifecycle.PER_CLASS)`即可。启用了该模式后，每一个测试类只会创建一次实例。因此，如果你的测试方法依赖实例变量存储的状态，你可能需要在`@BeforeEach` 或 `@AfterEach`方法中重置状态。
+如果你希望JUnit Jupiter在同一个实例上执行所有的测试方法，在你的测试类上加上注解`@TestInstance(Lifecycle.PER_CLASS)`即可。启用了该模式后，每一个测试类只会创建一次实例。因此，如果你的测试方法依赖实例变量存储的状态，你可能需要在`@BeforeEach`或`@AfterEach`方法中重置状态。
 
-“类之前”模式相比于默认的”方法之前“模式有一些额外的好处。尤其是，使用了”类方法“模式之后，你就可以在非静态方法上声明`@BeforeAll` 以及 `@AfterAll`，就像接口的默认方法一样。因此”类之前“模式使得在`@Nested`测试类中使用`@BeforeAll`和`@AfterAll`注解成为了可能。
+"per-class"模式相比于默认的"per-method"模式有一些额外的好处。具体来说，使用了"per-class"模式之后，你就可以在非静态方法和接口`default`方法上声明`@BeforeAll`和 `@AfterAll`，就像接口的默认方法一样。因此"per-class"模式使得在`@Nested`测试类中使用`@BeforeAll`和`@AfterAll`注解成为了可能。
+
+如果你使用Kotlin编程语言来编写测试，你会发现通过将测试实例的生命周期模式切换到"per-class"更容易实现`@BeforeAll`和`@AfterAll`方法。
+
+>📒 在测试实例生命周期的上下文中，任何使用了`@Test`, `@RepeatedTest`, `@ParameterizedTest`, `@TestFactory`, 或者`@TestTemplate`注解的方法都是一个*测试*方法。
 
 
-If you are authoring tests using the Kotlin programming language, you may also find it easier to implement `@BeforeAll` and `@AfterAll` methods by switching to the "per-class" test instance lifecycle mode.
+#### 3.8.1. 更改默认的测试实例生命周期
+如果测试类或测试接口没有用`@TestInstance`标注，JUnit Jupiter 将使用*默认*的生命周期模式。标准的*默认*模式是`PER_METHOD`。然而，整个测试计划执行的*默认值*是可以被更改的。要更改默认测试实例生命周期模式，只需将`junit.jupiter.testinstance.lifecycle.default`*配置参数*设置为在`TestInstance.Lifecycle`中定义的枚举常量的名称即可，名称忽略大小写。它也通过JVM系统属性提供，作为一个传递给`Launcher`的`LauncherDiscoveryRequest`中的*配置参数*，或通过JUnit Platform配置文件提供（详细信息请参[阅配置参数]()）。
 
-如果你使用Kotlin编程语言来编写测试，你会发现通过将测试实例的生命周期模式切换到”类之前“更容易实现`@BeforeAll`和`@AfterAll`方法。
+例如，要将默认测试实例生命周期模式设置为`Lifecycle.PER_CLASS`，你可以使用以下系统属性启动JVM。
 
-> 在测试实例生命周期的上下文中，任何使用了`@Test`, `@RepeatedTest`, `@ParameterizedTest`, `@TestFactory`, 或者`@TestTemplate`注解的方法都是一个测试方法。
+`-Djunit.jupiter.testinstance.lifecycle.default=per_class`
+
+但是请注意，通过JUnit Platform配置文件设置缺省测试实例生命周期模式是一个更强大的解决方案，因为配置文件可以与项目一起被提交到版本控制系统中，因此可用于IDE和构建软件。
+
+要通过JUnit Platform配置文件将默认测试实例生命周期模式设置为`Lifecycle.PER_CLASS`，请在类路径的根目录（例如，`src/test/resources`）中创建一个名为`junit-platform.properties`的文件，并写入以下内容。
+
+`junit.jupiter.testinstance.lifecycle.default = per_class`
+
+> ⚠️  更改*默认*的测试实例生命周期模式后，如果没有做到一致地应用，将会导致不可预测的结果和脆弱的构建。例如，如果构建将"per-class"语义配置为默认值，但是IDE中的测试使用"per-method"的语义来执行，则可能使调试构建服务器上发生的错误变得困难。因此，建议更改JUnit Platform配置文件中的默认值，而不是通过JVM系统属性。
+
 
 ### 3.9. 内嵌测试
 内嵌测试使得测试编写者能够表示出几组测试用例之间的关系。下面来看一个精心设计的例子。
