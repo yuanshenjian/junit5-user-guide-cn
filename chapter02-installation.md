@@ -1,7 +1,7 @@
 ## 2. 安装
-最终版本和里程碑的包已经部署到Mave仓库中心了。
+最终版本和里程碑的包已经被部署到Maven仓库中心了。
 
-快照版本被部署到 [Sonatype快照库](https://oss.sonatype.org/content/repositories/snapshots) 中的 [/org/junit](https://oss.sonatype.org/content/repositories/snapshots/org/junit/)目录下。
+快照版本被部署到 [Sonatype 快照库](https://oss.sonatype.org/content/repositories/snapshots) 中的 [/org/junit](https://oss.sonatype.org/content/repositories/snapshots/org/junit/)目录下。
 
 ### 2.1. 依赖元数据
 
@@ -9,54 +9,60 @@
 
 * **Group ID**: `org.junit.platform`
 
-* **Version**: `1.0.0-M6`
+* **Version**: `1.0.2`
 
 * **Artifact IDs:**
 
 `junit-platform-commons`  
 
-jUnit 内部通用类库/工具。这些工具是专门给JUnit框架自身使用的。不支持任何外部使用。使用的需要自行承担风险。
+These utilities are intended solely for usage within the JUnit framework itself. Any usage by external parties is not supported. Use at your own risk!
+
+JUnit 内部通用类库/实用工具。这些实用工具仅用于JUnit框架本身。不支持任何外部使用。外部使用风险自负。
 
 `junit-platform-console`  
 
-支持从控制台中查找和执行JUnit平台上的测试。详情参考[控制台启动器]()
+支持从控制台中查找和执行JUnit Platform上的测试。详情参考 [控制台启动器]()。
 	
 
 `junit-platform-console-standalone`  
 
-一个包含了Maven仓库中心 [junit-platform-console-standalone](https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone) 目录下所提供的所有依赖的可执行JAR包。详情参考[控制台启动器]()
+一个包含了Maven仓库中的 [junit-platform-console-standalone](https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone) 目录下所有依赖项的可执行JAR包。详情参考 [控制台启动器]()。
+
 
 `junit-platform-engine`  	
 
 测试引擎的公共API。详情参考 [插入你自己的测试引擎]()
 
+
 `junit-platform-gradle-plugin`  	
 
-支持使用 [Gralde]() 来查找和执行JUnit平台上的测试。
+支持使用 [Gralde]() 来查找和执行JUnit Platform上的测试。
+
 
 `junit-platform-launcher`	
 
-配置和加载测试计划的公共API -- 典型的使用场景是在IDE和构建工具中。详情参考 [JUnit 平台启动器API]()
+配置和加载测试计划的公共API -- 典型的使用场景是IDE和构建工具。详情参考 [JUnit Platform启动器API]()。
+
 
 `junit-platform-runner`
 
-它是一个在JUnit平台上以JUnit 4的环境执行的测试和测试套件的运行器。详情参考 [使用JUnit 4运行JUnit平台]()
+在JUnit Platform上以JUnit 4的环境执行测试和测试套件的运行器。详情参考 [使用JUnit 4 运行JUnit Platform]()。
    
    
 `junit-platform-suite-api`
 	
-在JUnit平台上配置测试套件的注解。被 [JUnit平台运行器]()所支持，也有可能被第三方`TestEngine`的实现所支持。 
+在JUnit Platform上配置测试套件的注解。被 [JUnit Platform 运行器]() 所支持，也有可能被第三方`TestEngine`的实现所支持。 
+
 
 `junit-platform-surefire-provider`
 
-	
-支持使用 [Maven Surefire]() 来查找和执行JUnit 平台上的测试。
+支持使用 [Maven Surefire]() 来查找和执行JUnit Platform上的测试。
 
 
 #### 2.1.2. JUnit Jupiter
 * **Group ID**: `org.junit.jupiter`
 
-* **Version**: `5.0.0-M6`
+* **Version**: `5.0.2`
 
 * **Artifact IDs**:
 
@@ -64,30 +70,46 @@ jUnit 内部通用类库/工具。这些工具是专门给JUnit框架自身使�
 
 [编写测试]() 和 [扩展]() 的JUnit Jupiter API。
 
+
 `junit-jupiter-engine`
 
-JUnit Jupiter测试引擎的实现，仅仅用在运行时。
+JUnit Jupiter测试引擎的实现，仅仅在运行时需要。
+
 
 `junit-jupiter-params`
 
-支持JUnit Jupiter中 [参数化的测试]()。
+支持JUnit Jupiter中的 [参数化的测试]()。
+
 
 `junit-jupiter-migration-support`
 
-将JUnit 4的支持迁移到JUnit Jupiter，仅仅用来运行选择了JUnit 4规则的测试。
+支持从JUnit 4的迁移到JUnit Jupiter，仅仅在运行选择了JUnit 4规则的测试时需要。
 
 
 #### 2.1.3. JUnit Vintage
 
 * **Group ID**: `org.junit.vintage`
 
-* **Version**: `4.12.0-M6`
+* **Version**: `4.12.2`
 
 * **Artifact ID**:
 
 `junit-vintage-engine`
 
-JUnit Vintage测试引擎实现，允许在JUnit平台上运行低版本的JUnit测试，即使用JUnit 3或JUnit 4风格编写的测试。
+JUnit Vintage测试引擎实现，允许在新的JUnit Platform上运行低版本的JUnit测试，即那些以JUnit 3或JUnit 4风格编写的测试。
+
+
+#### 2.1.4. 可选的依赖
+All of the above artifacts have an optional dependency in their published Maven POMs on the following @API Guardian JAR.
+
+以上所有的包在它们已发布的Maven POM中都有一个可选的依赖，位于紧随其后的@API Guardian JAR包中。
+
+* **Group ID**: org.apiguardian
+
+* **Artifact ID**: apiguardian-api
+
+* **Version**: 1.0.0
+
 
 ### 2.2. 依赖关系图
 
@@ -95,8 +117,8 @@ JUnit Vintage测试引擎实现，允许在JUnit平台上运行低版本的JUnit
 
 
 ### 2.3 JUnit Jupiter示例工程
-[junit5-samples](https://github.com/junit-team/junit5-samples) 代码库中包含了一系列基于JUnit Jupiter和JUnit Vintage的示例工程。在下面的项目中，你会分别找到`build.gradle`和`pom.xml`文件：
+[junit5-samples](https://github.com/junit-team/junit5-samples) 代码库中包含了一系列基于JUnit Jupiter和JUnit Vintage的示例工程。你可以在下面的项目中找到相应的`build.gradle`和`pom.xml`文件：
 
-- Gradle工程：[junit5-gradle-consumer](https://github.com/junit-team/junit5-samples/tree/r5.0.0-M4/junit5-gradle-consumer).
+- Gradle工程：[junit5-gradle-consumer](https://github.com/junit-team/junit5-samples/tree/r5.0.2/junit5-gradle-consumer).
 
-- Maven工程：[junit5-maven-consumer](https://github.com/junit-team/junit5-samples/tree/r5.0.0-M4/junit5-maven-consumer).
+- Maven工程：[junit5-maven-consumer](https://github.com/junit-team/junit5-samples/tree/r5.0.2/junit5-maven-consumer).
