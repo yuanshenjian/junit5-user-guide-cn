@@ -51,7 +51,7 @@ JUnit 内部通用类库/实用工具。这些实用工具仅用于JUnit框架�
    
 `junit-platform-suite-api`
 	
-在JUnit Platform上配置测试套件的注解。被 [JUnit Platform 运行器]() 所支持，也有可能被第三方`TestEngine`的实现所支持。 
+在JUnit Platform上配置测试套件的注解。被 [JUnit Platform 运行器]() 所支持，也有可能被第三方的`TestEngine`实现所支持。 
 
 
 `junit-platform-surefire-provider`

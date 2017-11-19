@@ -17,33 +17,41 @@ class FirstJUnit5Tests {
 }
 ```
 
-### 3.1. 注解
-JUnit Jupiter 支持使用下面表格中所列的注解来配置测试及扩展框架。
+JUnit Jupiter supports the following annotations for configuring tests and extending the framework.
 
-所有的核心注解位于`junit-jupiter-api`模块的 [org.junit.jupiter.api ](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/package-summary.html) 包中。
+All core annotations are located in the org.junit.jupiter.api package in the junit-jupiter-api module.
+
+### 3.1. 注解
+JUnit Jupiter 支持下面表格中注解来配置测试和扩展框架。
+
+所有的核心注解都位于`junit-jupiter-api`模块的 [org.junit.jupiter.api ](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/package-summary.html) 包中。
 
 | 注解          | 描述 |
 |:--------------|:------------|
-| @Test         | 表示该该方法是一个测试方法。不像JUnit4的 @Test 注解，该注解没有声明任何属性，由于JUnit Jupiter操作中，测试扩展都是基于它们自身专用的注解 |
-| @RepeatedTest | 表示该方法是一个[重复测试]()的测试模板 |
-| @TestFactory  | 表示该方法是一个[动态测试]()的测试工厂 |
-| @TestInstance  | 用来为所标注的测试类配置[测试实例生命周期]() |
-| @TestTemplate  | 表示某个方法是一个[测试用例的模板]()，它会依据注册的[提供者]()所返回的的调用上下文的数量被多次调用。 |
-| @DisplayName  | 为测试类或测试方法声明一个定制化的展示名字 |
-| @BeforeEach   | 使用该注解的方法应该在当前类中每一个使用了`@Test`,`@RepeatedTest`,`@ParameterizedTest`或者`@TestFactory`注解的方法之前执行；类似于JUnit4的 `@Before`，该方法是可被继承的 |
-| @AfterEach    | 使用该注解的方法应该在当前类中每一个使用了`@Test`,`@RepeatedTest`,`@ParameterizedTest`或者`@TestFactory`注解的方法之后执行；类似于JUnit4的 `@After`，该方法是可被继承的 |
-| @BeforeAll    | 使用该注解的方法应该在当前类中所有使用了`@Test`,`@RepeatedTest`,`@ParameterizedTest`或者`@TestFactory`注解的方法之前执行；类似于JUnit4的 `@BeforeClass`，该方法可以被继承。它必须是 `static`方法，除非测试类或测试接口使用了`@TestInstance(Lifecycle.PER_CLASS)`注解。|
-| @AfterAll     | 使用该注解的方法应该在当前类中所有使用了`@Test`,`@RepeatedTest`,`@ParameterizedTest`或者`@TestFactory`注解的方法之后执行；类似于JUnit4的 `@AfterClass`。该方法可以被继承。它必须是 `static`方法，除非测试类或测试接口使用了`@TestInstance(Lifecycle.PER_CLASS)`注解。|
-| @Nested       | 使用该注解的类是一个内嵌、非静态的测试类。受限于Java语言，`@BeforeAll`和`@AfterAll`方法不能直接在`@Nested`测试类中使用，除非测试类使用了`@TestInstance(Lifecycle.PER_CLASS)`注解。 |
-| @Tag          | 声明用于过滤测试的*tags*，该注解可以用在方法或类上；类似于TesgNG的测试组以及JUnit4的分类。
-| @Disable      | 禁用一个测试类或测试方法；类似于JUnit4的`@Ignore` |
-| @ExtendWith   | 注册自定义[扩展]() |
+| @Test         | 表示该方法是一个测试方法。与JUnit4的`@Test`注解不同的是，它没有声明任何属性，因为JUnit Jupiter中的测试扩展是基于他们自己的专用注解来完成的。这样的方法会被*继承*，除非它们被*覆盖*了。|
+| @ParameterizedTest | 表示该方法是一个 [参数化测试]()。这样的方法会被*继承*，除非它们被*覆盖*了。|
+| @RepeatedTest | 表示该方法是一个 [重复测试]() 的测试模板。这样的方法会被*继承*，除非它们被*覆盖*了。 |
+| @TestFactory  | 表示该方法是一个 [动态测试]() 的测试工厂。这样的方法会被*继承*，除非它们被*覆盖*了。 |
+| @TestInstance  | 用于配置所标注的测试类的 [测试实例生命周期]()。这些注解会被*继承*。 |
+| @TestTemplate  | 表示该方法是一个 [测试用例的模板]()，它会依据注册的 [提供者]()所返回的的调用上下文的数量被多次调用。 这样的方法会被*继承*，除非它们被*覆盖*了。|
+| @DisplayName  | 为测试类或测试方法声明一个定制化的展示名字。该注解不能被*继承*。 |
+| @BeforeEach   | 表示使用了该注解的方法应该在当前类中**每一个**使用了`@Test`,`@RepeatedTest`,`@ParameterizedTest`或者`@TestFactory`注解的方法*之前*执行；类似于JUnit4的 `@Before`。这样的方法会被*继承*，除非它们被*覆盖*了。|
+| @AfterEach    | 表示使用了该注解的方法应该在当前类中**每一个**使用了`@Test`,`@RepeatedTest`,`@ParameterizedTest`或者`@TestFactory`注解的方法*之后*执行；类似于JUnit4的 `@After`。这样的方法会被*继承*，除非它们被*覆盖*了。 |
+| @BeforeAll    | 表示使用了该注解的方法应该在当前类中**所有**使用了`@Test`,`@RepeatedTest`,`@ParameterizedTest`或者`@TestFactory`注解的方法*之前*执行；类似于JUnit4的 `@BeforeClass`。这样的方法会被*继承*（除非它们被*隐藏* 或*覆盖*），并且它必须是 `static`方法（除非"per-class" [测试实例声明周期]() 被使用）。|
+| @AfterAll     | 表示使用了该注解的方法应该在当前类中所有使用了`@Test`,`@RepeatedTest`,`@ParameterizedTest`或者`@TestFactory`注解的方法之后执行；类似于JUnit4的 `@AfterClass`。这样的方法会被*继承*（除非它们被*隐藏* 或*覆盖*），并且它必须是 `static`方法（除非"per-class" [测试实例声明周期]() 被使用）。|
+| @Nested       | 表示使用了该注解的类是一个内嵌、非静态的测试类。`@BeforeAll`和`@AfterAll`方法不能直接在`@Nested`测试类中使用，（除非"per-class" [测试实例声明周期]() 被使用）。该注解不能被*继承*。|
+| @Tag          | 用于声明过滤测试的*tags*，该注解可以用在方法或类上；类似于TesgNG的测试组或JUnit4的分类。该注解能被*继承*，但仅限于类级别，而非方法级别。
+| @Disable      | 用于*禁用*一个测试类或测试方法；类似于JUnit4的`@Ignore`。该注解不能被继承。 |
+| @ExtendWith   | 用于注册自定义[扩展]()。该注解不能被*继承*。 |
 
+被`@Test`、`@TestTemplate`、`@RepeatedTest`、`@BeforeAll`、`@AfterAll`、`@BeforeEach` 或 `@AfterEach` 注解标注的方法不可以有返回值。
 
-#### 3.1.1. 元注解即组合注解
-JUnit Jupiter注解可以被用作元注解。这意味着你可以定义你自己的组合注解，该注解会自动继承其元注解的语义。
+>⚠️  某些注解目前可能还处于实验阶段。详细信息请参阅 [实验性APIs]() 中的表格。
 
-例如，为了避免在代码库中到处复制粘贴`@Tag("fast")`（见 [标记和过滤]()），你可以创建一个名为`@Fast`自定义*组合注解*。`@Fast`就可以被用来替换`@Tag("fast")`了。如下面代码所示：
+#### 3.1.1. 元注解和组合注解
+JUnit Jupiter注解可以被用作*元注解*。这意味着你可以定义你自己的*组合注解*，而自定义的组合注解会自动*继承*其元注解的语义。
+
+例如，为了避免在代码库中到处复制粘贴`@Tag("fast")`（见 [标记和过滤]()），你可以自定义一个名为`@Fast`的*组合注解*。然后你就可以用`@Fast`来替换`@Tag("fast")`。如下面代码所示：
 
 ```java
 import java.lang.annotation.ElementType;
