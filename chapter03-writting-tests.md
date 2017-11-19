@@ -527,16 +527,16 @@ class TestingAStackDemo {
 >📒 只有*非静态嵌套类*（即内部类）可以作为@Nested测试类。嵌套可以是任意深的，这些内部类被认为是测试类家族的正式成员，但有一个例外：`@BeforeAll`和`@AfterAll`方法*默认*不会工作。原因是Java不允许内部类中存在`static`成员。不过这种限制可以使用`@TestInstance(Lifecycle.PER_CLASS)`标注`@Nested`测试类来绕开（请参阅 [测试实例生命周期]()）
 
 
-### 3.10. 构造器和方法的依赖注入
-JUnit之前所有的版本中，测试构造器和方法是不允许传入参数的（至少标准的`Runner`实现是不允许的）。JUnit Jupiter一个主要的改变是：测试类的构造器和方法都允许传入参数了。这带来了更大的灵活性，并且可以在构造器和方法上使用`依赖注入`。
+### 3.10. 构造函数和方法的依赖注入
+在之前的所有JUnit版本中，测试构造函数和方法是不允许传入参数的（至少不能使用标准的`Runner`实现）。JUnit Jupiter一个主要的改变是：允许给测试类的构造函数和方法传入参数。这带来了更大的灵活性，并且可以在构造函数和方法上使用*依赖注入*。
 
-[ParameterResolver](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/ParameterResolver.html) 为测试扩展定义了API，它可以在运行时*动态*解析参数。如果一个测试的构造器或者`@Test`、`@TestFactory`、`@BeforeEach`、`@AfterEach`、`@BeforeAll`或者 `@AfterAll`方法接收一个参数，这个参数就必须在运行时被一个已注册的`ParameterResolver`所解析。
+[ParameterResolver](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/ParameterResolver.html) 为测试扩展定义了API，它可以在运行时*动态*解析参数。如果一个测试的构造函数或者`@Test`、`@TestFactory`、`@BeforeEach`、`@AfterEach`、`@BeforeAll`或者 `@AfterAll`方法接收一个参数，这个参数就必须在运行时被一个已注册的`ParameterResolver`解析。
 
 目前有三种被自动注册的內建的解析器。
 
-* [TestInfoParameterResolver](https://github.com/junit-team/junit5/tree/r5.0.0-M4/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/TestInfoParameterResolver.java)：如果一个方法参数的类型是 [TestInfo](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/TestInfo.html)，`TestInfoParameterResolver`将根据当前的测试提供一个`TestInfo`的实例用于填充参数的值。然后`TestInfo`就可以被用来检索关于当前测试的信息，例如：展示名、测试类、测试方法或相关的标记。展示名要么是一个类似于测试类或测试方法的技术名称，要么是一个通过`@DisplayName`配置的自定义名称。
+* [TestInfoParameterResolver](https://github.com/junit-team/junit5/tree/r5.0.2/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/TestInfoParameterResolver.java)：如果一个方法参数的类型是 [TestInfo](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/TestInfo.html)，`TestInfoParameterResolver`将根据当前的测试提供一个`TestInfo`的实例用于填充参数的值。然后，`TestInfo`就可以被用来检索关于当前测试的信息，例如：显示名称、测试类、测试方法或相关的标签。显示名称要么是一个类似于测试类或测试方法的技术名称，要么是一个通过`@DisplayName`配置的自定义名称。
 
- [TestInfo](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/TestInfo.html)就像JUnit4规则中`TestName`规则的代替者。下面是来看一个示例：
+ [TestInfo](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/TestInfo.html)就像JUnit4规则中`TestName`规则的代替者。以下演示如何将`TestInfo`注入到测试构造函数，`@BeforeEach`方法和`@Test`方法中。
 
 ```java
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -548,7 +548,12 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 
+@DisplayName("TestInfo Demo")
 class TestInfoDemo {
+
+    TestInfoDemo(TestInfo testInfo) {
+        assertEquals("TestInfo Demo", testInfo.getDisplayName());
+    }
 
     @BeforeEach
     void init(TestInfo testInfo) {
@@ -558,10 +563,10 @@ class TestInfoDemo {
 
     @Test
     @DisplayName("TEST 1")
-    @Tag("my tag")
+    @Tag("my-tag")
     void test1(TestInfo testInfo) {
         assertEquals("TEST 1", testInfo.getDisplayName());
-        assertTrue(testInfo.getTags().contains("my tag"));
+        assertTrue(testInfo.getTags().contains("my-tag"));
     }
 
     @Test
@@ -571,10 +576,10 @@ class TestInfoDemo {
 }
 ```
 
-* `RepetitionInfoParameterResolver`：如果一个位于`@RepeatedTest`、`@BeforeEach`或者`@AfterEach`方法的参数的类型是 [RepetitionInfo](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/RepetitionInfo.html)，`RepetitionInfoParameterResolver`会提供一个`RepetitionInfo`实例。然后`RepetitionInfo`就可以被用来检索对应`@RepeatedTest`方法的当前重复以及总重复次数等相关信息。注意，`RepetitionInfoParameterResolver`不是在`@RepeatedTest`方法上下文外部被注册的。参考[重复测试示例]()
-* [TestReporterParameterResolver](https://github.com/junit-team/junit5/tree/r5.0.0-M4/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/TestReporterParameterResolver.java)：如果一个方法参数的类型是 [TestReporter](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/TestReporter.html)，`RepetitionInfoParameterResolver`会提供一个`TestReporter `实例。然后`RepetitionInfo`就可以被用来发布当前测试运行相关的额外数据。这些数据可以通过 [TestExecutionListener](http://junit.org/junit5/docs/current/api/org/junit/platform/launcher/TestExecutionListener.html)来消费。`reportingEntryPublished()`从而可以通过IDE来查看或者被输出到报告中。
+* `RepetitionInfoParameterResolver`：如果一个位于`@RepeatedTest`、`@BeforeEach`或者`@AfterEach`方法的参数的类型是 [RepetitionInfo](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/RepetitionInfo.html)，`RepetitionInfoParameterResolver`会提供一个`RepetitionInfo`实例。然后，`RepetitionInfo`就可以被用来检索对应`@RepeatedTest`方法的当前重复以及总重复次数等相关信息。但是请注意，`RepetitionInfoParameterResolver`不是在`@RepeatedTest`的上下文之外被注册的。请参阅[重复测试示例]()
+* [TestReporterParameterResolver](https://github.com/junit-team/junit5/tree/r5.0.2/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/TestReporterParameterResolver.java)：如果一个方法参数的类型是 [TestReporter](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/TestReporter.html)，`TestReporterParameterResolver`会提供一个`TestReporter`实例。然后，`TestReporter`就可以被用来发布有关当前测试运行的其他数据。这些数据可以通过  [TestExecutionListener](http://junit.org/junit5/docs/current/api/org/junit/platform/launcher/TestExecutionListener.html) 的`reportingEntryPublished()`方法来消费，因此可以被IDE查看或包含在报告中。
 
- 在JUnit Jupiter中，你应该使用`TestReporter`来代替你在JUnit4中打印信息到`stdout``stderr`的习惯。使用`@RunWith(JUnitPlatform.class)`会将报告的所有条目都输出到`stdout`中。
+ 在JUnit Jupiter中，你应该使用`TestReporter`来代替你在JUnit4中打印信息到`stdout`或`stderr`的习惯。使用`@RunWith(JUnitPlatform.class)`会将报告的所有条目都输出到`stdout`中。
  
 ```java
 import java.util.HashMap;
@@ -601,9 +606,9 @@ class TestReporterDemo {
 }
 ```
 
->Notes: 其他的参数解析器必须通过`@ExtendWith`注册恰当的[扩展]()来明确地启用。
+>📒 其他的参数解析器必须通过`@ExtendWith`注册合适的 [扩展]() 来明确地开启。
 
-检出 [MockitoExtension]()作为一个自定义 [ParameterResolver]()的例子。虽然不打算真正的大量使用它，但它演示了扩展模型和参数解决过程中的简单性和表现力。`MyMockitoTest`演示了如何注入Mockito mocks到`@BeforeEach`和`@Test`方法中：
+检出 [MockitoExtension](https://github.com/junit-team/junit5-samples/tree/r5.0.2/junit5-mockito-extension/src/main/java/com/example/mockito/MockitoExtension.java) 作为一个自定义 [ParameterResolver](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/ParameterResolver.html) 的例子。虽然不打算真正的大量使用它，但它演示了扩展模型和参数解决过程中的简单性和表现力。`MyMockitoTest`演示了如何将Mockito mocks注入到`@BeforeEach`和`@Test`方法中。
 
 ```java
 import static org.junit.jupiter.api.Assertions.assertEquals;
