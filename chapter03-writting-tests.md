@@ -432,10 +432,10 @@ class TaggingDemo {
 > ⚠️  更改*默认*的测试实例生命周期模式后，如果没有做到一致地应用，将会导致不可预测的结果和脆弱的构建。例如，如果构建将"per-class"语义配置为默认值，但是IDE中的测试使用"per-method"的语义来执行，则可能使调试构建服务器上发生的错误变得困难。因此，建议更改JUnit Platform配置文件中的默认值，而不是通过JVM系统属性。
 
 
-### 3.9. 内嵌测试
-内嵌测试使得测试编写者能够表示出几组测试用例之间的关系。下面来看一个精心设计的例子。
+### 3.9. 嵌套测试
+嵌套测试使得测试编写者能够表示出几组测试用例之间的关系。下面来看一个精心设计的例子。
 
-*一个用于测试栈的内嵌测试套件*
+*一个用于测试栈的嵌套测试套件*
 
 ```java
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -524,7 +524,8 @@ class TestingAStackDemo {
 }
 ```
 
-> Note: 用作`@Nested`的测试只能是非静态的内嵌类（i.e. 内部类）。内嵌可以是任意深度，那些内部类会被认为是一个该测试类家庭中的成员，但有一种特殊情况：`@BeforeAll`和`@AfterAll`，因为Java不允许内部类中存在`static`成员。但是这种限制可以通过`@Nested`注解，并未类添加`@TestInstance(Lifecycle.PER_CLASS)`的方式来避免（见[Test Instance Lifecycle](http://junit.org/junit5/docs/current/user-guide/#writing-tests-test-instance-lifecycle)）
+>📒 只有*非静态嵌套类*（即内部类）可以作为@Nested测试类。嵌套可以是任意深的，这些内部类被认为是测试类家族的正式成员，但有一个例外：`@BeforeAll`和`@AfterAll`方法*默认*不会工作。原因是Java不允许内部类中存在`static`成员。不过这种限制可以使用`@TestInstance(Lifecycle.PER_CLASS)`标注`@Nested`测试类来绕开（请参阅 [测试实例生命周期]()）
+
 
 ### 3.10. 构造器和方法的依赖注入
 JUnit之前所有的版本中，测试构造器和方法是不允许传入参数的（至少标准的`Runner`实现是不允许的）。JUnit Jupiter一个主要的改变是：测试类的构造器和方法都允许传入参数了。这带来了更大的灵活性，并且可以在构造器和方法上使用`依赖注入`。
