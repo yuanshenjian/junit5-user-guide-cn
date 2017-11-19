@@ -118,7 +118,7 @@ class StandardTests {
 }
 ```
 
-> Note: 测试类和测试方法都可以不是 `public`
+> 🔑 👉 不必将测试类和测试方法声明为`public`
 
 
 ### 3.3. 展示名字
