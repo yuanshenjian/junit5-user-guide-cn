@@ -4,25 +4,27 @@
 
 ### 4.1.1 IntelliJ IDEA
 
-IntelliJ IDEA 从 2016.2 版本开始支持在JUnit平台上运行Java测试。更多的相关细节可以参考[IntelliJ IDEA的相关博客](https://blog.jetbrains.com/idea/2016/08/using-junit-5-in-intellij-idea/)。
+IntelliJ IDEA 从 2016.2 版本开始支持在JUnit平台上运行测试。更多的细节参考 [IntelliJ IDEA的相关博客](https://blog.jetbrains.com/idea/2016/08/using-junit-5-in-intellij-idea/)。
 
 ###### 表格1. Junit5 版本对应的 IntelliJ IDEA
- **IntelliJ IDEA Version** | **Bundled JUnit5 Version**
+ **IntelliJ IDEA 版本** | **Bundled JUnit5 Version**
  --------|---------
  2016.2 | M2
  2016.3.1 | M3
  2017.1.2 | M4
+ 2017.2.1 | M5
+ 2017.2.3 | RC2
  
- > IntelliJ IDEA 绑定了 JUnit5的一个特定版本，也就是说，如果你想使用Jupiter API新的里程碑版本，可能在运行测试的时候会失败。直到JUnit5的GA版本发布，这种情况才有所改善。在这之前，你可以在IntelliJ IDEA中按照下面所示的方法使用JUnit5的新版本。
+ > IntelliJ IDEA 与 JUnit5 的特定版本绑定，也就是说，如果你想使用新版本的 Jupiter API，运行测试时可能会失败。直到 JUnit5 的 GA 版本发布，这种情况才有所改善。在这之前，你可以在IntelliJ IDEA中按照下面所示的方法使用 JUnit5 的新版本。
  
-为了能够使用JUnit5的不同版本，你需要在classpath中手动添加`junit-platform-launcher`,`junit-jupiter-engine`,`junit-vintage-engine`的JARs文件。
+为了能够使用JUnit5的不同版本，你需要在classpath中手动添加`junit-platform-launcher`,`junit-jupiter-engine`,`junit-vintage-engine`的 JARs 文件。
 
 ###### *添加Gradle依赖*
 ```
 // Only needed to run tests in an IntelliJ IDEA that bundles an older version
-testRuntime("org.junit.platform:junit-platform-launcher:1.0.0-M5")
-testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.0-M5")
-testRuntime("org.junit.vintage:junit-vintage-engine:4.12.0-M5")
+testRuntime("org.junit.platform:junit-platform-launcher:1.0.2")
+testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.2")
+testRuntime("org.junit.vintage:junit-vintage-engine:4.12.2")
 ```
 
 ###### *添加Maven依赖*
@@ -31,19 +33,19 @@ testRuntime("org.junit.vintage:junit-vintage-engine:4.12.0-M5")
 <dependency>
     <groupId>org.junit.platform</groupId>
     <artifactId>junit-platform-launcher</artifactId>
-    <version>1.0.0-M5</version>
+    <version>1.0.2</version>
     <scope>test</scope>
 </dependency>
 <dependency>
     <groupId>org.junit.jupiter</groupId>
     <artifactId>junit-jupiter-engine</artifactId>
-    <version>5.0.0-M5</version>
+    <version>5.0.2</version>
     <scope>test</scope>
 </dependency>
 <dependency>
     <groupId>org.junit.vintage</groupId>
     <artifactId>junit-vintage-engine</artifactId>
-    <version>4.12.0-M5</version>
+    <version>4.12.2</version>
     <scope>test</scope>
 </dependency>
 ```
