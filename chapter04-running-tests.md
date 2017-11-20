@@ -6,7 +6,7 @@
 
 IntelliJ IDEA 从 2016.2 版本开始支持在JUnit平台上运行测试。更多的细节参考 [IntelliJ IDEA的相关博客](https://blog.jetbrains.com/idea/2016/08/using-junit-5-in-intellij-idea/)。
 
-###### 表格1. Junit5 版本对应的 IntelliJ IDEA
+##### *表格1. Junit5 版本对应的 IntelliJ IDEA*
  **IntelliJ IDEA 版本** | **Bundled JUnit5 Version**
  --------|---------
  2016.2 | M2
@@ -15,7 +15,7 @@ IntelliJ IDEA 从 2016.2 版本开始支持在JUnit平台上运行测试。更�
  2017.2.1 | M5
  2017.2.3 | RC2
  
- > IntelliJ IDEA 与 JUnit5 的特定版本绑定，也就是说，如果你想使用新版本的 Jupiter API，运行测试时可能会失败。直到 JUnit5 的 GA 版本发布，这种情况才有所改善。在这之前，你可以在IntelliJ IDEA中按照下面所示的方法使用 JUnit5 的新版本。
+> ⚠️ IntelliJ IDEA 与 JUnit5 的特定版本绑定，也就是说，如果你想使用新版本的 Jupiter API，运行测试时可能会失败。直到 JUnit5 的 GA 版本发布，这种情况才有所改善。在这之前，你可以在IntelliJ IDEA中按照下面所示的方法使用 JUnit5 的新版本。
  
 为了能够使用JUnit5的不同版本，你需要在classpath中手动添加`junit-platform-launcher`,`junit-jupiter-engine`,`junit-vintage-engine`的 JARs 文件。
 
