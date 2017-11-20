@@ -100,7 +100,6 @@ JUnit Vintage测试引擎实现，允许在新的JUnit Platform上运行低版�
 
 
 #### 2.1.4. 可选的依赖
-All of the above artifacts have an optional dependency in their published Maven POMs on the following @API Guardian JAR.
 
 以上所有的包在它们已发布的Maven POM中都有一个可选的依赖，位于紧随其后的@API Guardian JAR包中。
 
