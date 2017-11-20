@@ -638,21 +638,22 @@ class MyMockitoTest {
 ```
 
 ### 3.11. 测试接口和默认方法
-JUnit Jupiter允许将`@Test`、`@RepeatedTest`、`@ParameterizedTest`、`@TestFactory`、`TestTemplate`、`@BeforeEach`和`@AfterEach`注解声明在接口的默认方法上。除此之外，`@BeforeAll`和`@AfterAll`可以被声明在测试接口的静态方法上，而`@TestInstance(Lifecycle.PER_CLASS)`(见[Test Instance Lifecycle](http://junit.org/junit5/docs/current/user-guide/#writing-tests-test-instance-lifecycle))的测试接口或方法可以在`default`方法的接口上使用 。下面来看一些示例：
+JUnit Jupiter允许将`@Test`、`@RepeatedTest`、`@ParameterizedTest`、`@TestFactory`、`TestTemplate`、`@BeforeEach`和`@AfterEach`注解声明在接口的`default`方法上。*如果* 测试接口或测试类使用了`@TestInstance(Lifecycle.PER_CLASS)`注解（请参阅 [测试实例生命周期]()），则可以在测试接口中的`static`方法或接口的`default`方法上声明`@BeforeAll`和`@AfterAll`。下面来看一些例子。
 
 ```java
-public interface TestLifecycleLogger {
+@TestInstance(Lifecycle.PER_CLASS)
+interface TestLifecycleLogger {
 
     static final Logger LOG = Logger.getLogger(TestLifecycleLogger.class.getName());
 
     @BeforeAll
-    static void beforeAllTests() {
-        LOG.info("beforeAllTests");
+    default void beforeAllTests() {
+        LOG.info("Before all tests");
     }
 
     @AfterAll
-    static void afterAllTests() {
-        LOG.info("afterAllTests");
+    default void afterAllTests() {
+        LOG.info("After all tests");
     }
 
     @BeforeEach
@@ -684,19 +685,20 @@ interface TestInterfaceDynamicTestsDemo {
 }
 ```
 
-`@ExtendWith`和`@Tag`可以被声明在一个测试接口，从而那些实现了该接口的类会自动继承它的标签和扩展。参考 [TimingExtension](http://junit.org/junit5/docs/current/user-guide/#extensions-lifecycle-callbacks-timing-extension) 源码中的 [测试执行回调之前和之后]() 
+可以在测试接口上声明`@ExtendWith`和`@Tag`，以便实现该接口的类自动继承它的标记和扩展。请参阅 [测试执行回调之前和之后]() 章节的 [TimingExtension]() 源代码。
 
 ```java
 @Tag("timed")
 @ExtendWith(TimingExtension.class)
-public interface TimeExecutionLogger {
+interface TimeExecutionLogger {
 }
 ```
 
 在你的测试类中，你可以通过实现这些测试接口来获取那些配置信息。
 
 ```java
-class TestInterfaceDemo implements TestLifecycleLogger, TimeExecutionLogger, TestInterfaceDynamicTestsDemo {
+class TestInterfaceDemo implements TestLifecycleLogger,
+        TimeExecutionLogger, TestInterfaceDynamicTestsDemo {
 
     @Test
     void isEqualValue() {
@@ -710,14 +712,14 @@ class TestInterfaceDemo implements TestLifecycleLogger, TimeExecutionLogger, Tes
 
 ```sh
 :junitPlatformTest
-18:28:13.967 [main] INFO  example.testinterface.TestLifecycleLogger - beforeAllTests
-18:28:13.982 [main] INFO  example.testinterface.TestLifecycleLogger - About to execute [dynamicTestsFromCollection()]
-18:28:14.000 [main] INFO  example.testinterface.TimingExtension - Method [dynamicTestsFromCollection] took 13 ms.
-18:28:14.004 [main] INFO  example.testinterface.TestLifecycleLogger - Finished executing [dynamicTestsFromCollection()]
-18:28:14.007 [main] INFO  example.testinterface.TestLifecycleLogger - About to execute [isEqualValue()]
-18:28:14.008 [main] INFO  example.testinterface.TimingExtension - Method [isEqualValue] took 1 ms.
-18:28:14.009 [main] INFO  example.testinterface.TestLifecycleLogger - Finished executing [isEqualValue()]
-18:28:14.011 [main] INFO  example.testinterface.TestLifecycleLogger - afterAllTests
+INFO  example.TestLifecycleLogger - Before all tests
+INFO  example.TestLifecycleLogger - About to execute [dynamicTestsFromCollection()]
+INFO  example.TimingExtension - Method [dynamicTestsFromCollection] took 13 ms.
+INFO  example.TestLifecycleLogger - Finished executing [dynamicTestsFromCollection()]
+INFO  example.TestLifecycleLogger - About to execute [isEqualValue()]
+INFO  example.TimingExtension - Method [isEqualValue] took 1 ms.
+INFO  example.TestLifecycleLogger - Finished executing [isEqualValue()]
+INFO  example.TestLifecycleLogger - After all tests
 
 Test run finished after 190 ms
 [         3 containers found      ]
@@ -736,7 +738,7 @@ Test run finished after 190 ms
 BUILD SUCCESSFUL
 ```
 
-该功能其他一些可能的应用是编写接口合同的测试。例如，你可以为`Object.equals`或者 `Comparable.compareTo`的实现应该具备什么样的行为编写测试。
+此功能的另一个可能的应用是编写接口合同的测试。例如，你可以编写测试，以了解`Object.equals`或`Comparable.compareTo`的实现应该如何执行。
 
 
 ```java
@@ -803,7 +805,7 @@ public interface ComparableContract<T extends Comparable<T>> extends Testable<T>
 }
 ```
 
-在测试类中，你就可以实现这两个合同接口，从而继承相应的测试。当然，你得实现那些抽象方法。
+在你的测试类中，你可以实现两个契约接口，从而继承相应的测试。当然，你还得实现那些抽象方法。
 
 ```java
 class StringTests implements ComparableContract<String>, EqualsContract<String> {
@@ -826,13 +828,15 @@ class StringTests implements ComparableContract<String>, EqualsContract<String> 
 }
 ```
 
-上述测试仅仅是作为示例，所以它们不是完整的。
+>📒 上述测试仅仅作为例子，因此它们是不完整的。
+
 
 ### 3.12. 重复的测试
 
-在JUnit Jupiter中，通过注解`@RepeatedTest`可以以指定次数地重复运行一个测试方法，并且可以指定重复的次数。重复测试的每一次调用就像执行一个完全支持相同生命周期回调和扩展的常规`@Test`方法。
+在JUnit Jupiter中，我们可以通过`@RepeatedTest`注解并指定所需的重复次数来重复运行一个测试方法。每个重复测试的调用都像执行常规的`@Test`方法一样，完全支持相同的生命周期回调和扩展。
 
-下面示例代码演示了如何将`repeatedTest()`方法声明为一个自动执行10次的测试方法。
+
+下面示例演示了如何声明名一个为`repeatedTest()`的测试，该测试将自动重复10次。
 
 ```java
 @RepeatedTest(10)
@@ -840,32 +844,34 @@ void repeatedTest() {
     // ...
 }
 ```
+
 In addition to specifying the number of repetitions, a custom display name can be configured for each repetition via the name attribute of the @RepeatedTest annotation. Furthermore, the display name can be a pattern composed of a combination of static text and dynamic placeholders. The following placeholders are currently supported.
 
-除了指定重复的次数，我们可以通过`@RepeatedTest`注解的`name`属性来为每一次重复配置一个自定义的展示名称。而展示名字可以由静态文本和动态占位符组成。下面列出来的占位符是目前支持的。
 
-* `{displayName}`: `@RepeatedTest`方法的展示名称。
+除了指定重复次数之外，我们还可以通过`@RepeatedTest`注解的`name`属性为每次重复配置自定义的显示名称。此外，显示名称可以是一个由静态文本和动态占位符的组合组成的模式。目前支持以下占位符。
 
-* `{currentRepetition}`: 当前重复的计数。
+* `{displayName}`: `@RepeatedTest`方法的显示名称。
 
-* `{totalRepetitions}`: 总重复次数。
+* `{currentRepetition}`: 当前的重复次数。
+
+* `{totalRepetitions}`: 总的重复次数。
 
 
-每一次重复的默认展示名称会基于下面的模式生成：`"repetition {currentRepetition} of {totalRepetitions}"`。因此，之前`repeatedTest()`例子中的每一次单独重复的展示名称就是：`repetition 1 of 10, repetition 2 of 10`，etc。如果你想让`RepeatedTest`方法的展示名称被包含在每一次重复中，你可以定义自己的模式或者使用预定义的`RepeatedTest.LONG_DISPLAY_NAME`。后者等同于`"{displayName} :: repetition {currentRepetition} of {totalRepetitions}"`，在这种模式下，`repeatedTest()`方法的每一次单独重复可能是这样子的：`repeatedTest() :: repetition 1 of 10, repeatedTest() :: repetition 2 of 10`，等等。
+给定重复的默认显示名称基于以下模式生成：`"repetition {currentRepetition} of {totalRepetitions}"`。因此，之前的`repeatTest()`例子的单个重复的显示名称将是：`repetition 1 of 10, repetition 2 of 10`，等等。如果你希望每个重复的名称中包含`@RepeatedTest`方法的显示名称，你可以自定义自己的模式或使用预定义的`RepeatedTest.LONG_DISPLAY_NAME`。后者等同于`"{displayName} :: repetition {currentRepetition} of {totalRepetitions}"`，在这种模式下，`repeatedTest()`方法单次重复的显示名称长成这样：`repeatedTest() :: repetition 1 of 10, repeatedTest() :: repetition 2 of 10`，等等。
 
-想要通过代码来获取当前重复相关的信息以及总的重复次数，开发者可以选择往`@RepeatedTest`, `@BeforeEach`, 或者 `@AfterEach`方法注入一个`RepetitionInfo`实例。
+为了以编程方式获取有关当前重复和总重复次数的信息，开发人员可以选择将一个`RepetitionInfo`的实例注入到`@RepeatedTest`，`@BeforeEach`或`@AfterEach`方法中。
 
 
 #### 3.12.1. 重复测试的例子
-本章节末尾处`RepeatedTestsDemo`类演示了重复的测试的示例。
+本节末尾的`RepeatedTestsDemo`类将演示重复测试的几个示例
 
-`repeatedTest()`方法跟之间那个例子一样。`repeatedTestWithRepetitionInfo()`演示怎么通过往测试注入一个`RepetitionInfo`来访问当前测试的总重复次数。
+`repeatedTest()`方法与上一节中的示例相同;而`repeatedTestWithRepetitionInfo()`演示了如何将`RepetitionInfo`实例注入到测试中，从而获取当前重复测试的总重复次数。
 
-接下来两个方法演示了如何将`@RepeatedTest`方法的自定义的`@DisplayName`包含到每次重复的展示名称中。`customDisplayName()`组合了一个自定义的展示名城以及一个自定义的模式，然后使用`TestInfo`来验证生成的展示名城的格式。`Repeat!`的是来自于`@DisplayName`中声明的`{displayName}`，以及`{currentRepetition}/{totalRepetitions}`定义的`1/1`。对比可以看出，`customDisplayNameWithLongPattern()`使用了前面提到的预定义`RepeatedTest.LONG_DISPLAY_NAME`模式。
+接下来的两个方法演示了如何在每个重复的显示名称中包含`@RepeatedTest`方法的自定义`@DisplayName`。`customDisplayName()`将自定义显示名称与自定义模式组合在一起，然后使用`TestInfo`来验证生成的显示名称的格式。`Repeat!`是来自`@DisplayName`中声明的`{displayName}`，`1/1`来自`{currentRepetition}/{totalRepetitions}`。而`customDisplayNameWithLongPattern()`使用了上述预定义的`RepeatedTest.LONG_DISPLAY_NAME`模式。
 
-`repeatedTestInGerman()`演示了将重复测试的展示名称翻译成外语的能力 - 比如例子中的德语，所以结果看起来像：`Wiederholung 1 von 5, Wiederholung 2 von 5`，等等。
+`repeatedTestInGerman()`演示了将重复测试的显示名称翻译成外语的能力 - 比如例子中的德语，所以结果看起来像：`Wiederholung 1 von 5, Wiederholung 2 von 5`，等等。
 
-由于`beforeEach()`方法使用了`@BeforeEach`注解，它将在每一次重复之前执行。通过往方法中注入`TestInfo`和`RepetitionInfo`，我们可以看到有可能能够获取当前正在执行的重复测试的信息。启用`INFO`的log级别，执行`RepeatedTestsDemo`可以看到如下的输出：
+由于`beforeEach()`方法使用了`@BeforeEach`注解，所以在每次重复测试之前都会执行它。通过往方法中注入`TestInfo`和`RepetitionInfo`，我们可以看到有可能获得有关当前正在执行的重复测试的信息。启用`INFO`的日志级别，执行`RepeatedTestsDemo`可以看到如下的输出：
 
 ```sh
 INFO: About to execute repetition 1 of 10 for repeatedTest
@@ -946,9 +952,7 @@ class RepeatedTestsDemo {
 }
 ```
 
-When using the ConsoleLauncher or the junitPlatformTest Gradle plugin with the unicode theme enabled, execution of RepeatedTestsDemo results in the following output to the console.
-
-当使用了`ConsoleLauncher`或`junitPlatformTest` Gradle插件，并且开启了unicode theme的时候，执行`RepeatedTestsDemo`测试，在控制台你会看到如下输出：
+在启用了unicode主题的情况下使用`ConsoleLauncher`或`junitPlatformTest` Gradle插件时，执行`RepeatedTestsDemo`，在控制台你会看到如下输出：
 
 ```sh
 ├─ RepeatedTestsDemo ✔

@@ -12,11 +12,11 @@
 
 ***JUnit 5*** = ***JUnit Platform*** + ***JUnit Jupiter*** + ***JUnit Vintage***
 
-**JUnit Platform**是在JVM上 [启动测试框架](#) 的基础平台。它还定义了[TestEngine](http://junit.org/junit5/docs/current/api/org/junit/platform/engine/TestEngine.html) API，该API可用于开发运行在平台上的测试框架。此外，平台还提供了一个从命令行或者 [Gradle](#) 和 [Maven](#) 插件来启动平台的 [控制台启动器](#) ，它就好比一个 [基于JUnit 4的Runner](#)在平台上运行任何`TestEngine`。
+**JUnit Platform**是在JVM上 [启动测试框架](#) 的基础平台。它还定义了[TestEngine](http://junit.org/junit5/docs/current/api/org/junit/platform/engine/TestEngine.html) API，该API可用于开发运行在平台上的测试框架。此外，平台还提供了一个从命令行或者 [Gradle](#) 和 [Maven](#) 插件来启动平台的 [控制台启动器](#) ，它就好比一个 [基于JUnit 4的Runner](#) 在平台上运行任何`TestEngine`。
 
-**JUnit Jupiter** 是一个组合体，由在JUnit5中编写测试和扩展的新 [编程模型](#) 和 [扩展模型](#)组成。另外，Jupiter子项目还提供了一个`TestEngine`，用于在平台上运行基于Jupiter的测试。
+**JUnit Jupiter** 是一个组合体，由在JUnit5中编写测试和扩展的新 [编程模型](#) 和 [扩展模型](#) 组成。另外，Jupiter子项目还提供了一个`TestEngine`，用于在平台上运行基于Jupiter的测试。
 
-**JUnit Vintage** 提供了一个`TestEngine`，用于在平台上运行基于JUnit 3和JUnit4 的测试。
+**JUnit Vintage** 提供了一个`TestEngine`，用于在平台上运行基于JUnit 3和JUnit 4 的测试。
 
 ### 1.2. 支持的Java版本
 JUnit 5需要Java 8（或更高）的运行时环境。不过，你仍然可以测试那些经由老版本JDK编译的代码。
