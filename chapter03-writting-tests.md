@@ -17,10 +17,6 @@ class FirstJUnit5Tests {
 }
 ```
 
-JUnit Jupiter supports the following annotations for configuring tests and extending the framework.
-
-All core annotations are located in the org.junit.jupiter.api package in the junit-jupiter-api module.
-
 ### 3.1. 注解
 JUnit Jupiter 支持下面表格中注解来配置测试和扩展框架。
 
