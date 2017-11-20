@@ -54,7 +54,7 @@ testRuntime("org.junit.vintage:junit-vintage-engine:4.12.2")
  
 ### 4.1.2 Eclipse 测试版支持
 
-Eclipse 4.7（Oxygen）的测试版支持JUnit平台和Junit Jupiter。而关于如何让 JUnit 5 在Eclipse上运行起来，可以参考[Eclipse JDT UI/JUnit 5](https://wiki.eclipse.org/JDT_UI/JUnit_5)的wiki页面。
+Eclipse 4.7（Oxygen）的测试版支持JUnit平台和Junit Jupiter。关于如何配置，参考 [Eclipse JDT UI/JUnit 5](https://wiki.eclipse.org/JDT_UI/JUnit_5) wiki页面。
 
 ### 4.1.3 其他IDE
 
