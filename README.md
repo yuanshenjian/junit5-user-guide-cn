@@ -1,19 +1,23 @@
-# junit5-user-guide-cn
+# JUnit 5 User Guide 中文版
 
 该工程中包含了JUnit5 User Guide文档的中文翻译。
 
 原文链接：<http://junit.org/junit5/docs/current/user-guide/>
+
 
 ## 翻译说明
 
 ### 文档格式
 统一使用Markdown格式编辑，推荐使用 [MacDown](http://macdown.uranusjr.com/) 工具编辑。
 
+
 ### #的个数
 一级标题两个`#`，二级标题三个`#`，以此类推。
 比如：
 
-- 1. 概述  ==> ## 1. 概述 
+- ## 1. 概述 
+- ### 1.1. JUnit 5 是什么?
+
 
 ### 中英文保留
 可以只出现译文，也可以中英段落间隔开，一段英文，紧接着是一段中文翻译。建议翻译中存在意思拿不准的就保留英文方便快速校对，例如：
@@ -30,6 +34,7 @@ The **JUnit Platform** serves as a foundation for [launching testing frameworks]
 - [TestEngine](http://junit.org/junit5/docs/current/api/org/junit/platform/engine/TestEngine.html)
 - [基于JUnit的Runner]()
 ```
+
 
 ### 专有名词
 原文中存在的方法名和类名等专有名词，不翻译，直接保留，例如：
@@ -49,6 +54,7 @@ $ git commit -m "[chapter03] - Complete chapter03"
 
 $ git commit -m "[chapter03] - Review chapter03"
 ```
+
 
 ## 翻译计划
 - 2017.10.01 之前完成初稿翻译。
