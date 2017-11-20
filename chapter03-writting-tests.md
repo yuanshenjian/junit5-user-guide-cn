@@ -831,7 +831,7 @@ class StringTests implements ComparableContract<String>, EqualsContract<String> 
 >📒 上述测试仅仅作为例子，因此它们是不完整的。
 
 
-### 3.12. 重复的测试
+### 3.12. 重复测试
 
 在JUnit Jupiter中，我们可以通过`@RepeatedTest`注解并指定所需的重复次数来重复运行一个测试方法。每个重复测试的调用都像执行常规的`@Test`方法一样，完全支持相同的生命周期回调和扩展。
 
@@ -844,9 +844,6 @@ void repeatedTest() {
     // ...
 }
 ```
-
-In addition to specifying the number of repetitions, a custom display name can be configured for each repetition via the name attribute of the @RepeatedTest annotation. Furthermore, the display name can be a pattern composed of a combination of static text and dynamic placeholders. The following placeholders are currently supported.
-
 
 除了指定重复次数之外，我们还可以通过`@RepeatedTest`注解的`name`属性为每次重复配置自定义的显示名称。此外，显示名称可以是一个由静态文本和动态占位符的组合组成的模式。目前支持以下占位符。
 
@@ -985,33 +982,37 @@ class RepeatedTestsDemo {
 │     └─ Wiederholung 5 von 5 ✔
 ```
 
-### 3.13. 参数化的测试
-参数化测试使得有可能以不同的参数多次执行一个测试。除了使用`@ParameterizedTest`注解，它们的声明跟`@Test`的方法没有区别。除此之外，你必须声明至少一个源用于给每次调用提供参数。
+### 3.13. 参数化测试
+
+参数化测试可以用不同的参数多次运行测试。除了使用`@ParameterizedTest`注解，它们的声明跟`@Test`的方法没有区别。此外，你必须声明至少一个给每次调用提供参数的来源。
+
+> ⚠️ 参数化测试目前是一个实验性功能。详细信息请参阅 [实验性API]() 中的表格。
 
 ```java
 @ParameterizedTest
-@ValueSource(strings = { "Hello", "World" })
-void testWithStringParameter(String argument) {
-    assertNotNull(argument);
+@ValueSource(strings = { "racecar", "radar", "able was I ere I saw elba" })
+void palindromes(String candidate) {
+    assertTrue(isPalindrome(candidate));
 }
 ```
 
-该参数化测试使用`@ValueSource`注解来制定一个字符串数组参数源。当执行这个方法时，每次调用会被单独地记录。例如，`ConsoleLauncher`会打印类似下面的结果：
+上面这个参数化测试使用`@ValueSource`注解来指定一个`String`数组作为参数源。执行上述方法时，每次调用会被分别报告。例如，`ConsoleLauncher`会打印类似下面的信息：
 
 ```java
-testWithStringParameter(String) ✔
-├─ [1] Hello ✔
-└─ [2] World ✔
+palindromes(String) ✔
+├─ [1] racecar ✔
+├─ [2] radar ✔
+└─ [3] able was I ere I saw elba ✔
 ```
 
-#### 3.13.1. 必要的设置
-为了使用参数化测试，你必须添加`junit-jupiter-params`依赖。详情请参开[依赖元数据]()
+#### 3.13.1. 必需的设置
+为了使用参数化测试，你必须添加`junit-jupiter-params`依赖。详细信息请参考 [依赖元数据]()。
 
 #### 3.13.2. 参数源
-Junit Jupiter提供一些开箱即用的*源*注解。接下来每个子章节将提供一个简短的摘要以及一个示例。更多信息请参考 [`org.junit.jupiter.params.provider`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/params/provider/package-summary.html)包中的JavaDoc。
+Junit Jupiter提供一些开箱即用的*源*注解。接下来每个子章节将提供一个简要的概述和一个示例。更多信息请参阅 [`org.junit.jupiter.params.provider`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/params/provider/package-summary.html) 包中的JavaDoc。
 
 ##### @ValueSource
-`@ValueSource`是最简单的合适的源。它允许你指定一个基本类型字面量数组（String、int、long或double）,并且它只能为每次调用提供一个参数。
+`@ValueSource`是最简单来源之一。它允许你指定一个基本类型的数组（String、int、long或double），并且它只能为每次调用提供一个参数。
 
 ```
 @ParameterizedTest
@@ -1022,7 +1023,7 @@ void testWithValueSource(int argument) {
 ```
 
 ##### @EnumSource
-`@EnumSource`能够很方便地提供`Enum`常量。它还提供一个可选的`names`参数，你可以用它来指定那个常量会被使用。如果省略了，就意味着所有的常量将被使用，例如下面的例子：
+`@EnumSource`能够很方便地提供`Enum`常量。该注解提供了一个可选的`names`参数，你可以用它来指定使用哪些常量。如果省略了，就意味着所有的常量将被使用，就像下面的例子所示。
 
 ```java
 @ParameterizedTest
@@ -1040,7 +1041,7 @@ void testWithEnumSourceInclude(TimeUnit timeUnit) {
 }
 ```
 
-`@EnumSource`注解还提供了一个可选的`mode`参数，它能够加细粒度地控制了什么参数会被传递给测试方法。例如，你可以排除枚举常量池中的名字，或者跟下面代码所示一样指定一个正则表达式：
+`@EnumSource`注解还提供了一个可选的`mode`参数，它能够细粒度地控制哪些常量将会被传递到测试方法中。例如，你可以从枚举常量池中排除一些名称或者指定正则表达式，如下面代码所示。
 
 ```java
 @ParameterizedTest
@@ -1062,13 +1063,14 @@ void testWithEnumSourceRegex(TimeUnit timeUnit) {
 ```
 
 ##### @MethodSource
-`@MethodSource`允许引用测试类中的一个或多个方法。被引用的方法的返回值必须是一个`Stream`、`Iterable`、`Iterator`或者参数数组。另外，每个方法必须是静态并且不能包含任何参数。
 
-如果你只需要一个参数，你可以直接返回参数类型的实例，正如下面示例所演示的：
+`@MethodSource`允许你引用测试类中的一个或多个工厂方法。这些工厂方法必须返回一个`Stream`、`Iterable`、`Iterator`或者参数数组。另外，它们不能接收任何参数。默认情况下，它们必须是`static`方法，除非测试类使用了`@TestInstance(Lifecycle.PER_CLASS)`注解。
+
+如果你只需要一个参数，你可以返回一个参数类型的实例的`Stream`，如下面示例所示。
 
 ```java
 @ParameterizedTest
-@MethodSource(names = "stringProvider")
+@MethodSource("stringProvider")
 void testWithSimpleMethodSource(String argument) {
     assertNotNull(argument);
 }
@@ -1078,7 +1080,7 @@ static Stream<String> stringProvider() {
 }
 ```
 
-还支持基本类型(`DoubleStream`、`IntStream`、`LongStream`)的Stream:
+同样支持基本类型的Stream(`DoubleStream`、`IntStream`、`LongStream`)，如下面示例所示。
 
 ```java
 @ParameterizedTest
@@ -1092,23 +1094,27 @@ static IntStream range() {
 }
 ```
 
-如果你需要多个参数，你可以返回`Argument`实例，如下面代码所示。注意`Arguments.of(Object…​)` 是接口自身的以个的一个静态工厂方法。
+如果测试方法声明了多个参数，则需要返回一个`Arguments`实例的集合或Stream，如下面代码所示。请注意，`Arguments.of(Object ...)`是`Arguments`接口中定义的静态工厂方法。
 
 ```java
 @ParameterizedTest
-@MethodSource(names = "stringAndIntProvider")
-void testWithMultiArgMethodSource(String first, int second) {
-    assertNotNull(first);
-    assertNotEquals(0, second);
+@MethodSource("stringIntAndListProvider")
+void testWithMultiArgMethodSource(String str, int num, List<String> list) {
+    assertEquals(3, str.length());
+    assertTrue(num >=1 && num <=2);
+    assertEquals(2, list.size());
 }
 
-static Stream<Arguments> stringAndIntProvider() {
-    return Stream.of(ObjectArrayArguments.create("foo", 1), ObjectArrayArguments.create("bar", 2));
+static Stream<Arguments> stringIntAndListProvider() {
+    return Stream.of(
+        Arguments.of("foo", 1, Arrays.asList("a", "b")),
+        Arguments.of("bar", 2, Arrays.asList("x", "y"))
+    );
 }
 ```
 
 ##### @CsvSource
-`@CsvSource`允许你定义的参数列表是以逗号分隔的值（例如 `String`字面值）。
+`@CsvSource`允许你将参数列表定义为以逗号分隔的值（即`String`类型的值）。
 
 ```java
 @ParameterizedTest
@@ -1119,8 +1125,19 @@ void testWithCsvSource(String first, int second) {
 }
 ```
 
+@CsvSource使用单引号`'`作为引用字符。请参考上述示例和下表中的`'baz，qux'`值。一个空的引用值`''`表示一个空的`String`；而一个完全*空*的值被当成一个`null`引用。如果`null`引用的目标类型是基本类型，则会抛出一个`ArgumentConversionException`。
+
+|示例输入|生成的参数列表|
+|:---|:--|
+| `@CsvSource({ "foo, bar" })` | `"foo"`, `"bar"` |
+| `@CsvSource({ "foo, 'baz, qux'" })` | `"foo"`, `"baz, qux"` |
+| `@CsvSource({ "foo, ''" })` | `"foo"`, `""` |
+| `@CsvSource({ "foo, " })` | `"foo"`, `null` | 
+
+
 ##### @CsvFileSource
-`@CsvFileSource`允许你使用类路径中的CSV文件。CSV文件的每一行会作为参数化测试的每次调用的参数：
+
+`@CsvFileSource`允许你使用类路径中的CSV文件。CSV文件中的每一行都会触发参数化测试的一次调用。
 
 ```java
 @ParameterizedTest
@@ -1139,9 +1156,12 @@ bar, 2
 "baz, qux", 3
 ```
 
+>📒 与`@CsvSource`中使用的语法相反，`@CsvFileSource`使用双引号`"`作为引号字符，请参考上面例子中的`"baz，qux"`值，一个空的带引号的值`""`表示一个空`String`，一个完全为`空`的值被当成`null`引用，如果`null`引用的目标类型是基本类型，则会抛出一个`ArgumentConversionException`。
+
+
 ##### @ArgumentsSource
 
-`@ArgumentsSource` 可以用来指定一个自定义且能够复用的`ArgumentsProvider`：
+`@ArgumentsSource` 可以用来指定一个自定义且能够复用的`ArgumentsProvider`。
 
 ```java
 @ParameterizedTest
@@ -1151,18 +1171,20 @@ void testWithArgumentsSource(String argument) {
 }
 
 static class MyArgumentsProvider implements ArgumentsProvider {
+
     @Override
-    public Stream<? extends Arguments> arguments(ContainerExtensionContext context) {
-        return Stream.of("foo", "bar").map(ObjectArrayArguments::create);
+    public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+        return Stream.of("foo", "bar").map(Arguments::of);
     }
 }
 ```
 
 #### 3.13.3. 参数转换
-##### 隐式转换
-为了支持像`@CsvSource`这样的使用场景，JUnit Jupiter提供了一些内建的隐式类型转换器。转换的处理依赖于每个方法参数的声明类型。
 
-例如，一个`@ParameterizedTest`方法声明了一个`TimeUnit`类型的参数，而实际上提供了一个`String`，此时字符串会被自动转换成对应的`TimeUnit`枚举常量。
+##### 隐式转换
+为了支持像`@CsvSource`这样的使用场景，JUnit Jupiter提供了一些内置的隐式类型转换器。转换过程取决于每个方法参数的声明类型。
+
+例如，如果一个`@ParameterizedTest`方法声明了`TimeUnit`类型的参数，而实际上提供了一个`String`，此时字符串会被自动转换成对应的`TimeUnit`枚举常量。
 
 ```java
 @ParameterizedTest
@@ -1172,35 +1194,32 @@ void testWithImplicitArgumentConversion(TimeUnit argument) {
 }
 ```
 
-`String`实例目前会被隐式地转换成以下的目标类型：
+`String`实例目前会被隐式地转换成以下目标类型：
 
-目标类型 | 类型示例
-:---|:---
-boolean/Boolean | "true" → true
-byte/Byte | "1" → (byte) 1
-char/Character | "o" → 'o'
-short/Short | "1" → (short) 1
-int/Integer | "1" → 1
-long/Long | "1" → 1L
-float/Float | "1.0" → 1.0f
-double/Double | "1.0" → 1.0d
-Enum subclass | "SECONDS" → TimeUnit.SECONDS
-java.time.Instant | "1970-01-01T00:00:00Z" → Instant.ofEpochMilli(0)
-java.time.LocalDate | "2017-03-14" → LocalDate.of(2017, 3, 14)
-java.time.LocalDateTime | "2017-03-14T12:34:56.789" → LocalDateTime.of(2017, 3, 14, 12, 34, 56, 789_000_000)
-java.time.LocalTime | "12:34:56.789" → LocalTime.of(12, 34, 56, 789_000_000)
-java.time.OffsetDateTime | "2017-03-14T12:34:56.789Z" → OffsetDateTime.of(2017, 3, 14, 12, 34, 56, 789_000_000, ZoneOffset.UTC)
-java.time.OffsetTime | "12:34:56.789Z" → OffsetTime.of(12, 34, 56, 789_000_000, ZoneOffset.UTC)
-java.time.Year | "2017" → Year.of(2017)
-java.time.YearMonth | "2017-03" → YearMonth.of(2017, 3)
-java.time.ZonedDateTime | "2017-03-14T12:34:56.789Z" → ZonedDateTime.of(2017, 3, 14, 12, 34, 56, 789_000_000, ZoneOffset.UTC)
+|目标类型 | 类型示例|
+|:---|:---|
+|`boolean/Boolean` | `"true" → true`|
+|`byte/Byte` | `"1" → (byte) 1`|
+|`char/Character` | `"o" → 'o'`|
+|`short/Short` | `"1" → (short) 1`|
+|`int/Integer` | `"1" → 1`|
+|`long/Long` | `"1" → 1L`|
+|`float/Float` | `"1.0" → 1.0f`|
+|`double/Double` | `"1.0" → 1.0d`|
+|`Enum subclass` | `"SECONDS" → TimeUnit.SECONDS`|
+|`java.time.Instant` | `"1970-01-01T00:00:00Z" → Instant.ofEpochMilli(0)`|
+|`java.time.LocalDate` | `"2017-03-14" → LocalDate.of(2017, 3, 14)`|
+|`java.time.LocalDateTime` | `"2017-03-14T12:34:56.789" → LocalDateTime.of(2017, 3, 14, 12, 34, 56, 789_000_000)`|
+|`java.time.LocalTime` | `"12:34:56.789" → LocalTime.of(12, 34, 56, 789_000_000)`|
+|`java.time.OffsetDateTime` | `"2017-03-14T12:34:56.789Z" → OffsetDateTime.of(2017, 3, 14, 12, 34, 56, 789_000_000, ZoneOffset.UTC)`|
+|`java.time.OffsetTime` | `"12:34:56.789Z" → OffsetTime.of(12, 34, 56, 789_000_000, ZoneOffset.UTC)`|
+|`java.time.Year` | `"2017" → Year.of(2017)`|
+|`java.time.YearMonth` | `"2017-03" → YearMonth.of(2017, 3)`|
+|`java.time.ZonedDateTime` | `"2017-03-14T12:34:56.789Z" → ZonedDateTime.of(2017, 3, 14, 12, 34, 56, 789_000_000, ZoneOffset.UTC)`|
 
 
-##### Explicit Conversion
-
-Instead of using implicit argument conversion you may explicitly specify an ArgumentConverter to use for a certain parameter using the @ConvertWith annotation like in the following example.
-
-除了使用隐式转换参数，你还可以针对一个特定使用了`@ConvertWith`注解的参数显式指定一个`ArgumentConverter`，例如下面代码所示：
+##### 显式转换
+除了使用隐式转换参数，你还可以使用`@ConvertWith`注解来显式指定一个`ArgumentConverter`用于某个参数，例如下面代码所示。
 
 ```java
 @ParameterizedTest
@@ -1210,6 +1229,7 @@ void testWithExplicitArgumentConversion(@ConvertWith(ToStringArgumentConverter.c
 }
 
 static class ToStringArgumentConverter extends SimpleArgumentConverter {
+
     @Override
     protected Object convert(Object source, Class<?> targetType) {
         assertEquals(String.class, targetType, "Can only convert to String");
@@ -1218,9 +1238,7 @@ static class ToStringArgumentConverter extends SimpleArgumentConverter {
 }
 ```
 
-Explicit argument converters are meant to be implemented by test authors. Thus, junit-jupiter-params only provides a single explicit argument converter that may also serve as a reference implementation: JavaTimeArgumentConverter. It is used via the composed annotation JavaTimeConversionPattern.
-
-显式参数转换器意味着开发人员要自己去实现它。正因为这样，`junit-jupiter-params`仅仅提供了一个显式参数转换器，它还可以被用作引用实现：`JavaTimeArgumentConverter`。你可以通过组合注解`JavaTimeConversionPattern`来使用它。
+显式参数转换器意味着开发人员要自己去实现它。正因为这样，`junit-jupiter-params`仅仅提供了一个可以作为参考实现的显式参数转换器：`JavaTimeArgumentConverter`。你可以通过组合注解`JavaTimeArgumentConverter `来使用它。
 
 ```java
 @ParameterizedTest
@@ -1230,9 +1248,9 @@ void testWithExplicitJavaTimeConverter(@JavaTimeConversionPattern("dd.MM.yyyy") 
 }
 ```
 
-#### 3.13.4. 自定义展示名称
-By default, the display name of a parameterized test invocation contains the invocation index and the String representation of all arguments for that specific invocation. However, you can customize invocation display names via the name attribute of the @ParameterizedTest annotation like in the following example.
-默认情况下，参数化测试执行调用时的展示名称包含了该调用的下标和所有参数的`String`表示形式。然而，你可以通过`@ParameterizedTest`注解的`name`属性来自定义调用的展示名称，如下面代码所示：
+#### 3.13.4. 自定义显示名称
+
+默认情况下，参数化测试调用的显示名称包含了该特定调用的索引和所有参数的`String`表示形式。不过，你可以通过`@ParameterizedTest`注解的`name`属性来自定义调用的显示名称，如下面代码所示。
 
 ```java
 @DisplayName("Display name of container")
@@ -1251,29 +1269,35 @@ Display name of container ✔
 └─ 3 ==> first='baz, qux', second=3 ✔
 ```
 
-The following placeholders are supported within custom display names.
-下标列出了目前所支持用在定制展示名称上占位符：
+自定义显示名称支持以下占位符。
 
-占位符 | 描述
-:---|:---
-{index} | 当前调用的下标 (1-based)
-{arguments} | 完整的参数列表，以逗号分隔
-{0}, {1}, …​ | 一个独立的参数
+|占位符 | 描述|
+|:---|:---|
+|`{index}` | 当前调用的索引 (1-based)|
+|`{arguments}` | 完整的参数列表，以逗号分隔|
+|`{0}, {1}, …​`| 单个参数|
+
 
 #### 3.13.5. 生命周期和互操作性
-Each invocation of a parameterized test has the same lifecycle as a regular @Test method. For example, @BeforeEach methods will be executed before each invocation. Similar to Dynamic Tests, invocations will appear one by one in the test tree of an IDE. You may at will mix regular @Test methods and @ParameterizedTest methods within the same test class.
+参数化测试的每次调用拥有跟普通`@Test`方法相同的生命周期。例如，`@BeforeEach`方法将在每次调用之前执行。类似于[动态测试]()，调用将逐个出现在IDE的测试树中。你可能会在一个测试类中混合常规`@Test`方法和`@ParameterizedTest`方法。
 
-参数化测试的每一次调用拥有跟`@Test`方法相同的生命周期。例如，`@BeforeEach`方法将在每一次调用之前执行。类似于[动态测试]()，调用将一个接一个的出现在IED的测试树上。你可能想在一个测试类中混合使用`@Test`方法和`@ParameterizedTest`方法。
-
-You may use ParameterResolver extensions with @ParameterizedTest methods. However, method parameters that are resolved by argument sources need to come first in the argument list.
-
-你可以在`@ParameterizedTest`方法上使用`ParameterResolver`扩展。然而，被参数源解析的方法参数必须位于参数列表的第一个。
+你可以在`@ParameterizedTest`方法上使用`ParameterResolver`扩展。但是，被参数源解析的方法参数必须出现在参数列表的首位。由于测试类可能包含常规测试和具有不同参数列表的参数化测试，因此，参数源的值不会针对生命周期方法（例如`@BeforeEach`）和测试类构造函数进行解析。
 
 ```java
+@BeforeEach
+void beforeEach(TestInfo testInfo) {
+    // ...
+}
+
 @ParameterizedTest
 @ValueSource(strings = "foo")
 void testWithRegularParameterResolver(String argument, TestReporter testReporter) {
     testReporter.publishEntry("argument", argument);
+}
+
+@AfterEach
+void afterEach(TestInfo testInfo) {
+    // ...
 }
 ```
 
