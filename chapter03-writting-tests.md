@@ -28,20 +28,20 @@ JUnit Jupiter 支持下面表格中注解来配置测试和扩展框架。
 
 | 注解          | 描述 |
 |:--------------|:------------|
-| @Test         | 表示该方法是一个测试方法。与JUnit4的`@Test`注解不同的是，它没有声明任何属性，因为JUnit Jupiter中的测试扩展是基于他们自己的专用注解来完成的。这样的方法会被*继承*，除非它们被*覆盖*了。|
+| @Test         | 表示该方法是一个测试方法。与JUnit 4的`@Test`注解不同的是，它没有声明任何属性，因为JUnit Jupiter中的测试扩展是基于他们自己的专用注解来完成的。这样的方法会被*继承*，除非它们被*覆盖*了。|
 | @ParameterizedTest | 表示该方法是一个 [参数化测试]()。这样的方法会被*继承*，除非它们被*覆盖*了。|
 | @RepeatedTest | 表示该方法是一个 [重复测试]() 的测试模板。这样的方法会被*继承*，除非它们被*覆盖*了。 |
 | @TestFactory  | 表示该方法是一个 [动态测试]() 的测试工厂。这样的方法会被*继承*，除非它们被*覆盖*了。 |
 | @TestInstance  | 用于配置所标注的测试类的 [测试实例生命周期]()。这些注解会被*继承*。 |
 | @TestTemplate  | 表示该方法是一个 [测试用例的模板]()，它会依据注册的 [提供者]()所返回的的调用上下文的数量被多次调用。 这样的方法会被*继承*，除非它们被*覆盖*了。|
 | @DisplayName  | 为测试类或测试方法声明一个定制化的展示名字。该注解不能被*继承*。 |
-| @BeforeEach   | 表示使用了该注解的方法应该在当前类中**每一个**使用了`@Test`,`@RepeatedTest`,`@ParameterizedTest`或者`@TestFactory`注解的方法*之前*执行；类似于JUnit4的 `@Before`。这样的方法会被*继承*，除非它们被*覆盖*了。|
-| @AfterEach    | 表示使用了该注解的方法应该在当前类中**每一个**使用了`@Test`,`@RepeatedTest`,`@ParameterizedTest`或者`@TestFactory`注解的方法*之后*执行；类似于JUnit4的 `@After`。这样的方法会被*继承*，除非它们被*覆盖*了。 |
-| @BeforeAll    | 表示使用了该注解的方法应该在当前类中**所有**使用了`@Test`,`@RepeatedTest`,`@ParameterizedTest`或者`@TestFactory`注解的方法*之前*执行；类似于JUnit4的 `@BeforeClass`。这样的方法会被*继承*（除非它们被*隐藏* 或*覆盖*），并且它必须是 `static`方法（除非"per-class" [测试实例声明周期]() 被使用）。|
-| @AfterAll     | 表示使用了该注解的方法应该在当前类中所有使用了`@Test`,`@RepeatedTest`,`@ParameterizedTest`或者`@TestFactory`注解的方法之后执行；类似于JUnit4的 `@AfterClass`。这样的方法会被*继承*（除非它们被*隐藏* 或*覆盖*），并且它必须是 `static`方法（除非"per-class" [测试实例声明周期]() 被使用）。|
+| @BeforeEach   | 表示使用了该注解的方法应该在当前类中**每一个**使用了`@Test`,`@RepeatedTest`,`@ParameterizedTest`或者`@TestFactory`注解的方法*之前*执行；类似于JUnit 4的 `@Before`。这样的方法会被*继承*，除非它们被*覆盖*了。|
+| @AfterEach    | 表示使用了该注解的方法应该在当前类中**每一个**使用了`@Test`,`@RepeatedTest`,`@ParameterizedTest`或者`@TestFactory`注解的方法*之后*执行；类似于JUnit 4的 `@After`。这样的方法会被*继承*，除非它们被*覆盖*了。 |
+| @BeforeAll    | 表示使用了该注解的方法应该在当前类中**所有**使用了`@Test`,`@RepeatedTest`,`@ParameterizedTest`或者`@TestFactory`注解的方法*之前*执行；类似于JUnit 4的 `@BeforeClass`。这样的方法会被*继承*（除非它们被*隐藏* 或*覆盖*），并且它必须是 `static`方法（除非"per-class" [测试实例声明周期]() 被使用）。|
+| @AfterAll     | 表示使用了该注解的方法应该在当前类中所有使用了`@Test`,`@RepeatedTest`,`@ParameterizedTest`或者`@TestFactory`注解的方法之后执行；类似于JUnit 4的 `@AfterClass`。这样的方法会被*继承*（除非它们被*隐藏* 或*覆盖*），并且它必须是 `static`方法（除非"per-class" [测试实例声明周期]() 被使用）。|
 | @Nested       | 表示使用了该注解的类是一个内嵌、非静态的测试类。`@BeforeAll`和`@AfterAll`方法不能直接在`@Nested`测试类中使用，（除非"per-class" [测试实例声明周期]() 被使用）。该注解不能被*继承*。|
-| @Tag          | 用于声明过滤测试的*tags*，该注解可以用在方法或类上；类似于TesgNG的测试组或JUnit4的分类。该注解能被*继承*，但仅限于类级别，而非方法级别。
-| @Disable      | 用于*禁用*一个测试类或测试方法；类似于JUnit4的`@Ignore`。该注解不能被继承。 |
+| @Tag          | 用于声明过滤测试的*tags*，该注解可以用在方法或类上；类似于TesgNG的测试组或JUnit 4的分类。该注解能被*继承*，但仅限于类级别，而非方法级别。
+| @Disable      | 用于*禁用*一个测试类或测试方法；类似于JUnit 4的`@Ignore`。该注解不能被继承。 |
 | @ExtendWith   | 用于注册自定义[扩展]()。该注解不能被*继承*。 |
 
 被`@Test`、`@TestTemplate`、`@RepeatedTest`、`@BeforeAll`、`@AfterAll`、`@BeforeEach` 或 `@AfterEach` 注解标注的方法不可以有返回值。
@@ -298,11 +298,11 @@ class HamcrestAssertionDemo {
 }
 ```
 
-当然，那些基于JUnit4编程模型的遗留测试可以继续使用`org.junit.Assert#assertThat`。
+当然，那些基于JUnit 4编程模型的遗留测试可以继续使用`org.junit.Assert#assertThat`。
 
 
 ### 3.5. 假设
-JUnit Jupiter附带了JUnit4所提供的假设方法的一个子集，并增加了一些适合与Java 8 lambda一起使用的假设方法。所有的JUnit Jupiter假设都是 [org.junit.jupiter.Assumptions](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Assumptions.html) 类中的静态方法。
+JUnit Jupiter附带了JUnit 4所提供的假设方法的一个子集，并增加了一些适合与Java 8 lambda一起使用的假设方法。所有的JUnit Jupiter假设都是 [org.junit.jupiter.Assumptions](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Assumptions.html) 类中的静态方法。
 
 ```java
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -536,7 +536,7 @@ class TestingAStackDemo {
 
 * [TestInfoParameterResolver](https://github.com/junit-team/junit5/tree/r5.0.2/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/TestInfoParameterResolver.java)：如果一个方法参数的类型是 [TestInfo](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/TestInfo.html)，`TestInfoParameterResolver`将根据当前的测试提供一个`TestInfo`的实例用于填充参数的值。然后，`TestInfo`就可以被用来检索关于当前测试的信息，例如：显示名称、测试类、测试方法或相关的标签。显示名称要么是一个类似于测试类或测试方法的技术名称，要么是一个通过`@DisplayName`配置的自定义名称。
 
- [TestInfo](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/TestInfo.html)就像JUnit4规则中`TestName`规则的代替者。以下演示如何将`TestInfo`注入到测试构造函数，`@BeforeEach`方法和`@Test`方法中。
+ [TestInfo](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/TestInfo.html)就像JUnit 4规则中`TestName`规则的代替者。以下演示如何将`TestInfo`注入到测试构造函数，`@BeforeEach`方法和`@Test`方法中。
 
 ```java
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -579,7 +579,7 @@ class TestInfoDemo {
 * `RepetitionInfoParameterResolver`：如果一个位于`@RepeatedTest`、`@BeforeEach`或者`@AfterEach`方法的参数的类型是 [RepetitionInfo](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/RepetitionInfo.html)，`RepetitionInfoParameterResolver`会提供一个`RepetitionInfo`实例。然后，`RepetitionInfo`就可以被用来检索对应`@RepeatedTest`方法的当前重复以及总重复次数等相关信息。但是请注意，`RepetitionInfoParameterResolver`不是在`@RepeatedTest`的上下文之外被注册的。请参阅[重复测试示例]()
 * [TestReporterParameterResolver](https://github.com/junit-team/junit5/tree/r5.0.2/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/TestReporterParameterResolver.java)：如果一个方法参数的类型是 [TestReporter](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/TestReporter.html)，`TestReporterParameterResolver`会提供一个`TestReporter`实例。然后，`TestReporter`就可以被用来发布有关当前测试运行的其他数据。这些数据可以通过  [TestExecutionListener](http://junit.org/junit5/docs/current/api/org/junit/platform/launcher/TestExecutionListener.html) 的`reportingEntryPublished()`方法来消费，因此可以被IDE查看或包含在报告中。
 
- 在JUnit Jupiter中，你应该使用`TestReporter`来代替你在JUnit4中打印信息到`stdout`或`stderr`的习惯。使用`@RunWith(JUnitPlatform.class)`会将报告的所有条目都输出到`stdout`中。
+ 在JUnit Jupiter中，你应该使用`TestReporter`来代替你在JUnit 4中打印信息到`stdout`或`stderr`的习惯。使用`@RunWith(JUnitPlatform.class)`会将报告的所有条目都输出到`stdout`中。
  
 ```java
 import java.util.HashMap;
@@ -1260,7 +1260,7 @@ void testWithCustomDisplayNames(String first, int second) {
 }
 ```
 
-使用`ConsoleLauncher`执行上面方法，你会看到类似于下面的输出：
+使用`ConsoleLauncher`执行上面方法，你会看到类似于下面的输出。
 
 ```sh
 Display name of container ✔
@@ -1309,7 +1309,7 @@ A @TestTemplate method is not a regular test case but rather a template for test
 ### 3.15. 动态测试
 The standard @Test annotation in JUnit Jupiter described in Annotations is very similar to the @Test annotation in JUnit 4. Both describe methods that implement test cases. These test cases are static in the sense that they are fully specified at compile time, and their behavior cannot be changed by anything happening at runtime. 
 
-在JUnit Juppiter的[Annotations]()章节描述的标准`@Test`注解跟JUnit4中的`@Test`注解非常类似。两者都表示方式是一个测试用例。这些测试用例都是静态的，并且都是在编译器就指定好的，以及它们的行为不能在运行期被改变。*假设提供了动态行为的基本形式，但在表现力上做有意的限制*。
+在JUnit Juppiter的[Annotations]()章节描述的标准`@Test`注解跟JUnit 4中的`@Test`注解非常类似。两者都表示方式是一个测试用例。这些测试用例都是静态的，并且都是在编译器就指定好的，以及它们的行为不能在运行期被改变。*假设提供了动态行为的基本形式，但在表现力上做有意的限制*。
 
 In addition to these standard tests a completely new kind of test programming model has been introduced in JUnit Jupiter. This new kind of test is a dynamic test which is generated at runtime by a factory method that is annotated with @TestFactory.
 
