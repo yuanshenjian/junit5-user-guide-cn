@@ -64,11 +64,11 @@ Eclipse 4.7（Oxygen）的测试版支持JUnit平台和Junit Jupiter。关于如
 
 ### 4.2.1 Gradle
 
-JUnit 开发团队已经开发了一款基于Gradle的Junit 5 插件，它可以让使用者运行任何一种已经被支持的`TestEngine`（例如：JUnit 3、JUnit 4、JUnit Jupiter以及[Specsy](http://specsy.org/)等）。可以通过查看[`junit5-gradle-consumer`](https://github.com/junit-team/junit5-samples/tree/r5.0.0-M4/junit5-gradle-consumer)项目中的`build.gradle`文件，将其作为一个使用插件的例子学习。
+JUnit 开发团队已经开发了一款基于 Gradle 的Junit5 插件，它可以让使用者运行任何一种支持的 `TestEngine`（例如：JUnit3、JUnit4、JUnit Jupiter以及 [Specsy](http://specsy.org/) 等）。学习使用插件的例子见 [`junit5-gradle-consumer`](https://github.com/junit-team/junit5-samples/tree/r5.0.0-M4/junit5-gradle-consumer) 项目中的 `build.gradle` 文件。
 
-### 使用JUnit Gradle插件
+#### 应用 JUnit Gradle 插件
 
-要使用 JUnit Gradle 插件，确保你使用的Gradle版本是2.5或更高以后，就可以按以下模板配置项目中的`build.gradle`文件了。
+要使用 JUnit Gradle 插件，需要确保使用的Gradle版本是2.5或更高，若满足条件，可以按以下模板配置项目中的 `build.gradle` 文件：
 
 ```
 buildscript {
@@ -78,22 +78,21 @@ buildscript {
         // maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     }
     dependencies {
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-M4'
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.2'
     }
 }
 
 apply plugin: 'org.junit.platform.gradle.plugin'
 ```
 
-### 配置 JUnit Gradle 插件
+#### 配置 JUnit Gradle 插件
 
-一旦应用了 JUnit Gradle 插件，开发者就可以按照如下方式进行配置。
+一旦应用了 JUnit Gradle 插件，可按照如下方式进行配置。
 
->这里配置的的选项在开发的过程中，很有可能是需要不断变更的。
 
 ```
 junitPlatform {
-    platformVersion 1.0
+    platformVersion '1.0.2' // optional, defaults to plugin version
     logManager 'org.apache.logging.log4j.jul.LogManager'
     reportsDir file('build/test-results/junit-platform') // this is the default
     // enableStandardTestTask true
@@ -102,42 +101,50 @@ junitPlatform {
 }
 ```
 
-设置`logManager`可以让JUnit Gradle 插件去设置`java.util.logging.manager`的系统参数，但要使用`java.util.logging.LogManager`的全类名。如上述例子就展示了如何将log4j配置为`LogManager`。
+设置 `logManager` 可以让 JUnit Gradle 插件去设置`java.util.logging.manager` 的系统参数，但要使用`java.util.logging.LogManager` 的全类名。如上述例子展示了如何将 log4j 配置为 `LogManager` 。
 
-JUnit Gradle 插件在默认情况下会禁用标准的 Gradle `test`任务，但是你可以通过`enableStandardTestTask`标记来启用。
+JUnit Gradle 插件在默认情况下会禁用标准的 Gradle `test`任务，但是你可以通过 `enableStandardTestTask` 标记来启用。
 
-### 配置Selectors
+#### 配置Selectors
 
-默认情况下，插件将会扫描项目中所有的测试输出文件夹。但是，开发者可以通过使用`selectors`的扩展元素来明确指定哪些测试应该被执行。
+默认情况下，插件将会扫描项目中所有的测试输出文件夹。但是，开发者可以通过使用 `selectors` 的扩展元素来明确指定哪些测试应该被执行。
 
 ```
 junitPlatform {
     // ...
     selectors {
         uris 'file:///foo.txt', 'http://example.com/'
-        uri 'foo:resource' //URIs
+        uri 'foo:resource'  ①
         files 'foo.txt', 'bar.csv'
-        file 'qux.json' //本地文件
+        file 'qux.json'  ②
         directories 'foo/bar', 'bar/qux'
-        directory 'qux/bar' //本地文件夹
+        directory 'qux/bar'  ③
         packages 'com.acme.foo', 'com.acme.bar'
-        aPackage 'com.example.app' //包名
+        aPackage 'com.example.app'  ④
         classes 'com.acme.Foo', 'com.acme.Bar'
-        aClass 'com.example.app.Application' //类，完整类名称 
+        aClass 'com.example.app.Application' ⑤ 
         methods 'com.acme.Foo#a', 'com.acme.Foo#b'
-        method 'com.example.app.Application#run(java.lang.String[])' //方法，完整的方法名称
+        method 'com.example.app.Application#run(java.lang.String[])'  ⑥
         resources '/bar.csv', '/foo/input.json'
-        resource '/com/acme/my.properties' //资源路径
+        resource '/com/acme/my.properties'  ⑦
     }
     // ...
 }
 
 ```
 
-### 配置Filters
+① URIs	
+② 本地文件	
+③ 本地目录	
+④ 包			
+⑤ 类，全类名			
+⑥ 方法，全方法名（见 [selectMethod(String) in DiscoverySelectors](http://junit.org/junit5/docs/current/api/org/junit/platform/engine/discovery/DiscoverySelectors.html#selectMethod-java.lang.String-)）			
+⑦ 路径资源
 
-开发者可以使用`Filter`扩展来配置测试计划的过滤器。默认情况下，所有的引擎和标签都会被包含在测试计划中。默认使用的是`includeClassNamePattern 
-(^.*Tests?$)`。你可以重写默认的匹配器就像下面的示例一样。当使用了多种匹配器时，JUnit Platform会使用逻辑或将它们合并起来使用。
+#### 配置 Filters
+
+可以使用 `Filter` 扩展来配置测试计划的过滤器。默认情况下，所有的引擎和标签都被包含在测试计划中。但只有默认的 `includeClassNamePattern 
+(^.*Tests?$)` 被应用。开发者可以重写默认的匹配器，例子如下。当使用了多种匹配器时，JUnit Platform 会使用逻辑或将它们合并起来使用。
 
 ```
 junitPlatform {
@@ -162,38 +169,54 @@ junitPlatform {
 }
 ```
 
-如果你为`engines {include …​} `或`engines {exclude …​}`的提供了*测试引擎ID*，那么JUnit Gradle插件将会只去运行开发者所希望运行的那个测试引擎。同样，如果你为`tags {include …​}`或者`tags {exclude …​}`提供了*标签*，JUnit Gradle插件将只会处理含有这个标签的测试（例如，通过一个`@Tag`注解标注基于JUnit Jupiter测试）。这点还可以应用在package名称上，例如`packages {include …​}`或者`packages {exclude …​}`。
+如果通过 `engines {include …​} ` 或 `engines {exclude …​}` 的提供*测试引擎ID*，那么 JUnit Gradle 插件将会只运行开发者所希望运行的那个测试引擎。同样，如果你通过 `tags {include …​}` 或者 `tags {exclude …​}` 提供了*标签*，JUnit Gradle 插件将只会处理含有这个标签的测试（例如，通过一个 `@Tag` 注解标注基于 JUnit Jupiter 测试）。关于 package 名称同理，可以通过 `packages {include …​}` 或者 `packages {exclude …​}` 配置。
 
-### 配置测试引擎
-
-为了能够使 JUnit Gradle 插件运行任何一个测试，必须给出`TestEngine`的实现的classpath。
-
-要配置基于JUnit Jupiter的测试支持，你需要配置一个JUnit Jupiter API 的`testCompile`依赖以及JUnit Jupiter`TestEngine`实现的`testRuntime`依赖。具体配置如下：
+#### 配置变量
+通过使用 `configurationParameter` 或者 `configurationParameters` DSL 配置变量可以影响测试执行和路径。前者可以配置单独的配置变量，后者可以获取一个 map 变量配置多个键值对，所有的 key 和 value 都必须是 ```String``` 类型。
 
 ```
-dependencies {
-    testCompile("org.junit.jupiter:junit-jupiter-api:5.0.0-M4")
-    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.0-M4")
+
+junitPlatform {
+    // ...
+    configurationParameter 'junit.jupiter.conditions.deactivate', '*'
+    configurationParameters([
+        'junit.jupiter.extensions.autodetection.enabled': 'true',
+        'junit.jupiter.testinstance.lifecycle.default': 'per_class'
+    ])
+    // ...
 }
 ```
 
-只要你配置了一个JUnit4的`testCompile`依赖以及JUnit Vintage `TestEngine`的`testRuntime `依赖，JUnit Gradle 插件就可以运行基于JUnit 4 的测试。具体配置如下：
+#### 配置测试引擎
+
+为了能够使 JUnit Gradle 插件运行任何一个测试，必须给出`TestEngine`的实现的 classpath。
+
+要配置基于 JUnit Jupiter 的测试支持，需要配置一个JUnit Jupiter API 的 `testCompile` 依赖以及JUnit Jupiter `TestEngine` 实现的 `testRuntime` 依赖。具体配置如下：
+
+```
+dependencies {
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.0.2")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.2")
+}
+```
+
+开发者只要配置了一个JUnit4的 `testCompile` 依赖以及JUnit Vintage `TestEngine` 的 `testRuntime `依赖，JUnit Gradle 插件就可以运行基于JUnit 4 的测试。具体配置如下：
 
 ```
 dependencies {
     testCompile("junit:junit:4.12")
-    testRuntime("org.junit.vintage:junit-vintage-engine:4.12.0-M4")
+    testRuntime("org.junit.vintage:junit-vintage-engine:4.12.2")
 }
 ```
 
 ### 使用 JUnit Gradle 插件
 
 一旦JUnit Gradle插件配置完全完毕，
-，在你可用的Gralde的task中就会多出一个`junitPlatformTest `task。
+，在可用的Gralde的task中就会多出一个`junitPlatformTest` task。
 
-在命令行中调用`gradlew junitPlatformTest` (or `gradlew test`)指令，项目中所有满足当前`includeClassNamePattern `配置的测试会被执行。（默认匹配`^.*Tests?$`）
+在命令行中调用 `gradlew junitPlatformTest` (or `gradlew test` )指令，项目中所有满足当前 `includeClassNamePattern` 配置的测试会被执行。（默认匹配`^.*Tests?$`）
 
-在[`junit5-gradle-consumer`](https://github.com/junit-team/junit5-samples/tree/r5.0.0-M4/junit5-gradle-consumer)项目中，执行`junitPlatformTest`任务的输出结果如下：
+在 [`junit5-gradle-consumer`](https://github.com/junit-team/junit5-samples/tree/r5.0.0-M4/junit5-gradle-consumer) 项目中，执行 `junitPlatformTest` 任务的输出结果如下：
 
 ```
 :junitPlatformTest
@@ -246,13 +269,13 @@ FAILURE: Build failed with an exception.
 * What went wrong:
 Execution failed for task ':junitPlatformTest'.
 > Process 'command '/Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home/bin/java'' finished with non-zero exit value 1
+
 ```
 
-> 当任何一个容器有误或者测试失败时，退出值为1；否则，值为0.
+> 📒当任何一个容器有误或者测试失败时，退出值为1；否则，值为0.
 
-> ⚠️  
-> **当前JUnit Gradle插件的限制**
-> 目前所有通过JUnit Gradle插件完成的测试结果都无法被包含在标准生成的的Gradle测试报告中；但这些测试结果通常可以被记录于持续集成服务器上。通过插件的`reportsDir`属性可以找到报告。
+> ⚠️  **当前JUnit Gradle插件的限制**
+> 目前所有通过JUnit Gradle插件完成的测试结果都无法被包含在标准生成的的Gradle测试报告中；但这些测试结果通常可以被记录于持续集成服务器上。通过插件的 `reportsDir` 属性可以找到报告。
 
 
 ### 4.2.2. Maven
