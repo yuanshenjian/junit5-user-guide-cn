@@ -42,12 +42,12 @@ JUnit Jupiter 支持下面表格中注解来配置测试和扩展框架。
 
 被`@Test`、`@TestTemplate`、`@RepeatedTest`、`@BeforeAll`、`@AfterAll`、`@BeforeEach` 或 `@AfterEach` 注解标注的方法不可以有返回值。
 
->⚠️  某些注解目前可能还处于实验阶段。详细信息请参阅 [实验性APIs]() 中的表格。
+>⚠️  某些注解目前可能还处于实验阶段。详细信息请参阅 [实验性API]() 中的表格。
 
 #### 3.1.1. 元注解和组合注解
 JUnit Jupiter注解可以被用作*元注解*。这意味着你可以定义你自己的*组合注解*，而自定义的组合注解会自动*继承*其元注解的语义。
 
-例如，为了避免在代码库中到处复制粘贴`@Tag("fast")`（见 [标记和过滤]()），你可以自定义一个名为`@Fast`的*组合注解*。然后你就可以用`@Fast`来替换`@Tag("fast")`。如下面代码所示：
+例如，为了避免在代码库中到处复制粘贴`@Tag("fast")`（见 [标记和过滤]()），你可以自定义一个名为`@Fast`的*组合注解*。然后你就可以用`@Fast`来替换`@Tag("fast")`，如下面代码所示。
 
 ```java
 import java.lang.annotation.ElementType;
@@ -275,7 +275,7 @@ class AssertionsDemo {
 
 举个例子，*匹配器*和一个流式调用的API的组合可以使得断言更加具有描述性和可读性。然而，JUnit Jupiter的 [org.junit.jupiter.Assertions](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Assertions.html) 类没有提供一个类似于JUnit 4的`org.junit.Assert`类中 [assertThat()](http://junit.org/junit4/javadoc/latest/org/junit/Assert.html#assertThat) 方法，该方法接受一个Hamcrest [Matcher](http://junit.org/junit4/javadoc/latest/org/hamcrest/Matcher.html)。所以，我们鼓励开发人员使用由第三方断言库提供的匹配器的内置支持。
 
-下面的例子演示如何在JUnit Jupiter中使用Hamcrest提供的`assertThat()`。只要Hamcrest库已经被添加到classpath中，你就可以静态导入诸如`assertThat()`、`is()`以及`equalTo()`方法，然后在测试方法中使用它们，如下面代码所示的`assertWithHamcrestMatcher()`方法：
+下面的例子演示如何在JUnit Jupiter中使用Hamcrest提供的`assertThat()`。只要Hamcrest库已经被添加到classpath中，你就可以静态导入诸如`assertThat()`、`is()`以及`equalTo()`方法，然后在测试方法中使用它们，如下面代码所示的`assertWithHamcrestMatcher()`方法。
 
 ```java
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -338,7 +338,7 @@ class AssumptionsDemo {
 ```
 
 ### 3.6. 禁用测试
-下面是一个被禁用的测试用例：
+下面是一个被禁用的测试用例。
 
 ```java
 import org.junit.jupiter.api.Disabled;
@@ -352,7 +352,7 @@ class DisabledClassDemo {
 }
 ```
 
-下面是一个包含被禁用测试方法的测试用例：
+下面是一个包含被禁用测试方法的测试用例。
 
 ```java
 import org.junit.jupiter.api.Disabled;
@@ -372,7 +372,7 @@ class DisabledTestsDemo {
 ```
 
 ### 3.7. 标记和过滤
-测试类和测试方法可以被标记。那些标签可以在后面被用来过滤 [测试发现和执行]()
+测试类和测试方法可以被标记。那些标签可以在后面被用来过滤 [测试发现和执行]()。
 
 #### 3.7.1. 标记的语法规则
 * 标记不能为`null`或*空*。
@@ -1144,7 +1144,7 @@ void testWithCsvFileSource(String first, int second) {
 }
 ```
 
-two-column.csv
+*two-column.csv*
 
 ```sh
 foo, 1
@@ -1265,7 +1265,7 @@ Display name of container ✔
 └─ 3 ==> first='baz, qux', second=3 ✔
 ```
 
-自定义显示名称支持以下占位符。
+自定义显示名称支持下面表格中的占位符。
 
 |占位符 | 描述|
 |:---|:---|
@@ -1298,45 +1298,54 @@ void afterEach(TestInfo testInfo) {
 ```
 
 ### 3.14. 测试模板
-A @TestTemplate method is not a regular test case but rather a template for test cases. As such, it is designed to be invoked multiple times depending on the number of invocation contexts returned by the registered providers. Thus, it must be used in conjunction with a registered TestTemplateInvocationContextProvider extension. Each invocation of a test template method behaves like the execution of a regular @Test method with full support for the same lifecycle callbacks and extensions. Please refer to Providing Invocation Contexts for Test Templates for usage examples.
 
-`@TestTemplate`方法不是一个常规的实测用例，它是测试用例的模板。这样一来，设计它是用来被多次调用，而这取决于注册提供者返回的调用上下文数量。因此，它必须结合 [TestTemplateInvocationContextProvider](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestTemplateInvocationContextProvider.html) 扩展一起使用。测试模板方法每一次调用类似于常规`@Test`方法的执行，它也全部支持同样的生命周期回调和扩展。关于它的用例请参考 [为测试模板提供调用上下文]()。
+`@TestTemplate`方法不是一个常规的测试用例，它是测试用例的模板。因此，它的设计初衷是用来被多次调用，而调用次数取决于注册提供者返回的调用上下文数量。所以，它必须结合 [TestTemplateInvocationContextProvider](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestTemplateInvocationContextProvider.html) 扩展一起使用。测试模板方法每一次调用跟执行常规`@Test`方法一样，它也完全支持相同的生命周期回调和扩展。关于它的用例请参阅 [为测试模板提供调用上下文]()。
+
 
 ### 3.15. 动态测试
-The standard @Test annotation in JUnit Jupiter described in Annotations is very similar to the @Test annotation in JUnit 4. Both describe methods that implement test cases. These test cases are static in the sense that they are fully specified at compile time, and their behavior cannot be changed by anything happening at runtime. 
 
-在JUnit Juppiter的[Annotations]()章节描述的标准`@Test`注解跟JUnit 4中的`@Test`注解非常类似。两者都表示方式是一个测试用例。这些测试用例都是静态的，并且都是在编译器就指定好的，以及它们的行为不能在运行期被改变。*假设提供了动态行为的基本形式，但在表现力上做有意的限制*。
+JUnit Juppiter的 [Annotations]() 章节描述的标准`@Test`注解跟JUnit 4中的`@Test`注解非常类似。两者都描述了实现测试用例的方法。这些测试用例都是静态的，因为它们是在编译时完全指定的，而且它们的行为不能在运行时被改变。*假设提供了一种基本的动态行为形式，但其表达性却被故意地加以限制*。
 
-In addition to these standard tests a completely new kind of test programming model has been introduced in JUnit Jupiter. This new kind of test is a dynamic test which is generated at runtime by a factory method that is annotated with @TestFactory.
+除了这些标准的测试以外，JUnit Jupiter还引入了一种全新的测试编程模型。这中新的测试是一个*动态测试*，它们由一个使用了`@TestRactory`注解的工厂方法在运行时生成。
 
-除了那些标标准的测试，一个全新的测试编程模型已经被引入到JUnit Jupiter中。这个新型的测试就是*一个动态测试*，它们由一个使用了`@TestRactory`注解的工厂方法生成。
+相比于`@Test`方法，`@TestFactory`方法本身不是测试用例，它是测试用例的工厂。因此，动态测试是工厂的产品。从技术上讲，`@TestFactory`方法必须返回一个`DynamicNode`实例的`Stream`、`Collection`、`Iterable`、`Iterator`。`DynamicNode`的可实例化子类是`DynamicContainer`和`DynamicTest`。`DynamicContainer`实例由一个*显示名称*和一个动态子节点列表组成，它允许创建任意嵌套的动态节点层次结构。而`DynamicTest`实例会被延迟执行，从而生成动态甚至非确定性的测试用例。
 
-相比于`@Test`方法，一个`@TestFactory`方法自身并不是一个测试，它是一个测试用例工厂。因此，一个动态测试是一个工厂的产品。从技术上将，`@TestFactory`方法必须一个返回`DynamicTest`实例的`Stream`、`Collection`、`Iterable`、`Iterator`。这些`DynamicTest`实例将被延迟执行，这恰恰允许动态以及不确定性地生成测试用例。
+任何由`@TestFactory`方法返回的`Stream`在调用`stream.close()`的时候会被正确地关闭，这样我们就可以安全地使用一个资源，例如：`Files.lines()`。
 
-任何由`@TestFactory`方法返回的`Stream`在调用`stream.close()`的时候会被正确地关闭 , 这使得我们可以安全地使用一个资源，例如：`Files.lines()`。；
+跟`@Test`方法一样，`@TestFactory`方法不能是`private`或`static`的。但它可以声明被`ParameterResolvers`解析的参数。
 
-跟`@Test`方法一样，`@TestFactory`方法不能是`private`或`static`的。但可以声明被`ParameterResolvers`解析的参数。
+`DynamicTest`是运行时生成的测试用例。它由一个*显示名称*和`Executable`组成。`Executable`是一个`@FunctionalInterface`，这意味着动态测试的实现可以是一个*lambda表达式* 或*方法引用*。
 
-一个`DynamicTest`是一个在运行期生成的测试。它由一个展示名称和`Executable`组成。`Executable`是一个`@FunctionalInterface`，这意味着动态测试的实现可以是一个`lambda表达式`或方法引用。
+> ⚠️ *动态测试生命周期*
+> 
+> 动态测试执行生命周期跟标准的`@Test`测试截然不同。具体而言，动态测试不存在任何生命周期回调。这意味着`@BeforeEach`和`@AfterEach`方法以及它们相应的扩展回调函数对`@TestFactory`方法执行，而不是对每个动态测试执行。换言之，如果你从一个lambda表达式的测试实例中访问动态测试的字段，那么由同一个`@TestFactory`方法生成的各个动态测试执行之间的回调方法或扩展不会重置那些字段。
 
-> ##### 动态测试生命周期
-> 动态测试执行生命周期跟标准的`@Test`测试截然不同。具体地说，动态测试不存在任何生命周期阶段的回调。这意味着`@BeforeEach`和`@AfterEach`方法以及它们对应的扩展回调不会被动态执行。换言之，如果你在一个动态测试中的lambda表达式中去访问字段，那么在由同一个`@TestFactory`方法生成的动态测试之间的执行中，那些字段不会被回调方法或扩展重置掉。
+>译者注：同一个`@TestFactory`所生成的n个动态测试，`@BeforeEach`和`@AfterEach`只会在这n个动态测试开始前和结束后各执行一次，不会为每一个单独的动态测试都执行。
 
->译者注：同一个`@TestFactory`所生成的n个测试，`@BeforeEach`和`@AfterEach`只会在这n个测试开始前和结束后各执行一次，不会为每一个测试都执行。
+从JUnit Jupiter 5.0.2开始，动态测试必须始终由工厂方法创建；不过，在后续的发行版中，这可以通过注册工具来提供。
+
+> ⚠️ 动态测试目前是一个实验性功能。详细信息请参阅 [实验性API]() 中的表格。
+
 
 #### 3.15.1. 动态测试示例
-下面的`DynamicTestsDemo`类演示了测试工厂和动态测试的几个示例：
 
-第一个方法返回一个非法的类型。由于非法类型不能在编译器被识别，所以运行期会抛出一个`JUnitException`。
+下面的`DynamicTestsDemo`类演示了测试工厂和动态测试的几个示例。
 
-接下来5个方法是非常简单的示例，它们演示了生成一个`DynamicTest`实例的`Collection`、`Iterable`、`Iterator`、`Stream`。大部分例子不是为了展示动态行为，仅仅是为了演示所支持的类型。然而，`dynamicTestsFromStream()`和`dynamicTestsFromIntStream()`演示了为给定的字符串或数字范围的集合生成动态测试是一件非常容易的事情。
+第一个方法返回一个无效的返回类型。由于在编译时无法检测到无效的返回类型，因此在运行时会抛出`JUnitException`。
 
-最后一个方法是真正意义上动态的。`generateRandomNumberOfTests()`实现了一个生成随机数字的`Iterator`，一个展示名称生成器和一个测试执行器，然后将它们三者以`DynamicTest.stream()`的方式返回一个`Stream`。当然，`generateRandomNumberOfTests()`行为的不确定性与测试可重复性会产生冲突，而我们应该尽量小心避免这样使用，这里只是用它来演示动态测试的表现力和强大性。
+接下来五个方法是非常简单的例子，它们演示了生成一个`DynamicTest`实例的`Collection`、`Iterable`、`Iterator`、`Stream`。这些例子中大多数并不真正表现出动态行为，而只是为了证明原则上所支持的返回类型。然而，`dynamicTestsFromStream()`和`dynamicTestsFromIntStream()`演示了为给定的一组字符串或一组输入数字生成动态测试是多么的容易。
+
+下一个方法是真正意义上动态的。`generateRandomNumberOfTests()`实现了一个生成随机数的`Iterator`，一个显示名称生成器和一个测试执行器，然后将这三者提供给`DynamicTest.stream()`。因为`generateRandomNumberOfTests()`的非确定性行为会与测试的可重复性发生冲突，因此应该谨慎使用，这里只是用它来演示动态测试的表现力和强大。
+
+最后一个方法使用`DynamicContainer`来生成动态测试的嵌套层次结构。
 
 
 ```java
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.DynamicContainer.dynamicContainer;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 import java.util.Arrays;
@@ -1348,6 +1357,7 @@ import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.TestFactory;
@@ -1387,15 +1397,15 @@ class DynamicTestsDemo {
 
     @TestFactory
     Stream<DynamicTest> dynamicTestsFromStream() {
-        return Stream.of("A", "B", "C").map(
-            str -> dynamicTest("test" + str, () -> { /* ... */ }));
+        return Stream.of("A", "B", "C")
+            .map(str -> dynamicTest("test" + str, () -> { /* ... */ }));
     }
 
     @TestFactory
     Stream<DynamicTest> dynamicTestsFromIntStream() {
         // Generates tests for the first 10 even integers.
-        return IntStream.iterate(0, n -> n + 2).limit(10).mapToObj(
-            n -> dynamicTest("test" + n, () -> assertTrue(n % 2 == 0)));
+        return IntStream.iterate(0, n -> n + 2).limit(10)
+            .mapToObj(n -> dynamicTest("test" + n, () -> assertTrue(n % 2 == 0)));
     }
 
     @TestFactory
@@ -1428,6 +1438,18 @@ class DynamicTestsDemo {
 
         // Returns a stream of dynamic tests.
         return DynamicTest.stream(inputGenerator, displayNameGenerator, testExecutor);
+    }
+
+    @TestFactory
+    Stream<DynamicNode> dynamicTestsWithContainers() {
+        return Stream.of("A", "B", "C")
+            .map(input -> dynamicContainer("Container " + input, Stream.of(
+                dynamicTest("not null", () -> assertNotNull(input)),
+                dynamicContainer("properties", Stream.of(
+                    dynamicTest("length > 0", () -> assertTrue(input.length() > 0)),
+                    dynamicTest("not empty", () -> assertFalse(input.isEmpty()))
+                ))
+            )));
     }
 
 }
