@@ -279,10 +279,9 @@ Execution failed for task ':junitPlatformTest'.
 
 
 ### 4.2.2. Maven
-为了能够通过`mvn test`运行JUnit 4和 JUnit Jupiter，JUnit团队为Maven Surefire提供了基础的支持保证。项目[`junit5-maven-consumer`](https://github.com/junit-team/junit5-samples/tree/r5.0.0-M4/junit5-maven-consumer)中的`pom.xml`文件展示了如何作为一个开始并使用的其的描述。
+为了能够通过 `mvn test` 运行 JUnit4 和 JUnit Jupiter，JUnit 团队为 Maven Surefire 提供了基础的支持保证。项目 [`junit5-maven-consumer`](https://github.com/junit-team/junit5-samples/tree/r5.0.0-M4/junit5-maven-consumer) 中的 `pom.xml` 文件展示了如何作为一个开始并使用的其的描述。
 
-> ⚠️  
-> 由于Surefire2.20中的内存泄漏，`junit-platform-surefire-provider`仅仅在Surefire 2.19.1中可用。
+> ⚠️ 由于 Surefire2.20 中的内存泄漏，`junit-platform-surefire-provider` 仅仅在Surefire 2.19.1 中可用。
 
 ```
 ...
@@ -296,7 +295,7 @@ Execution failed for task ':junitPlatformTest'.
                 <dependency>
                     <groupId>org.junit.platform</groupId>
                     <artifactId>junit-platform-surefire-provider</artifactId>
-                    <version>1.0.0-M4</version>
+                    <version>1.0.2</version>
                 </dependency>
             </dependencies>
         </plugin>
@@ -308,7 +307,7 @@ Execution failed for task ':junitPlatformTest'.
 ### 配置测试引擎
 为了使 Maven Surefire 能够运行所有的测试，`TestEngine`的实现必须加到运行时路径中。
 
-要配置针对JUnit Jupiter测试的支持，你需要为JUnit Jupiter API配置`test`依赖，为`maven-surefire-plugin`增加JUnit Jupiter的`TestEngine`实现的依赖。
+要配置针对 JUnit Jupiter 测试的支持，你需要为JUnit Jupiter API配置 `test` 依赖，为 `maven-surefire-plugin` 增加JUnit Jupiter的 `TestEngine` 实现的依赖。
 
 ```
 ...
@@ -322,12 +321,12 @@ Execution failed for task ':junitPlatformTest'.
                 <dependency>
                     <groupId>org.junit.platform</groupId>
                     <artifactId>junit-platform-surefire-provider</artifactId>
-                    <version>1.0.0-M4</version>
+                    <version>1.0.2</version>
                 </dependency>
                 <dependency>
                     <groupId>org.junit.jupiter</groupId>
                     <artifactId>junit-jupiter-engine</artifactId>
-                    <version>5.0.0-M4</version>
+                    <version>5.0.2</version>
                 </dependency>
             </dependencies>
         </plugin>
@@ -339,14 +338,14 @@ Execution failed for task ':junitPlatformTest'.
     <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-api</artifactId>
-        <version>5.0.0-M4</version>
+        <version>5.0.2</version>
         <scope>test</scope>
     </dependency>
 </dependencies>
 ...
 ```
 
-只要你配置了JUnit4的`test`依赖，并增加`maven-surefire-plugin`的JUnit Vintage `TestEngine`实现的依赖，Unit Platform Surefire Provider 就可以运行基于JUnit4 的测试。具体配置如下：
+只要你配置了 JUnit4 的 `test` 依赖，并增加 `maven-surefire-plugin` 的 JUnit Vintage `TestEngine` 实现的依赖，Unit Platform Surefire Provider 就可以运行基于JUnit4 的测试。具体配置如下：
 
 ```
 ...
@@ -360,13 +359,13 @@ Execution failed for task ':junitPlatformTest'.
                 <dependency>
                     <groupId>org.junit.platform</groupId>
                     <artifactId>junit-platform-surefire-provider</artifactId>
-                    <version>1.0.0-M4</version>
+                    <version>1.0.2</version>
                 </dependency>
                 ...
                 <dependency>
                     <groupId>org.junit.vintage</groupId>
                     <artifactId>junit-vintage-engine</artifactId>
-                    <version>4.12.0-M4</version>
+                    <version>4.12.2</version>
                 </dependency>
             </dependencies>
         </plugin>
@@ -388,8 +387,8 @@ Execution failed for task ':junitPlatformTest'.
 ### tag过滤测试
 使用以下配置属性，你可以通过tag来过滤测试：
 
-* 为了包含一个 tag，可以使用`groups`或者`includeTags`
-* 为了排除一个 tag，可以使用`excludedGroups`或者`excludeTags`
+* 为了包含一个 tag，可以使用 `groups` 或者 `includeTags`
+* 为了排除一个 tag，可以使用 `excludedGroups` 或者 `excludeTags`
 
 ```
 ...
@@ -403,6 +402,35 @@ Execution failed for task ':junitPlatformTest'.
                 <properties>
                     <includeTags>acceptance</includeTags>
                     <excludeTags>integration, regression</excludeTags>
+                </properties>
+            </configuration>
+            <dependencies>
+                ...
+            </dependencies>
+        </plugin>
+    </plugins>
+</build>
+...
+```
+
+### 配置变量
+通过配置变量可以影响测试路径和执行，使用属性 `configurationParameters ` 并在 Java 的 `Properties` 文件中提供键值对。
+
+```
+...
+<build>
+    <plugins>
+        ...
+        <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>2.19</version>
+            <configuration>
+                <properties>
+                    <configurationParameters>
+                        junit.jupiter.conditions.deactivate = *
+                        junit.jupiter.extensions.autodetection.enabled = true
+                        junit.jupiter.testinstance.lifecycle.default = per_class
+                    </configurationParameters>
                 </properties>
             </configuration>
             <dependencies>
