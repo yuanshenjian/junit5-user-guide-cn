@@ -443,27 +443,27 @@ Execution failed for task ':junitPlatformTest'.
 ```
 
 ## 4.3 运行控制台
-[ConsoleLauncher](http://junit.org/junit5/docs/current/api/org/junit/platform/console/ConsoleLauncher.html)是一个Java的命令行应用程序，它允许你通过命令行来启动JUnit平台。例如，它可以用来运行 JUnit Vintage 和 JUnit Jupiter 测试，并在命令行中打印测试结果。
+[ConsoleLauncher](http://junit.org/junit5/docs/current/api/org/junit/platform/console/ConsoleLauncher.html) 是一个Java的命令行应用程序，它允许你通过命令行来启动JUnit平台。例如，它可以用来运行 JUnit Vintage 和 JUnit Jupiter 测试，并在命令行中打印测试结果。
 
-`junit-platform-console-standalone-1.0.0-M4.jar`这个可执行的jar包，包括了所有的依赖，它已经被发布在Maven中心库中了，路径是[junit-platform-console-standalone](https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/)，可以通过以下命令[运行](https://docs.oracle.com/javase/tutorial/deployment/jar/run.html)单机版的`ConsoleLauncher `
+`junit-platform-console-standalone-1.0.0-M4.jar`这个可执行的jar包，包括了所有的依赖，它已经被发布在 Maven 中心库中了，路径是 [junit-platform-console-standalone](https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/)，可以通过以下命令[运行](https://docs.oracle.com/javase/tutorial/deployment/jar/run.html) 单机版的 `ConsoleLauncher `
 
 ```
-java -jar junit-platform-console-standalone-1.0.0-M4.jar <Options>
+java -jar junit-platform-console-standalone-1.0.2.jar <Options>
 ```
 如下所示为一个输出的例子：
 
 ```
 ├─ JUnit Vintage
-│  ├─ example.JUnit4Tests
-│  │  ├─ standardJUnit4Test ✔
-├─ JUnit Jupiter
-│  ├─ StandardTests
-│  │  ├─ succeedingTest() ✔
-│  │  ├─ skippedTest() ↷ for demonstration purposes
-│  ├─ A special test case
-│  │  ├─ Custom test name containing spaces ✔
-│  │  ├─ ╯°□°）╯ ✔
-│  │  ├─ 😱 ✔
+│  └─ example.JUnit4Tests
+│     └─ standardJUnit4Test ✔
+└─ JUnit Jupiter
+   ├─ StandardTests
+   │  ├─ succeedingTest() ✔
+   │  └─ skippedTest() ↷ for demonstration purposes
+   └─ A special test case
+      ├─ Custom test name containing spaces ✔
+      ├─ ╯°□°）╯ ✔
+      └─ 😱 ✔
 
 Test run finished after 64 ms
 [         5 containers found      ]
@@ -480,12 +480,10 @@ Test run finished after 64 ms
 [         0 tests failed          ]
 ```
 
-> ##### 退出码
-> 如果[ConsoleLauncher](http://junit.org/junit5/docs/current/api/org/junit/platform/console/ConsoleLauncher.html)的返回的状态值为1，则代表有容器或测试运行失败，否则返回0.
+> ##### 退出码 📒
+> 如果 [ConsoleLauncher](http://junit.org/junit5/docs/current/api/org/junit/platform/console/ConsoleLauncher.html) 的返回的状态值为1，则代表有容器或测试运行失败，否则返回0.
 
 ### Options
-
-为了最终的成功发布，options经常需要改变。
 
 ```
 Option                                        Description
@@ -493,7 +491,6 @@ Option                                        Description
 -h, --help                                    Display help information.
 --disable-ansi-colors                         Disable ANSI colors in output (not
                                                 supported by all terminals).
---hide-details                                @Deprecated. Use '--details none' instead.
 --details <[none,flat,tree,verbose]>          Select an output details mode for when
                                                 tests are executed. Use one of: [none,
                                                 flat, tree, verbose]. If 'none' is
@@ -559,6 +556,9 @@ Option                                        Description
 -E, --exclude-engine <String>                 Provide the ID of an engine to be excluded
                                                 from the test run. This option can be
                                                 repeated.
+--config <key=value>                          Set a configuration parameter for test
+                                                discovery and execution. This option can
+                                                be repeated.
 ```
 
 ## 4.4 使用JUnit4运行JUnit Platform
