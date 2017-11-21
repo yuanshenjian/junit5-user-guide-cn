@@ -18,7 +18,7 @@ class FirstJUnit5Tests {
 ```
 
 ### 3.1. 注解
-JUnit Jupiter 支持下面表格中注解来配置测试和扩展框架。
+JUnit Jupiter 支持使用下面表格中的注解来配置测试和扩展框架。
 
 所有的核心注解都位于`junit-jupiter-api`模块的 [org.junit.jupiter.api ](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/package-summary.html) 包中。
 
@@ -42,7 +42,7 @@ JUnit Jupiter 支持下面表格中注解来配置测试和扩展框架。
 
 被`@Test`、`@TestTemplate`、`@RepeatedTest`、`@BeforeAll`、`@AfterAll`、`@BeforeEach` 或 `@AfterEach` 注解标注的方法不可以有返回值。
 
->⚠️  某些注解目前可能还处于实验阶段。详细信息请参阅 [实验性API]() 中的表格。
+>⚠️  某些注解目前可能还处于实验阶段。详细信息请参阅 [试验性API]() 中的表格。
 
 #### 3.1.1. 元注解和组合注解
 JUnit Jupiter注解可以被用作*元注解*。这意味着你可以定义你自己的*组合注解*，而自定义的组合注解会自动*继承*其元注解的语义。
@@ -982,7 +982,7 @@ class RepeatedTestsDemo {
 
 参数化测试可以用不同的参数多次运行测试。除了使用`@ParameterizedTest`注解，它们的声明跟`@Test`的方法没有区别。此外，你必须声明至少一个给每次调用提供参数的来源。
 
-> ⚠️ 参数化测试目前是一个实验性功能。详细信息请参阅 [实验性API]() 中的表格。
+> ⚠️ 参数化测试目前是一个试验性功能。详细信息请参阅 [试验性API]() 中的表格。
 
 ```java
 @ParameterizedTest
@@ -1324,7 +1324,7 @@ JUnit Juppiter的 [Annotations]() 章节描述的标准`@Test`注解跟JUnit 4�
 
 从JUnit Jupiter 5.0.2开始，动态测试必须始终由工厂方法创建；不过，在后续的发行版中，这可以通过注册工具来提供。
 
-> ⚠️ 动态测试目前是一个实验性功能。详细信息请参阅 [实验性API]() 中的表格。
+> ⚠️ 动态测试目前是一个试验性功能。详细信息请参阅 [试验性API]() 中的表格。
 
 
 #### 3.15.1. 动态测试示例
