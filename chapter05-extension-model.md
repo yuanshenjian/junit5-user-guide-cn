@@ -2,17 +2,16 @@
 
 ## 5.1 概述
 
-相比于JUnit4中的`Runner`，`@Rule`以及`@ClassRule`等多个扩展点，JUnit Jupiter的扩展模型始于一个单一连贯概念：`Extension`API。但是，需要注意的是`Extension`本身也只是一个标记接口。
+相比于JUnit4中的`Runner`，`@Rule`以及`@ClassRule`等多个扩展点，JUnit Jupiter的扩展模型始于一个单一连贯概念：`Extension`API。但是，需要注意的是 `Extension` 本身也只是一个标记接口。
 
 ## 5.2 注册扩展
 
-JUnit Jupiter中的扩展可以通过[`@ExtenWith`]()注解显式注册，或者通过Java的[`ServiceLoader`机制]()自动完成。
+JUnit Jupiter中的扩展可以通过 [`@ExtenWith`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/ExtendWith.html) 注解显式注册，或者通过Java的 [`ServiceLoader`机制](http://junit.org/junit5/docs/current/user-guide/#extensions-registration-automatic) 自动完成。
 
 ### 5.2.1 声明式的扩展注册
+开发者可以通过在测试接口、测试类、测试方法或者自定义的[组合注解](http://junit.org/junit5/docs/current/user-guide/#writing-tests-meta-annotations) 上标注 `@ExtendWith(...)` 并提供要注册的扩展类的引用，从而以声明式的方式注册一个或多个扩展。
 
-开发者可以通过在测试接口、测试类、测试方法或者自定义的[组合注解]()上标注`@ExtendWith(...)`并提供要注册的扩展类的引用，从而以声明式的方式注册一个或多个扩展。
-
-例如，要给某个测试方法注册一个自定义的`MockitoExtension `扩展，你可以参照如下的方式标注该方法。
+例如，要给某个测试方法注册一个自定义的 `MockitoExtension`，你可以参照如下的方式标注该方法:
 
 ```
 @ExtendWith(MockitoExtension.class)
@@ -22,7 +21,7 @@ void mockTest() {
 }
 ```
 
-若是要某个类或者其子类注册一个自定义的`MockitoExtension `扩展，将注解添加到测试类上即可。
+若要为某个类或者其子类注册一个自定义的`MockitoExtension`，将注解添加到测试类上即可：
 
 ```
 @ExtendWith(MockitoExtension.class)
@@ -40,7 +39,7 @@ class MyTestsV1 {
 }
 ```
 
-当然，多个扩展类的的注册形式也可以是这样子：
+当然，另一种方式的多个扩展类的的注册形式，也可以是这样子：
 
 ```
 @ExtendWith(FooExtension.class)
@@ -49,7 +48,7 @@ class MyTestsV2 {
     // ...
 }
 ```
-上述的两种扩展注册方式是等价的，`MyTestV1`和`MyTestV2`都会被`FooExtension`和`BarExtension`进行扩展，而且扩展顺序跟声明顺序一样。
+上述的两种扩展注册方式是等价的，`MyTestV1` 和 `MyTestV2` 都会被 `FooExtension` 和 `BarExtension` 进行扩展，且扩展顺序跟声明顺序一致。
 
 ### 5.2.2 自动扩展注册
 
