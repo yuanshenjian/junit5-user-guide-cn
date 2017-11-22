@@ -632,8 +632,23 @@ public class JUnit4SuiteDemo {
 >##### 附加配置选项
 > 相比于值使用 `@SelectPackages` 注解，还有很多配置选项可以用来寻找和过滤测试。详细内容参考 [Javadoc](http://junit.org/junit5/docs/current/api/org/junit/platform/suite/api/package-summary.html).
 
+## 4.5. 配置变量
+为了给操作平台指明包含哪些测试类、测试引擎和需要扫描哪些包，需要额外添加自定义的配置变量来详细说明测试引擎。例如，JUnit Jupiter `TestEngine` 支持为以下内容配置变量：
 
+* [Changing the Default Test Instance Lifecycle](http://junit.org/junit5/docs/current/user-guide/#writing-tests-test-instance-lifecycle-changing-default)
+* [Enabling Automatic Extension Detection](http://junit.org/junit5/docs/current/user-guide/#extensions-registration-automatic-enabling)
+* [Deactivating Conditions](http://junit.org/junit5/docs/current/user-guide/#extensions-conditions-deactivation)
 
+配置变量是一种基于文本的键值对，可以通过以下任一种机制应用于 JUnit Platform 的测试引擎：
+
+1. `LauncherDiscoveryRequestBuilder ` 中的方法 `configurationParameter()` 和 `configurationParameters()` 可以用来为 [Launcher](http://junit.org/junit5/docs/current/user-guide/#launcher-api) [API](http://junit.org/junit5/docs/current/user-guide/#launcher-api) 构建请求。当使用 JUnit Platform 提供的某一种测试工具，可以配置详细的配置变量，如下所示：
+ * [Console Launcher](http://junit.org/junit5/docs/current/user-guide/#running-tests-console-launcher): 使用 `--config` 命令行选项
+ * [Gradle plugin](http://junit.org/junit5/docs/current/user-guide/#running-tests-build-gradle-config-params): 使用 `configurationParameter` 或者 `configurationParameters` DSL
+ * [Maven Surefire provider](http://junit.org/junit5/docs/current/user-guide/#running-tests-build-maven-config-params): 使用 `configurationParameters ` 属性
+2. JVM 系统属性
+3. JUnit Platform 配置文件：该文件命名为 `junit-platform.properties`，在根目录路径下，并遵循 Java 'Properties' 文件的语法
+
+> 📒 配置变量按照上面的定义顺序进行查找，所以，在 'Launcher' 中的配置变量优先级高于在系统属性中或配置文件中的设置。同样的，通过系统属性应用的应用变量优先级高于配置文件。
 
 
 
