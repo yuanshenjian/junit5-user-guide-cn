@@ -626,10 +626,11 @@ public class JUnit4SuiteDemo {
 }
 ```
 
-`JUnit4SuiteDemo`类会寻找并运行所有在`example`包及其子包下的测试。默认情况下，它只包含类名符合正则表达式`^.*Tests?$`的测试类。
+`JUnit4SuiteDemo` 类会寻找并运行所有在 `example` 包及其子包下的测试。默认情况下，它只包含类名符合正则表达式 `^.*Tests?$` 的测试类。
 
->### 附加配置选项
-> 相比于值使用`@SelectPackages`注解，还有很多配置选项可以用来寻找和过滤测试。详细内容参考[Javadoc](http://junit.org/junit5/docs/current/api/org/junit/platform/suite/api/package-summary.html).
+>📒 
+>##### 附加配置选项
+> 相比于值使用 `@SelectPackages` 注解，还有很多配置选项可以用来寻找和过滤测试。详细内容参考 [Javadoc](http://junit.org/junit5/docs/current/api/org/junit/platform/suite/api/package-summary.html).
 
 
 
