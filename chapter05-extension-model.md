@@ -205,11 +205,11 @@ INFO: Method [sleep50ms] took 53 ms.
 
 ## 5.7 异常处理
 
-[`TestExecutionExceptionHandler`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestExecutionExceptionHandler.html)为`扩展`定义了异常处理的API，可以在执行测试时处理抛出的异常。
+[`TestExecutionExceptionHandler`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestExecutionExceptionHandler.html) 为`扩展`定义了异常处理的API，可以在执行测试时处理抛出的异常。
 
-下面的例子展示了一个扩展，它将收到的`IOException`重新包装并抛出为其他类型的异常。
+下面的例子展示了一个扩展，它将收到的 `IOException` 重新包装并抛出为其他类型的异常。
 
-*一个异常处理扩展*
+##### 一个异常处理扩展
 
 ```
 public class IgnoreIOExceptionExtension implements TestExecutionExceptionHandler {
