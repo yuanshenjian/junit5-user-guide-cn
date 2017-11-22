@@ -52,24 +52,23 @@ class MyTestsV2 {
 
 ### 5.2.2 自动扩展注册
 
-除了[声明式的扩展注册]()支持使用注解外，JUnit Jupiter 同样也支持通过Java的`java.util.ServiceLoader` 机制来做*全局的扩展注册*。采用这种机制后自动的检测`classpath`下的第三方扩展，并自动完成注册。
+除了 [声明式的扩展注册](http://junit.org/junit5/docs/current/user-guide/#extensions-registration-declarative) 支持使用注解外，JUnit Jupiter 同样也支持通过 Java 的`java.util.ServiceLoader` 机制来做*全局的扩展注册*。采用这种机制后自动的检测 `classpath` 下的第三方扩展，并自动完成注册。
 
-另外，还可以通过提供自定扩展的全类名来完成注册，该扩展被定义在它所在的JAR文件中的`/META-INF/services`目录下的`org.junit.jupiter.api.extension.Extension`文件里。
+另外，还可以通过提供自定扩展的全类名来完成注册，该扩展被定义在它所在的JAR文件中的 `/META-INF/services` 目录下的 `org.junit.jupiter.api.extension.Extension` 文件里。
 
-### 使用自动扩展检测
+#### 使用自动扩展检测
 
-自动检测是一种高级特性，因此默认是关闭的。想要启用它，只需要在配置文件中将`junit.extensions.autodetection.enabled`的Key设置为`true`即可。如此一来，这一参数便可以作为JVM的系统属性或作为一个`LauncherDiscoveryRequest`的配置参数传递给`Laucher`。
+自动检测是一种高级特性，因此默认是关闭的。想要启用它，只需要在配置文件中将 `junit.jupiter.extensions.autodetection.enabled` 的配置变量设置为 `true` 即可。这一参数可以作为JVM的系统属性并作为一个`LauncherDiscoveryRequest`的配置参数传递给`Laucher`，另一种方法是通过配置 JUnit Platform 的配置文件（详情见[配置参数](http://junit.org/junit5/docs/current/user-guide/#running-tests-config-params)）。
 
 例如，要启用扩展的自动检测，你可以通过在启动JVM时传入如下系统参数
 
-`
--Djunit.extensions.autodetection.enabled=true
-`
+```
+-Djunit.jupiter.extensions.autodetection.enabled=true
+```
 
-当启用了自动扩展检测后，被`ServiceLoader`机制发现的扩展会被添加到JUnit Jupiter 的全局扩展的扩咋韩注册表中（例如. `TestInfo`,`TestReporter`的支持，等等）。
+当启用了自动扩展检测后，被 `ServiceLoader` 机制发现的扩展会被添加到 JUnit Jupiter 的全局扩展的扩展注册表中（例如. `TestInfo`,`TestReporter`的支持，等等）。
 
 ### 5.2.3 扩展的继承
-
 扩展的继承在测试类中表现为语义上自顶向下的形式。也就是说，一个类级别的注册扩展是可以被方法级的扩展所继承的。此外，一个特定的扩展实现只能在给定的扩展上下文或其父上下文中被注册一次。因此，任何重复注册的扩展实现都将会被忽略掉。
 
 ## 5.3 附加条件测试的执行
