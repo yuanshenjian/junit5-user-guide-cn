@@ -11,7 +11,7 @@ That’s why JUnit 5 introduces a defined lifecycle for all publicly available i
 
 ### 8.1 API 版本和状态
 
-每个发布的包都有一个版本号`<major>.<minor>.<patch>`，所有公开的接口、类和方法都使用 [@API Guardian](https://github.com/apiguardian-team/apiguardian) 项目中的 [@API](https://apiguardian-team.github.io/apiguardian/docs/current/api/) 进行注解。注解的`status`属性可以被赋予下面表格中的值。
+每个发布的包都有一个版本号`<major>.<minor>.<patch>`，所有公开的接口、类和方法都使用 [@API Guardian](https://github.com/apiguardian-team/apiguardian) 项目中的 [@API](https://apiguardian-team.github.io/apiguardian/docs/current/api/) 进行标注。`@API`注解的`status`属性可以被赋予下面表格中的值。
 
 | 状态 | 描述 |
 |:---|:---|
