@@ -584,8 +584,7 @@ Option                                        Description
 *  `opentest4j` 在*test*范围内
 
 ### 4.4.2 展示名称 vs 技术名称
-默认情况下，*展示名称*会被使用在测试产出物上，但是当`JUnitPlatform`运行器使用Gradle或者Maven等编译工具来运行测试时，生成的测试报告需要使用测试产出物的*技术名称*，例如，使用完整类名，而不是使用简写类名，或者自定义的包含特殊字符的展示名称。为了在测试报告中使用技术名称，在`@RunWith(JUnitPlatform.class)`注解旁边声明`@UseTechnicalNames`注解即可。
-
+默认情况下，*展示名称*会被使用在测试产出物上，但是当`JUnitPlatform` 运行器使用 Gradle 或者 Maven 等编译工具来运行测试时，生成的测试报告需要使用测试产出物的*技术名称*，例如，使用完整类名，而不是使用简写类名，或者自定义的包含特殊字符的展示名称。为了在测试报告中使用技术名称，在 `@RunWith(JUnitPlatform.class)` 注解旁边声明 `@UseTechnicalNames` 注解即可。
 
 ### 4.4.3 Single测试类
 使用`JUnitPlatform`运行器的方式之一是直接在测试类上添加`@RunWith(JUnitPlatform.class)`注解。注意下面例子中的测试方法使用的是`org.junit.jupiter.api.Test`（JUnit Jupiter）,而不是`org.junit.Test`(JUnit Vintage)。同时，这个类中的测试用例必须是`public`，否则，IDE不能将其识别为JUnit4的测试类。
