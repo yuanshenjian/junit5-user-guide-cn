@@ -562,27 +562,26 @@ Option                                        Description
 ```
 
 ## 4.4 使用JUnit4运行JUnit Platform
-`JunitPlatform`运行器是一个基于JUnit4的`Runner`，它可以运行任何在JUnit Platform上以JUnint4环境所支持的编程模型的测试，例如，JUnit Jupiter测试类。
+`JunitPlatform` 运行器是一个基于 JUnit4 的`Runner`，它可以运行任何在 JUnit Platform 上以JUnint4 环境所支持的编程模型的测试，例如，JUnit Jupiter 测试类。
 
-如果某个类上标注了`@RunWith(JUnitPlatform.class)`注解，它就可以在那些支持JUnit4但是还不支持JUnit Platform 的IDE和构建系统中上直接运行。
+如果某个类上标注了 `@RunWith(JUnitPlatform.class)` 注解，它就可以在那些支持 JUnit4 但是还不支持JUnit Platform 的 IDE 和构建系统中上直接运行。
 
-> 由于JUnit Platform具备一些JUnit4不具备的功能，运行器只能部分支持JUnit Platform的功能，尤其针对报告中的一些内容（见[命名显示 vs 科学命名](http://junit.org/junit5/docs/current/user-guide/#running-tests-junit-platform-runner-technical-names)）。但是就目前来说，`JUnitPlatform`运行器是一个开启学习的简单方式。
+> 📒 由于 JUnit Platform 具备一些 JUnit4 不具备的功能，运行器只能部分支持 JUnit Platform 的功能，尤其针对报告中的一些内容（见 [命名显示 vs 科学命名](http://junit.org/junit5/docs/current/user-guide/#running-tests-junit-platform-runner-technical-names)）。但是就目前来说，`JUnitPlatform` 运行器是一个开启学习的简单方式。
 
 ### 4.4.1 设置
-你需要在类路径中添加以下的组件和它们的依赖。可以在[依赖元数据](http://junit.org/junit5/docs/current/user-guide/#dependency-metadata)中查看关于group ID, artifact ID 和版本的细节信息。
+你需要在类路径中添加以下的组件和它们的依赖。可以在 [依赖元数据](http://junit.org/junit5/docs/current/user-guide/#dependency-metadata) 中查看关于group ID, artifact ID 和版本的细节信息。
 
 ### 显式依赖
-* `junit-4.12.jar` 在*test*范围内：使用JUnit4运行测试
+* `junit-4.12.jar` 在*test*范围内：使用 JUnit4 运行测试
 * `junit-platform-runner` 在*test*范围内：`JUnitPlatform`运行器的位置
-* `junit-jupiter-api`在*test*范围内：使用API编写测试，包括`@Test`等
-* `junit-jupiter-engine`在*test*运行范围内：为JUnit Jupiter实现Engine的API方法
+* `junit-jupiter-api` 在*test*范围内：使用API编写测试，包括 `@Test` 等
+* `junit-jupiter-engine` 在*test*运行范围内：为JUnit Jupiter 实现 Engine 的 API 方法
 
 ### 传递的依赖
 * `junit-platform-launcher` 在*test*范围内
 *  `junit-platform-engine` 在*test*范围内
 *  `junit-platform-commons` 在*test*范围内
 *  `opentest4j` 在*test*范围内
-
 
 ### 4.4.2 展示名称 vs 技术名称
 默认情况下，*展示名称*会被使用在测试产出物上，但是当`JUnitPlatform`运行器使用Gradle或者Maven等编译工具来运行测试时，生成的测试报告需要使用测试产出物的*技术名称*，例如，使用完整类名，而不是使用简写类名，或者自定义的包含特殊字符的展示名称。为了在测试报告中使用技术名称，在`@RunWith(JUnitPlatform.class)`注解旁边声明`@UseTechnicalNames`注解即可。
