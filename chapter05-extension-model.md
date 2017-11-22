@@ -73,26 +73,28 @@ class MyTestsV2 {
 
 ## 5.3 附加条件测试的执行
 
-[`ExecutionCondition`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/ExecutionCondition.html)定义了 `Extension` 的API编程--*附加条件测试的执行*。
+[`ExecutionCondition`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/ExecutionCondition.html) 定义了 `Extension` 的API编程--*附加条件测试的执行*。
 
-每个容器（例如，测试类）都会对`ExecutionCondition`进行解析，从而确定是否应根据提供的`ExtensionContext`执行其包含的所有测试. 类似地，`ExecutionCondition`会被每个测试解析，从而确定是否应该根据提供的`ExtensionContext`执行给定的测试方法。
+每个容器（例如，测试类）都会对`ExecutionCondition` 进行解析，从而确定是否应根据提供的 `ExtensionContext` 执行其包含的所有测试。类似地，`ExecutionCondition` 会被每个测试解析，从而确定是否应该根据提供的 `ExtensionContext` 执行给定的测试方法。
 
-当多个`ExecutionCondition`扩展被注册时，只要其中一个条件没有被满足，那么这个容器或者测试就会失效。由于容器可能在某个条件被解析之前就因为另一个失败的条件而失效，所以没有办法保证每个条件都被解析。也就是说，条件的解析机制类似于“短路或”(符号为`||`)操作。
+当多个 `ExecutionCondition` 扩展被注册时，只要其中一个条件没有被满足，那么这个容器或者测试就会失效。由于容器可能在某个条件被解析之前就因为另一个失败的条件而失效，所以没有办法保证每个条件都被解析。也就是说，条件的解析机制类似于“短路或”(符号为`||`)操作。
 
-可以参考[`DisabledCondition`](https://github.com/junit-team/junit5/tree/r5.0.0-M5/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/DisabledCondition.java)和[`@Disable`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Disabled.html)的源码来获取具体的案例。
+可以参考 [`DisabledCondition`](https://github.com/junit-team/junit5/tree/r5.0.0-M5/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/DisabledCondition.java) 和 [`@Disable`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Disabled.html)的源码来获取具体的案例。
 
-### 5.3.1 停用条件
+### 5.3.1. 停用条件
 
-有时候，在没有明确的附加条件下运行测试集可能更有用。例如，开发者可能想要运行一些被标注了`@Disable`的测试，以便观察这些测试是否一直是*失败的*。为了完成这些工作，只需提供一个用于junit.conditions.deactivate的关键词配置，以指定当前测试运行的哪些条件应该被停用（即不被解析）。该模式可以作为JVM系统属性提供，也可以作为`LauncherDiscoveryRequest`中的*配置参数*提供给`Launcher`。
+有时候，在没有明确的附加条件下运行测试集可能更有用。例如，开发者可能想要运行一些被标注了 `@Disable` 的测试，以便观察这些测试是否一直是*失败的*。为了完成这些工作，只需提供一个用于 `junit.jupiter.conditions.deactivate` 的关键词配置，以指定当前测试运行的哪些条件应该被停用（即不被解析）。该模式可以作为JVM系统属性提供，也可以作为 `LauncherDiscoveryRequest` 中的*配置参数*提供给`Launcher`, 或使用 JUnit Platform 的配置文件（详情见[配置变量](http://junit.org/junit5/docs/current/user-guide/#running-tests-config-params)）。
 
-例如，要停用JUnit的 `@Disable`条件，你可以在JVM启动时传入系统参数完成：
-`-Djunit.conditions.deactivate=org.junit.*DisabledCondition`
+例如，要停用JUnit的 `@Disable` 条件，你可以在JVM启动时传入系统参数完成：
+```
+-Djunit.jupiter.conditions.deactivate=org.junit.*DisabledCondition
+```
 
 ### 模式匹配语法
 
-如果`junit.conditions.deactivate`模式仅由星号（`*`）组成，则所有条件都将被禁用。 否则，该模式将用于匹配每个注册的条件的完整的类名（*FQCN*）。 模式中的点（`.`）会匹配FQCN中的点（`.`）或美元符号（`$`）。 星号（`*`）匹配FQCN中的一个或多个字符。 该模式中的所有其他字符将与FQCN一对一匹配。
+如果 `junit.jupiter.conditions.deactivate` 模式仅由星号（`*`）组成，则所有条件都将被禁用。 否则，该模式将用于匹配每个注册的条件的完整的类名（*FQCN*）。 模式中的点（`.`）会匹配FQCN中的点（`.`）或美元符号（`$`）。 星号（`*`）匹配FQCN中的一个或多个字符。 该模式中的所有其他字符将与FQCN一对一匹配。
 
-举例：
+例如：
 
 - `*`: 停用所有条件。
 - `org.junit.*`: 停用`org.junit`基础包及子包下的所有条件。
