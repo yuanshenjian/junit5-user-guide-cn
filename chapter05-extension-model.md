@@ -118,7 +118,7 @@ class MyTestsV2 {
 
 ## 5.6 测试生命周期回调
 
-下列接口定义了用于在测试执行生命周期的不同阶段来扩展测试的API。可以参考后续章节的示例，也可以查阅[`org.junit.jupiter.api.extension`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/package-summary.html)包中的Javadoc，获取每个接口的详细信息。
+下列接口定义了用于在测试执行生命周期的不同阶段来扩展测试的API。可参考后续章节的示例，也可以查阅 [`org.junit.jupiter.api.extension`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/package-summary.html) 包中的Javadoc，获取每个接口的详细信息。
 
 - [`BeforeAllCallback`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/BeforeAllCallback.html)
 	- [`BeforeEachCallback`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/BeforeEachCallback.html)
@@ -128,16 +128,17 @@ class MyTestsV2 {
 	- [`AfterEachCallback`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/AfterEachCallback.html)
 - [`AfterAllCallback`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/AfterAllCallback.html) 
 
-> 实现多种扩展API
-> 扩展开发人员可以选择在单个扩展中实现任意数量的上述接口。参考[`Consult the source code of the SpringExtension for a concrete example.`](https://github.com/spring-projects/spring-framework/tree/master/spring-test/src/main/java/org/springframework/test/context/junit/jupiter/SpringExtension.java)的源代码以获取具体示例。
+> 📒
+> ##### 实现多种扩展API
+> 扩展开发人员可以选择在单个扩展中实现任意数量的上述接口。参考 [`SpringExtension`](https://github.com/spring-projects/spring-framework/tree/master/spring-test/src/main/java/org/springframework/test/context/junit/jupiter/SpringExtension.java)的源代码以获取具体示例。
 
-### 5.6.1 Before和After的测试扩展回调
+### 5.6.1 Before 和 After 的测试扩展回调
 
-[`BeforeTestExecutionCallback`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/BeforeTestExecutionCallback.html)和[`AfterTestExecutionCallback`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/AfterTestExecutionCallback.html)分别为`Extensions`定义了用于在执行测试方法之前和之后添加立即执行行为的API。因此，这些回调非常适合于定时器、跟踪器以及其他类似的场景。如果你需要实现在`@BeforeEach`和`@AfterEach`方法下调用的回调，可以实现`BeforeEachCallback`和`AfterEachCallback`。
+[`BeforeTestExecutionCallback`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/BeforeTestExecutionCallback.html) 和 [`AfterTestExecutionCallback`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/AfterTestExecutionCallback.html) 分别为`Extensions`定义了用于在执行测试方法之前和之后添加立即执行行为的API。因此，这些回调非常适合于定时器、跟踪器以及其他类似的场景。如果你需要实现在`@BeforeEach`和`@AfterEach`方法下调用的回调，可以实现`BeforeEachCallback`和`AfterEachCallback`。
 
-以下示例展示了如何使用这些回调来统计和记录测试方法的执行时间。`TimingExtension`同时实现了`BeforeTestExecutionCallback`和`AfterTestExecutionCallback`接口从而给测试执行做时间统计和日志记录。
+以下示例展示了如何使用这些回调来统计和记录测试方法的执行时间。`TimingExtension` 同时实现了 `BeforeTestExecutionCallback` 和 `AfterTestExecutionCallback` 接口从而给测试执行做时间统计和日志记录。
 	
-*一个关于测试执行的时间和日志的扩展示例：*
+##### 一个关于测试执行的时间和日志的扩展示例：
 
 ```
 import java.lang.reflect.Method;
@@ -155,12 +156,12 @@ public class TimingExtension implements BeforeTestExecutionCallback, AfterTestEx
 
     @Override
     public void beforeTestExecution(ExtensionContext context) throws Exception {
-        getStore(context).put(context.getTestMethod().get(), System.currentTimeMillis());
+        getStore(context).put(context.getRequiredTestMethod(), System.currentTimeMillis());
     }
 
     @Override
     public void afterTestExecution(ExtensionContext context) throws Exception {
-        Method testMethod = context.getTestMethod().get();
+        Method testMethod = context.getRequiredTestMethod();
         long start = getStore(context).remove(testMethod, long.class);
         long duration = System.currentTimeMillis() - start;
 
@@ -174,9 +175,9 @@ public class TimingExtension implements BeforeTestExecutionCallback, AfterTestEx
 }
 ```
 
-由于`TimingExtensionTests`类通过`@ExtendWith`注册了`TimingExtension`，所以它的测试在执行时会被计时。
+由于 `TimingExtensionTests` 类通过 `@ExtendWith` 注册了 `TimingExtension`，所以它的测试在执行时会被计时。
 
-*下面是一个测试类应用了 TimingExample 的示例：*
+##### 下面是一个测试类应用了 TimingExample 的示例：
 
 ```
 @ExtendWith(TimingExtension.class)
