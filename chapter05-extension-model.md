@@ -112,9 +112,9 @@ class MyTestsV2 {
 
 ## 5.5 参数解析
 
-[`ParameterResolver`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/ParameterResolver.html)定义了用于在运行时动态解析参数的`Extension`API。
+[`ParameterResolver`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/ParameterResolver.html) 定义了用于在运行时动态解析参数的 `Extension` API。
 
-如果一个测试构造器或者`@Test`、`@TestFactory`、`@BeforeEach`、`@AfterEach`、`@BeforeAll`或者`@AfterAll`方法接收了一个参数，那么该参数一定会在运行时被`ParameterResolver`*解析*。开发人员可以使用内建的`ParameterResolver`（参考[`TestInfoParameterResolver`](https://github.com/junit-team/junit5/tree/r5.0.0-RC2/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/TestInfoParameterResolver.java)），也可以自己注册一个。一般而言，参数可能被按照其*名称*、*类型*、*注解*或在任何一种上述方式的组合所解析。具体示例可以参照[`CustomTypeParameterResolver`](https://github.com/junit-team/junit5/tree/r5.0.0-M5/junit-jupiter-engine/src/test/java/org/junit/jupiter/engine/execution/injection/sample/CustomTypeParameterResolver.java)和[`CustomAnnotationParameterResolver`](https://github.com/junit-team/junit5/tree/r5.0.0-M5/junit-jupiter-engine/src/test/java/org/junit/jupiter/engine/execution/injection/sample/CustomAnnotationParameterResolver.java)的源码。
+如果一个测试构造器或者 `@Test`、`@TestFactory`、`@BeforeEach`、`@AfterEach`、`@BeforeAll` 或者 `@AfterAll` 方法接收了一个参数，那么该参数一定会在运行时被 `ParameterResolver` *解析*。开发人员可以使用内置的 `ParameterResolver`（参考 [`TestInfoParameterResolver`](https://github.com/junit-team/junit5/tree/r5.0.0-RC2/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/TestInfoParameterResolver.java)）或 [自己注册](http://junit.org/junit5/docs/current/user-guide/#extensions-registration)。一般而言，参数可能被按照其*名称*、*类型*、*注解*或在任何一种上述方式的组合所解析。具体示例可以参照 [`CustomTypeParameterResolver`](https://github.com/junit-team/junit5/tree/r5.0.0-M5/junit-jupiter-engine/src/test/java/org/junit/jupiter/engine/execution/injection/sample/CustomTypeParameterResolver.java) 和 [`CustomAnnotationParameterResolver`](https://github.com/junit-team/junit5/tree/r5.0.0-M5/junit-jupiter-engine/src/test/java/org/junit/jupiter/engine/execution/injection/sample/CustomAnnotationParameterResolver.java) 的源码。
 
 ## 5.6 测试生命周期回调
 
