@@ -106,9 +106,9 @@ class MyTestsV2 {
 
 [`TestInstancePostProcessor`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestInstancePostProcessor.html) 为`Extensions`定义了测试实例后处理的API。
 
-通常的用法涵盖了将依赖注入到测试实例中，在测试实例中调用自定义的初始化方法等。
+常用的用法涵盖了将依赖注入到测试实例中，在测试实例中调用自定义的初始化方法等。
 
-对于具体示例，可以查看[`MockitoExtension`](https://github.com/junit-team/junit5-samples/tree/r5.0.0-RC2/junit5-mockito-extension/src/main/java/com/example/mockito/MockitoExtension.java)和[`SpringExtension`](https://github.com/spring-projects/spring-framework/tree/master/spring-test/src/main/java/org/springframework/test/context/junit/jupiter/SpringExtension.java)的源代码。
+对于具体示例，可以查看 [`MockitoExtension`](https://github.com/junit-team/junit5-samples/tree/r5.0.0-RC2/junit5-mockito-extension/src/main/java/com/example/mockito/MockitoExtension.java) 和 [`SpringExtension`](https://github.com/spring-projects/spring-framework/tree/master/spring-test/src/main/java/org/springframework/test/context/junit/jupiter/SpringExtension.java) 的源代码。
 
 ## 5.5 参数解析
 
