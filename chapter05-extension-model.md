@@ -294,9 +294,9 @@ static class MyTestTemplateInvocationContextProvider implements TestTemplateInvo
 
 通常地，一个扩展实例只能初始化一次。随之而来的问题是：开发者如何能够在两次调用之间保持扩展的状态？`ExtensionContext` API 提供了一个 `Store` 用来解决这一问题。扩展可以将值保存在 Store 中，以备之后的检索。查看 [`TimingExtension`](http://junit.org/junit5/docs/current/user-guide/#extensions-lifecycle-callbacks-timing-extension) 可以看到在方法级范围使用 `Store` 的示例。要注意，在测试执行期间，值被存储在一个 `ExtensionContext` 中的值，在其他的 `ExtensionContext` 中是不可用的。由于 `ExtensionContexts` 可能被嵌套，因此内部上下文的范围也可能受到限制。请参阅相应的Javadoc来了解有关通过 [Store](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/ExtensionContext.Store.html) 存储和检索值的方法的详细信息。
 
-## 5.10 扩展中支持的工具
+### 5.10 扩展中支持的工具
 
- JUnit Platform Commons 公开了一个名为[`org.junit.platform.commons.support `](http://junit.org/junit5/docs/current/api/org/junit/platform/commons/support/package-summary.html) 的包，该包包含了用于处理注解、反射和类路径扫描任务的实用方法。`TestEngine`和`Extension`的开发者被鼓励去使用这些方法，以便与JUnit Platform的行为保持一致。
+ JUnit Platform Commons 公开了一个名为 [`org.junit.platform.commons.support`](http://junit.org/junit5/docs/current/api/org/junit/platform/commons/support/package-summary.html) 的包，该包包含了用于处理注解、反射和类路径扫描任务的实用方法。`TestEngine` 和 `Extension` 的开发者被鼓励去使用这些方法，以便与JUnit Platform 的行为保持一致。
  
 ## 5.11 用户代码和扩展的相对执行顺序
 
