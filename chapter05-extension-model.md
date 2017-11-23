@@ -292,7 +292,7 @@ static class MyTestTemplateInvocationContextProvider implements TestTemplateInvo
 
 ### 5.9 在扩展中保持状态
 
-通常地，一个扩展实例只能初始化一次。那么问题来了：开发者如何能够在两次调用之间保持扩展的状态？`ExtensionContext`API提供了一个`Store`用来解决这一问题。扩展可以将值保存在Store中，以备之后的检索。查看[`TimingExtension`]()可以看到在方法级范围使用`Store`的示例。值得一提的是，在测试执行期间，被存储在一个`ExtensionContext`中的值，在其他的`ExtensionContext`中是不可用的。由于`ExtensionContexts`可能被嵌套，因此内部上下文的范围也可能受到限制。 请参阅相应的Javadoc来了解有关通过[Store](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/ExtensionContext.Store.html)存储和检索值的方法的详细信息。
+通常地，一个扩展实例只能初始化一次。随之而来的问题是：开发者如何能够在两次调用之间保持扩展的状态？`ExtensionContext` API 提供了一个 `Store` 用来解决这一问题。扩展可以将值保存在 Store 中，以备之后的检索。查看 [`TimingExtension`](http://junit.org/junit5/docs/current/user-guide/#extensions-lifecycle-callbacks-timing-extension) 可以看到在方法级范围使用 `Store` 的示例。要注意，在测试执行期间，值被存储在一个 `ExtensionContext` 中的值，在其他的 `ExtensionContext` 中是不可用的。由于 `ExtensionContexts` 可能被嵌套，因此内部上下文的范围也可能受到限制。请参阅相应的Javadoc来了解有关通过 [Store](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/ExtensionContext.Store.html) 存储和检索值的方法的详细信息。
 
 ## 5.10 扩展中支持的工具
 
