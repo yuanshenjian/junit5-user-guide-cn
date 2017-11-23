@@ -131,7 +131,7 @@ Previously, disabled test classes were eagerly instantiated when Lifecycle.PER_C
 
 **范围**：配置参数和错误修复。
 
->⚠️ 这是一个预发行版，包含一些重大更改。请参考上面的 [说明]()在一个捆绑了旧版本里程碑或候选版本的IntelliJ IDEA版本中使用它。
+>⚠️ 这是一个预发行版，包含一些重大更改。请参考上面的 [说明]() 在一个捆绑了旧版本里程碑或候选版本的IntelliJ IDEA版本中使用它。
 
 关于此版本所有已关闭问题和请求的完整列表，请参阅GitHub上JUnit存储库中的 [5.0 RC3](https://github.com/junit-team/junit5/milestone/13?closed=1) 里程碑页面。
 

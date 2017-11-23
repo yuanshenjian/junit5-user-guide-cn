@@ -9,7 +9,7 @@ That’s why JUnit 5 introduces a defined lifecycle for all publicly available i
 这就是为什么JUnit 5为所有公开的接口、类和方法引入了一个明确的生命周期。
 
 
-### 8.1 API 版本和状态
+### 8.1. API 版本和状态
 
 每个发布的包都有一个版本号`<major>.<minor>.<patch>`，所有公开的接口、类和方法都使用 [@API Guardian](https://github.com/apiguardian-team/apiguardian) 项目中的 [@API](https://apiguardian-team.github.io/apiguardian/docs/current/api/) 进行标注。`@API`注解的`status`属性可以被赋予下面表格中的值。
 
@@ -23,7 +23,7 @@ That’s why JUnit 5 introduces a defined lifecycle for all publicly available i
 
 如果`@API`注解出现在某个类型上，则认为它也适用于该类型的所有公共成员。一个成员可以声明一个稳定性更低的`status`值。
 
-### 8.2 试验性API
+### 8.2. 试验性API
 
 下表列出了哪些API当前被指定为*试验性的*（通过`@API(status = EXPERIMENTAL)`）。使用这样的API时应该谨慎。
 
