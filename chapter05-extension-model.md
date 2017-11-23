@@ -298,17 +298,17 @@ static class MyTestTemplateInvocationContextProvider implements TestTemplateInvo
 
  JUnit Platform Commons 公开了一个名为 [`org.junit.platform.commons.support`](http://junit.org/junit5/docs/current/api/org/junit/platform/commons/support/package-summary.html) 的包，该包包含了用于处理注解、反射和类路径扫描任务的实用方法。`TestEngine` 和 `Extension` 的开发者被鼓励去使用这些方法，以便与JUnit Platform 的行为保持一致。
  
-## 5.11 用户代码和扩展的相对执行顺序
+### 5.11 用户代码和扩展的相对执行顺序
 
 当执行包含一个或多个测试方法的测试类时，除了用户提供的测试和生命周期方法之外，还会调用多个扩展回调。 下图说明了用户提供的代码和扩展代码的相对顺序。
 
 ![](http://junit.org/junit5/docs/current/user-guide/images/extensions_lifecycle.png)
 
-*用户代码和扩展代码*
+###### 用户代码和扩展代码
 
-用户提供的测试和生命周期方法以橙色表示，扩展提供的回调代码由蓝色显示。 灰色框表示单个测试方法的执行，并将在测试类中对每个测试方法重复执行。
+用户提供的测试和生命周期方法以橙色表示，扩展提供的回调代码由蓝色显示。灰色框表示单个测试方法的执行，并将在测试类中对每个测试方法重复执行。
 
-下表进一步说明了[用户代码和扩展代码]()图中的十二个步骤。
+下表进一步说明了 [用户代码和扩展代码](http://junit.org/junit5/docs/current/user-guide/#extensions-execution-order-diagram) 图中的十二个步骤。
 
 |步骤|接口/注解|描述|
 |:---|:---|:---|
@@ -325,4 +325,4 @@ static class MyTestTemplateInvocationContextProvider implements TestTemplateInvo
 |11|注解org.junit.jupiter.api.AfterAll|执行所有容器测试后执行的用户代码|
 |12|接口org.junit.jupiter.api.extension.AfterAllCallback|执行所有容器测试后执行的扩展代码|
 
-上述情况在最简单的情况下，仅执行实际的测试方法（步骤6）; 所有其他步骤都是可选的，具体包含的步骤将取决于用户代码的存在或相应生命周期回调的扩展支持。 有关各种生命周期回调的更多详细信息，请参阅相应的JavaDoc以获取每个注释和扩展名。
+上述情况在最简单的情况下，仅执行实际的测试方法（步骤6）; 所有其他步骤都是可选的，具体包含的步骤将取决于用户代码的存在或相应生命周期回调的扩展支持。有关各种生命周期回调的更多详细信息，请参阅相应的JavaDoc以获取每个注释和扩展名。
