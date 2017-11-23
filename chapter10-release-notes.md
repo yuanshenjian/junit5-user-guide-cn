@@ -61,7 +61,6 @@ Previously, disabled test classes were eagerly instantiated when Lifecycle.PER_C
 #### 整体改进
 - 所有的包现在都有一个`optional`的依赖，而不需要在其发布的Maven POM中强制依赖*@API Guardian* JAR包。
 
-
 #### JUnit Platform
 没有变化。
 
@@ -93,18 +92,33 @@ Previously, disabled test classes were eagerly instantiated when Lifecycle.PER_C
 ##### Bug修复
 - `AbstractTestDescriptor`中的`removeFromHierarchy()`实现现在也清除了所有子级的父级关系。
 
-##### 启用和彻底改变
+##### 弃用和彻底改变
 - `@API`注释已经从`junit-platform-commons`项目中删除，并重新定位到GitHub上一个名为 [@API Guardian](https://github.com/apiguardian-team/apiguardian) 的独立新项目。
 - 标签不再允许包含以下任何保留字符。
 	- `,`, `(`, `)`, `&`, `|`, `!`
 - `FilePosition`的构造函数已被替换为一个名为`from(int，int)`的静态工厂方法。
 - 一个`FilePosition`现在全完可以通过新的`from(int)`静态工厂方法从一个行号进行构建。
+- `FilePosition.getColumn()`现在返回`Optional<Integer>`而不是`int`。
+- 以下所列的`TestSource`几个具体实现类的构造函数已被替换为命名`from(…​)`的静态工厂方法。
+	- `ClasspathResourceSource`
+	- `ClassSource`
+	- `CompositeTestSource`
+	- `DirectorySource`
+	- `FileSource`
+	- `MethodSource`
+	- `PackageSource` 
+
+- `LoggingListener`的构造函数已被替换为名为`forBiConsumer(...)`的静态工厂方法。
+- `AbstractTestDescriptor`中的`getParent()`方法现在是`final`的。
 
 ##### 新功能和改进
+- `AbstractTestDescriptor`中的`children`字段现在是`protected`的，从而让子类能够访问。
+
 
 #### JUnit Jupiter
 
 ##### Bug修复
+- `AbstractExtensionContext.getRoot()`现在会遍历完整的层次结构并返回真正的根上下文。
 
 
 #### JUnit Vintage
@@ -115,10 +129,58 @@ Previously, disabled test classes were eagerly instantiated when Lifecycle.PER_C
 ### 5.0.0-RC3
 **发布时间**： 2017.08.23
 
-**范围**：
+**范围**：配置参数和错误修复。
+
+>⚠️ 这是一个预发行版，包含一些重大更改。请参考上面的 [说明]()在一个捆绑了旧版本里程碑或候选版本的IntelliJ IDEA版本中使用它。
+
+关于此版本所有已关闭问题和请求的完整列表，请参阅GitHub上JUnit存储库中的 [5.0 RC3](https://github.com/junit-team/junit5/milestone/13?closed=1) 里程碑页面。
+
+
+#### JUnit Platform
+
+##### Bug修复
+- 源JAR包不再包含每个源文件两次。
+- The Maven Surefire provider now reports a failed test with a cause that is not an instance of AssertionError as an error instead of a failure for compatibility reasons.
+- Maven Surefire提供者程序现在报告一个失败的测试，其原因不是`AssertionError`的一个实例就是一个*错误*，而不是因为兼容性导致的*失败*。
+
+##### 新功能和改进
+- 现在可以通过许多新的方式提供`配置参数`：
+	- 通过类路径根目录下的`junit-platform.properties`文件。详情请参阅 [配置参数]()。
+	- 通过 [控制台启动器]() 中的`--config`命令行选项。
+	- 通过Gradle插件的`configurationParameter`或`configurationParameters` DSL。
+	- 通过Maven Surefire提供这程序的`configurationParameters`属性。
+	
+#### JUnit Jupiter
+
+##### Bug修复
+- 源JAR包不再包含每个源文件两次。
+- `ExecutionContext.Store.getOrComputeIfAbsent`现在在计算值之前会在其祖父级上下文中查找值（并在其父级中递归）。
+- `ExecutionContext.Store.getOrComputeIfAbsent()`现在是现成安全的。
+- 如果唯一ID属于不同的测试引擎，`JupiterTestEngine`就不会再尝试解析通过其中一个`DiscoverySelectors.selectUniqueId()`方法选择的唯一ID。
+
+##### 弃用和彻底改变
+- 恢复RC1中引入的更改：现在使用与Java类相同的默认测试实例生命周期模式（即"per-method"）执行使用Kotlin编程语言编写的测试类。
+- `junit.conditions.deactivate` 配置参数已被重命名为` junit.jupiter.conditions.deactivate`。
+- `junit.extensions.autodetection.enabled`配置参数已被重命名为` junit.jupiter.extensions.autodetection.enabled`。
+- `ExtensionContext`中的默认全局扩展名称空间常量已从`Namespace.DEFAULT`重命名为`Namespace.GLOBAL`。
+- 默认的`getStore()`方法已经从`ExtensionContext`接口中移除。要访问全局存储，需要显式调用`getStore(Namespace.GLOBAL)`方法。
+
+##### 新功能和改进
+- 现在可以通过名为`junit.jupiter.testinstance.lifecycle.default`的配置参数或JVM系统属性来设置*默认*的测试实例生命周期模式。详情请参阅 [更改默认测试实例生命周期]()。
+- 在参数化测试中使用`@CsvSource`或`@CsvFileSource`时，如果CSV解析器没有从输入中读取到任何字符，并且输入位于引号内，则返回空字符串`""`而不是`null`。
+
+
+#### JUnit Vintage
+
+##### Bug修复
+- 源JAR包不再包含每个源文件两次。
+- 现在可以通过`DiscoverySelectors`中的`selectMethod()`变体在JUnit 4参数化测试类中选择单个方法。
+
+
 
 ### 5.0.0-RC2
 **发布时间**： 2017.07.30
+
 
 **范围**：
 
