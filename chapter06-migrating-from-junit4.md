@@ -9,21 +9,21 @@ Just make sure that the junit-vintage-engine artifact is in your test runtime pa
 
 具体如何实现，可以参考 [junit5-samples](https://github.com/junit-team/junit5-samples) 仓库中那些以Gradle和Maven来实现的样例工程。
 
-## 6.2. 迁移技巧
-以下是当你在将现存的JUnit4测试迁移到JUnit Jupiter上的时候要注意的东西：
+### 6.2. 迁移技巧
+以下是当你在将现存的 JUnit4 测试迁移到 JUnit Jupiter上的时候要注意的东西：
 
-* `org.junit.jupiter.api`包中的注解。
+* `org.junit.jupiter.api` 包中的注解。
 
-* `org.junit.jupiter.api.Assertions`类中的断言。
+* `org.junit.jupiter.api.Assertions` 类中的断言。
 
-* `org.junit.jupiter.api.Assumptions`类中的假设。
+* `org.junit.jupiter.api.Assumptions` 类中的假设。
 
 * `@Before` 和 `@After` 已经不存在; 取而代之的是`@BeforeEach` 和 `@AfterEach`。
 
 * `@BeforeClass` 和 `@AfterClass` 已经不存在; 取而代之的是 `@BeforeAll` 和 `@AfterAll`。
 
-* `@Ignore` 已经不存在: 取而代之的是`@Disabled`。
-* `@Category` 已经不存在: 取而代之的是`@Tag`。
+* `@Ignore` 已经不存在: 取而代之的是 `@Disabled`。
+* `@Category` 已经不存在: 取而代之的是 `@Tag`。
 * `@RunWith` 已经不存在: 取而代之的是`@ExtendWith`。
 * `@Rule` 和 `@ClassRule` 已经不存在; 取而代之的是`@ExtendWith`; 请参阅后续章节关于对JUnit规则的有限支持。
 
