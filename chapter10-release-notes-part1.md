@@ -33,7 +33,7 @@
 
 - 以前，`@EnableRuleMigrationSupport`无法识别`@Rule`方法，该方法返回一个已支持的`TestRule`类型的子类型。而且，它错误地实例化了某些多次使用方法声明的规则。现在，一旦启用，它将实例化所有声明的规则（字段*和*方法），并按照JUnit 4使用的顺序来调用它们。
 
-Previously, disabled test classes were eagerly instantiated when Lifecycle.PER_CLASS was used. Now, ExecutionCondition evaluation always takes place before test class instantiation.
+> - Previously, disabled test classes were eagerly instantiated when Lifecycle.PER_CLASS was used. Now, ExecutionCondition evaluation always takes place before test class instantiation.
 
 - 以前，当使用`Lifecycle.PER_CLASS`时，被禁用的测试类会被迫切地实例化。现在，`ExecutionCondition`总是在测试类实例化之前就被解析。
 
@@ -189,42 +189,3 @@ Previously, disabled test classes were eagerly instantiated when Lifecycle.PER_C
 **发布时间**： 2017.07.30
 
 **范围**：
-
-### 5.0.0-M6
-**发布时间**： 2017.07.18
-
-**范围**：
-
-### 5.0.0-M5
-**发布时间**： 2017.07.04
-
-**范围**：
-
-### 5.0.0-M4
-**发布时间**： 2017.04.01
-
-**范围**：
-
-
-### 5.0.0-M3
-**发布时间**： 2016.11.30
-
-**范围**：
-
-### 5.0.0-M2
-**发布时间**： 2016.07.23
-
-**范围**：
-
-### 5.0.0-M1
-**发布时间**： 2016.07.07
-
-**范围**：
-
-
-### 5.0.0-ALPHA
-**发布时间**： 2016.02.01
-
-**范围**：
-
-
