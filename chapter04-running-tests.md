@@ -106,7 +106,7 @@ junitPlatform {
 
 设置`logManager`会让JUnit Gradle插件将`java.util.logging.manager`系统属性设置为要使用的`java.util.logging.LogManager`实现提供的全类名。上面的示例演示了如何将log4j配置为`LogManager` 。
 
-JUnit Gradle插件在默认情况下会禁用标准的Gradle `test`任务，但可以通过`enableStandardTestTask`标记来启用。
+JUnit Gradle插件在默认情况下会禁用标准的Gradle `test`任务，但可以通过`enableStandardTestTask`标志来启用。
 
 ##### 配置选择器
 
@@ -146,8 +146,8 @@ junitPlatform {
 
 ##### 配置过滤器
 
-你可以使用 `Filter` 扩展来配置测试计划的过滤器。默认情况下，所有的引擎和标签都会被包含在测试计划中。但只有默认的`includeClassNamePattern 
-(^.*Tests?$)`被应用。你可以重写默认的匹配模式，例如下面示例。当你使用了多种匹配模式时，JUnit Platform会使用逻辑 或 将它们合并起来使用。
+你可以使用`filters`扩展来配置测试计划的过滤器。默认情况下，所有的引擎和标记都会被包含在测试计划中。但只有默认的`includeClassNamePattern 
+(^.*Tests?$)`会被应用。你可以重写默认的匹配模式，例如下面示例。当你使用了多种匹配模式时，JUnit Platform会使用逻辑 或 将它们合并起来使用。
 
 ```groovy
 junitPlatform {
@@ -172,7 +172,7 @@ junitPlatform {
 }
 ```
 
-如果你通过 `engines {include …​}` 或 `engines {exclude …​}`来提供一个提供*测试引擎ID*，那么JUnit Gradle插件将会只运行你希望运行的那个测试引擎。同样，如果你通过 `tags {include …​}` 或者 `tags {exclude …​}` 提供一个*标签*，JUnit Gradle插件将只会处理相应标签的测试（例如，通过一个 `@Tag`注解标注的基于JUnit Jupiter测试）。同理，关于包名，可以通过`packages {include …​}`或者`packages {exclude …​}`配置要包含或排除的包名。
+如果你通过`engines {include …​}`或`engines {exclude …​}`来提供一个*测试引擎ID*，那么JUnit Gradle插件将会只运行你希望运行的那个测试引擎。同样，如果你通过`tags {include …​}`或者`tags {exclude …​}`提供一个*标记*，JUnit Gradle插件将只运行相应标记的测试（例如，通过JUnit Jupiter测试的`@Tag`注解来过滤）。同理，关于包名，可以通过`packages {include …​}`或者`packages {exclude …​}`配置要包含或排除的包名。
 
 ##### 配置参数
 你可以使用`configurationParameter`或者`configurationParameters` DSL来设置配置参数，从而影响测试发现和执行。前者可以配置单独的配置参数，后者可以使用一个配置参数的map来一次性配置多个键-值对。所有的key和value都必须是`String`类型。
@@ -191,7 +191,7 @@ junitPlatform {
 ```
 
 ##### 配置测试引擎
-为了能够使JUnit Gradle插件运行任何测试，类路径中必须存在一个`TestEngine`的实现。
+为了让JUnit Gradle插件运行所有测试，类路径中必须存在一个`TestEngine`的实现。
 
 要配置对基于JUnit Jupiter测试的支持，需要配置一个JUnit Jupiter API的 `testCompile`依赖以及JUnit Jupiter `TestEngine`实现的 `testRuntime`依赖，具体配置如下。
 
@@ -214,7 +214,7 @@ dependencies {
 ##### 使用JUnit Gradle插件
 一旦应用并配置了JUnit Gradle插件，你就可以使用新的`junitPlatformTest`任务（在可用的Gralde task中会多出一个叫`junitPlatformTest`task）。
 
-在命令行中调用`gradlew junitPlatformTest` (or `gradlew test` )指令，项目中所有满足当前`includeClassNamePattern`（默认匹配`^.*Tests?$`）配置的测试会被执行。
+在命令行中调用`gradlew junitPlatformTest`（或者`gradlew test`）指令，项目中所有满足当前`includeClassNamePattern`（默认匹配`^.*Tests?$`）配置的测试会被执行。
 
 在 [`junit5-gradle-consumer`](https://github.com/junit-team/junit5-samples/tree/r5.0.2/junit5-gradle-consumer) 项目中执行 `junitPlatformTest`任务会看到类似下面的输出。
 
@@ -278,9 +278,9 @@ Execution failed for task ':junitPlatformTest'.
 
 
 #### 4.2.2. Maven
-为了能够通过`mvn test`运行 JUnit4 和 JUnit Jupiter，JUnit 团队为 Maven Surefire 提供了基础的支持保证。项目 [`junit5-maven-consumer`](https://github.com/junit-team/junit5-samples/tree/r5.0.0-M4/junit5-maven-consumer) 中的 `pom.xml` 文件展示了如何作为一个开始并使用的其的描述。
+JUnit团队已经为Maven Surefire开发了一个非常基本的提供者，它允许你通过`mvn test`运行JUnit 4和JUnit Jupiter。[`junit5-maven-consumer`](https://github.com/junit-team/junit5-samples/tree/r5.0.2/junit5-maven-consumer) 项目中的`pom.xml`文件演示了如何使用它，并可以以它作为一个起点。
 
-> ⚠️ 由于 Surefire2.20 中的内存泄漏，`junit-platform-surefire-provider` 仅仅在Surefire 2.19.1 中可用。
+> ⚠️ 由于Surefire2.20存在内存泄漏的漏洞，`junit-platform-surefire-provider`目前仅适用于Surefire 2.19.1。
 
 ```xml
 ...
@@ -304,9 +304,9 @@ Execution failed for task ':junitPlatformTest'.
 ```
 
 ##### 配置测试引擎
-为了使 Maven Surefire 能够运行所有的测试，`TestEngine`的实现必须加到运行时路径中。
+为了让Maven Surefire运行所有测试，必须将`TestEngine`实现添加到运行时类路径中。
 
-要配置针对 JUnit Jupiter 测试的支持，你需要为JUnit Jupiter API配置 `test` 依赖，为 `maven-surefire-plugin` 增加JUnit Jupiter的 `TestEngine` 实现的依赖。
+要配置针对JUnit Jupiter测试的支持，你需要配置一个JUnit Jupiter API的`test`依赖，并将JUnit Jupiter TestEngine实现添加到`maven-surefire-plugin`的依赖项中，如下所示。
 
 ```xml
 ...
@@ -344,7 +344,7 @@ Execution failed for task ':junitPlatformTest'.
 ...
 ```
 
-只要你配置了 JUnit4 的 `test` 依赖，并增加 `maven-surefire-plugin` 的 JUnit Vintage `TestEngine` 实现的依赖，Unit Platform Surefire Provider 就可以运行基于JUnit4 的测试。具体配置如下：
+只要你配置了JUnit 4的`test`依赖，并将JUnit Vintage `TestEngine`的实现添加到`maven-surefire-plugin`的依赖项中，JUnit Platform Surefire Provider 就可以运行基于JUnit 4的测试。具体配置如下。
 
 ```xml
 ...
@@ -383,11 +383,11 @@ Execution failed for task ':junitPlatformTest'.
 ...
 ```
 
-##### tag过滤测试
-使用以下配置属性，你可以通过tag来过滤测试：
+##### 按Tag过滤
+使用以下配置属性，你可以通过Tag来过滤测试。
 
-* 为了包含一个 tag，可以使用 `groups` 或者 `includeTags`
-* 为了排除一个 tag，可以使用 `excludedGroups` 或者 `excludeTags`
+* 要包含一个 tag，可以使用`groups`或者`includeTags`
+* 要排除一个 tag，可以使用`excludedGroups`或者`excludeTags`
 
 ```xml
 ...
@@ -413,7 +413,7 @@ Execution failed for task ':junitPlatformTest'.
 ```
 
 ##### 配置参数
-通过配置参数可以影响测试路径和执行，使用属性 `configurationParameters` 并在 Java 的 `Properties` 文件中提供键值对。
+你可以使用`configurationParameters`属性以Java `Properties`文件的语法提供键值对来设置配置参数，从而影响测试发现和执行。
 
 ```xml
 ...
@@ -442,14 +442,15 @@ Execution failed for task ':junitPlatformTest'.
 ```
 
 ### 4.3. 控制台启动器
-[ConsoleLauncher](http://junit.org/junit5/docs/current/api/org/junit/platform/console/ConsoleLauncher.html) 是一个Java的命令行应用程序，它允许你通过命令行来启动JUnit平台。例如，它可以用来运行 JUnit Vintage 和 JUnit Jupiter 测试，并在命令行中打印测试结果。
+[`ConsoleLauncher`](http://junit.org/junit5/docs/current/api/org/junit/platform/console/ConsoleLauncher.html) 是一个Java的命令行应用程序，它允许你通过命令行来启动JUnit Platform。例如，它可以用来运行JUnit Vintage和JUnit Jupiter测试，并在控制台中打印测试结果。
 
-`junit-platform-console-standalone-1.0.0-M4.jar`这个可执行的jar包，包括了所有的依赖，它已经被发布在 Maven 中心库中了，路径是 [junit-platform-console-standalone](https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/)，可以通过以下命令[运行](https://docs.oracle.com/javase/tutorial/deployment/jar/run.html) 单机版的 `ConsoleLauncher `
+`junit-platform-console-standalone-1.0.2.jar`这个包含了所有依赖的可执行的jar包已经被发布在Maven仓库中了，它位于 [junit-platform-console-standalone](https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone)目录下，你可以 [运行](https://docs.oracle.com/javase/tutorial/deployment/jar/run.html) 独立的ConsoleLauncher，如下所示。
 
-```sh
-java -jar junit-platform-console-standalone-1.0.2.jar <Options>
-```
-如下所示为一个输出的例子：
+
+
+java -jar junit-platform-console-standalone-1.0.2.jar<[Options](#431-options)>
+
+如下所示为一个输出的例子。
 
 ```sh
 ├─ JUnit Vintage
@@ -480,7 +481,7 @@ Test run finished after 64 ms
 ```
 
 >📒 ***退出码***  
-> 如果 [ConsoleLauncher](http://junit.org/junit5/docs/current/api/org/junit/platform/console/ConsoleLauncher.html) 的返回的状态值为1，则代表有容器或测试运行失败，否则返回0.
+> 如果任何容器或测试失败，[ConsoleLauncher](http://junit.org/junit5/docs/current/api/org/junit/platform/console/ConsoleLauncher.html) 就会以状态码1退出，否则退出码为0.
 
 #### Options
 
@@ -561,32 +562,34 @@ Option                                        Description
 ```
 
 ### 4.4. 使用JUnit4运行JUnit Platform
-`JunitPlatform` 运行器是一个基于 JUnit4 的`Runner`，它可以运行任何在 JUnit Platform 上以JUnint4 环境所支持的编程模型的测试，例如，JUnit Jupiter 测试类。
+>The JUnitPlatform runner is a JUnit 4 based Runner which enables you to run any test whose programming model is supported on the JUnit Platform in a JUnit 4 environment — for example, a JUnit Jupiter test class.
 
-如果某个类上标注了 `@RunWith(JUnitPlatform.class)` 注解，它就可以在那些支持 JUnit4 但是还不支持JUnit Platform 的 IDE 和构建系统中上直接运行。
+`JunitPlatform`运行器是一个基于JUnit 4的`Runner`，它让你能够在一个JUnit 4环境中的JUnit Platform上运行任何编程模型被支持的测试，例如，JUnit Jupiter测试类。
 
->📒 由于 JUnit Platform 具备一些 JUnit4 不具备的功能，运行器只能部分支持 JUnit Platform 的功能，尤其针对报告中的一些内容（见 [命名显示 vs 科学命名](http://junit.org/junit5/docs/current/user-guide/#running-tests-junit-platform-runner-technical-names)）。但是就目前来说，`JUnitPlatform` 运行器是一个开启学习的简单方式。
+如果某个类被标注了`@RunWith(JUnitPlatform.class)`注解，它就可以在那些支持JUnit 4但是还不支持JUnit Platform的IDE和构建系统中直接运行。
+
+>📒 由于JUnit Platform具备一些JUnit 4不具备的功能，因此运行器只能部分支持JUnit Platform的功能，特别是在报告方面（请参阅 [显示名称 vs 技术名称](#442-显示名称与技术名称)）。但是就目前来说，`JUnitPlatform`运行器是一个简单的入门方式。
 
 #### 4.4.1. 设置
-你需要在类路径中添加以下的组件和它们的依赖。可以在 [依赖元数据](http://junit.org/junit5/docs/current/user-guide/#dependency-metadata) 中查看关于group ID, artifact ID 和版本的细节信息。
+你需要在类路径中添加以下的组件和它们的依赖。可以在 [依赖元数据](#21-依赖元数据) 中查看关于group ID, artifact ID 和版本的详细信息。
 
 ##### 显式依赖
-* `junit-4.12.jar` 在*test*范围内：使用 JUnit4 运行测试
-* `junit-platform-runner` 在*test*范围内：`JUnitPlatform`运行器的位置
-* `junit-jupiter-api` 在*test*范围内：使用API编写测试，包括 `@Test` 等
-* `junit-jupiter-engine` 在*test*运行范围内：为JUnit Jupiter 实现 Engine 的 API 方法
+* `junit-4.12.jar` 在*test*范围内：使用JUnit 4运行测试。
+* `junit-platform-runner` 在*test*范围内：`JUnitPlatform`运行器的位置。
+* `junit-jupiter-api` 在*test*范围内：编写测试的API，包括 `@Test` 等。
+* `junit-jupiter-engine` 在*test运行时*范围内：JUnit Jupiter引擎API的实现。
 
-##### 传递的依赖
+##### 可传递的依赖
 * `junit-platform-launcher` 在*test*范围内
 *  `junit-platform-engine` 在*test*范围内
 *  `junit-platform-commons` 在*test*范围内
 *  `opentest4j` 在*test*范围内
 
 #### 4.4.2. 展示名称 vs 技术名称
-默认情况下，*展示名称*会被使用在测试产出物上，但是当`JUnitPlatform` 运行器使用 Gradle 或者 Maven 等编译工具来运行测试时，生成的测试报告需要使用测试产出物的*技术名称*，例如，使用完整类名，而不是使用简写类名，或者自定义的包含特殊字符的展示名称。为了在测试报告中使用技术名称，在 `@RunWith(JUnitPlatform.class)` 注解旁边声明 `@UseTechnicalNames` 注解即可。
+默认情况下，*显示名称*会被使用在测试产出物上，但是当`JUnitPlatform`运行器使用Gradle或者Maven等构建工具来运行测试时，生成的测试报告通常需要包含测试产出物的*技术名称*（例如，使用完整类名），而不是像测试类的简单名称或包含特殊字符的自定义显示名称这种较短的显示名称。为了在测试报告中使用技术名称，在`@RunWith(JUnitPlatform.class)`注解旁声明 `@UseTechnicalNames`注解即可。
 
-#### 4.4.3. Single测试类
-使用 `JUnitPlatform` 运行器的方式之一是直接在测试类上添加 `@RunWith(JUnitPlatform.class)` 注解。注意下面例子中的测试方法使用的注解是 `org.junit.jupiter.api.Test`（JUnit Jupiter）,而不是 `org.junit.Test`(JUnit Vintage)。同时，这个类中的测试用例必须为 `public`，否则，IDE不能将其识别为JUnit4 的测试类。
+#### 4.4.3. 单一测试类
+使用`JUnitPlatform`运行器的方式之一是直接在测试类上添加 `@RunWith(JUnitPlatform.class)`注解。请注意，以下示例中的测试方法使用的注解是`org.junit.jupiter.api.Test`（JUnit Jupiter）,而不是 `org.junit.Test`(JUnit Vintage)。同时，这个类中的测试用例必须为 `public`，否则，IDE不能将其识别为一个JUnit 4的测试类。
 
 ```java
 import static org.junit.jupiter.api.Assertions.fail;
@@ -612,7 +615,7 @@ public class JUnit4ClassDemo {
 ```
 
 #### 4.4.4. 测试套件
-如果有多个测试类，可以通过创建测试套件完成测试，如下例子所示：
+如果你有多个测试类，你可以创建一个测试套件，如下例子所示。
 
 ```java
 import org.junit.platform.runner.JUnitPlatform;
@@ -625,28 +628,28 @@ public class JUnit4SuiteDemo {
 }
 ```
 
-`JUnit4SuiteDemo` 类会寻找并运行所有在 `example` 包及其子包下的测试。默认情况下，它只包含类名符合正则表达式 `^.*Tests?$` 的测试类。
+`JUnit4SuiteDemo`类会发现并运行所有在`example`包及其子包下的测试。默认情况下，它只包含类名符合正则表达式`^.*Tests?$`的测试类。
 
 >📒 ***附加配置选项***  
-> 相比于值使用 `@SelectPackages` 注解，还有很多配置选项可以用来寻找和过滤测试。详细内容参考 [Javadoc](http://junit.org/junit5/docs/current/api/org/junit/platform/suite/api/package-summary.html).
+> 除了`@SelectPackages`之外，还有很多配置选项可以用来发现和过滤测试。详细内容请参考 [Javadoc](http://junit.org/junit5/docs/current/api/org/junit/platform/suite/api/package-summary.html).
 
 ### 4.5. 配置参数
-为了给操作平台指明包含哪些测试类、测试引擎和需要扫描哪些包，需要额外添加自定义的配置参数来详细说明测试引擎。例如，JUnit Jupiter `TestEngine` 支持以下用例的配置参数。
+除了告诉平台要包含哪些测试类、测试引擎以及要扫描哪些包等之外，有时还需要提供额外的自定义配置参数，该参数特定于特定的测试引擎。例如，JUnit Jupiter `TestEngine`支持以下用例中的*配置参数*。
 
-* [Changing the Default Test Instance Lifecycle](http://junit.org/junit5/docs/current/user-guide/#writing-tests-test-instance-lifecycle-changing-default)
-* [Enabling Automatic Extension Detection](http://junit.org/junit5/docs/current/user-guide/#extensions-registration-automatic-enabling)
-* [Deactivating Conditions](http://junit.org/junit5/docs/current/user-guide/#extensions-conditions-deactivation)
+* [Changing the Default Test Instance Lifecycle](#)
+* [Enabling Automatic Extension Detection](#)
+* [Deactivating Conditions](#)
 
-配置参数是一种基于文本的键值对，可以通过以下任一种机制应用于 JUnit Platform 的测试引擎：
+*配置参数*是一种基于文本的键值对，可以通过以下任何一种机制将其提供给运行在JUnit Platform上的测试引擎。
 
-1. `LauncherDiscoveryRequestBuilder ` 中的方法 `configurationParameter()` 和 `configurationParameters()` 可以用来为 [Launcher](http://junit.org/junit5/docs/current/user-guide/#launcher-api) [API](http://junit.org/junit5/docs/current/user-guide/#launcher-api) 构建请求。当使用 JUnit Platform 提供的某一种测试工具，可以配置详细的配置参数，如下所示：
- * [Console Launcher](http://junit.org/junit5/docs/current/user-guide/#running-tests-console-launcher): 使用 `--config` 命令行选项
- * [Gradle plugin](http://junit.org/junit5/docs/current/user-guide/#running-tests-build-gradle-config-params): 使用 `configurationParameter` 或者 `configurationParameters` DSL
- * [Maven Surefire provider](http://junit.org/junit5/docs/current/user-guide/#running-tests-build-maven-config-params): 使用 `configurationParameters ` 属性
+1. `LauncherDiscoveryRequestBuilder `中的`configurationParameter()`和`configurationParameters()`方法可以用来构建提供给 [`Launcher` API](#) 的请求。当使用JUnit Platform提供的某一种工具运行测试时，你可以采用如下所示的方式指定配置参数：
+ * [控制台启动器](#): 使用`--config`命令行选项。
+ * [Gradle插件](#): 使用`configurationParameter`或者`configurationParameters`DSL。
+ * [Maven Surefire 提供者](#配置参数): 使用 `configurationParameters` 属性
 2. JVM 系统属性
-3. JUnit Platform 配置文件：该文件命名为 `junit-platform.properties`，在根目录路径下，并遵循 Java `Properties` 文件的语法
+3. JUnit Platform配置文件：该文件命名为`junit-platform.properties`，在类路径根目下，并遵循Java `Properties`文件的语法。
 
-> 📒 配置参数按照上面的定义顺序进行查找，所以，在 'Launcher' 中的配置参数优先级高于在系统属性中或配置文件中的设置。同样的，通过系统属性应用的应用变量优先级高于配置文件。
+> 📒 配置参数会按照上面定义的顺序查找。所以，直接提供给`Launcher`的配置参数优先于通过系统属性和配置文件提供的配置参数。同样，通过系统属性提供的配置参数优先于通过配置文件提供的参数。
 
 
 

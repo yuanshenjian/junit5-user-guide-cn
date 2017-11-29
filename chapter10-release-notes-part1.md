@@ -94,7 +94,7 @@
 
 ###### 弃用和彻底改变
 - `@API`注释已经从`junit-platform-commons`项目中删除，并重新定位到GitHub上一个名为 [@API Guardian](https://github.com/apiguardian-team/apiguardian) 的独立新项目。
-- 标签不再允许包含以下任何保留字符。
+- Tag不再允许包含以下任何保留字符。
 	- `,`, `(`, `)`, `&`, `|`, `!`
 - `FilePosition`的构造函数已被替换为一个名为`from(int，int)`的静态工厂方法。
 - 一个`FilePosition`现在全完可以通过新的`from(int)`静态工厂方法从一个行号进行构建。
