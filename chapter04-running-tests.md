@@ -1,4 +1,4 @@
-## 4.运行测试
+## 4. 运行测试
 
 ### 4.1. IDE支持
 
@@ -561,7 +561,7 @@ Option                                        Description
                                                 be repeated.
 ```
 
-### 4.4. 使用JUnit4运行JUnit Platform
+### 4.4. 使用JUnit 4运行JUnit Platform
 >The JUnitPlatform runner is a JUnit 4 based Runner which enables you to run any test whose programming model is supported on the JUnit Platform in a JUnit 4 environment — for example, a JUnit Jupiter test class.
 
 `JunitPlatform`运行器是一个基于JUnit 4的`Runner`，它让你能够在一个JUnit 4环境中的JUnit Platform上运行任何编程模型被支持的测试，例如，JUnit Jupiter测试类。
@@ -645,7 +645,7 @@ public class JUnit4SuiteDemo {
 1. `LauncherDiscoveryRequestBuilder `中的`configurationParameter()`和`configurationParameters()`方法可以用来构建提供给 [`Launcher` API](#) 的请求。当使用JUnit Platform提供的某一种工具运行测试时，你可以采用如下所示的方式指定配置参数：
  * [控制台启动器](#): 使用`--config`命令行选项。
  * [Gradle插件](#): 使用`configurationParameter`或者`configurationParameters`DSL。
- * [Maven Surefire 提供者](#配置参数): 使用 `configurationParameters` 属性
+ * [Maven Surefire 提供者](#配置参数): 使用 `configurationParameters` 属性。
 2. JVM 系统属性
 3. JUnit Platform配置文件：该文件命名为`junit-platform.properties`，在类路径根目下，并遵循Java `Properties`文件的语法。
 
