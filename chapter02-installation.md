@@ -78,7 +78,7 @@ JUnit Jupiter测试引擎的实现，仅仅在运行时需要。
 
 `junit-jupiter-params`
 
-支持JUnit Jupiter中的 [参数化的测试](#313-参数化测试)。
+支持JUnit Jupiter中的 [参数化测试](#313-参数化测试)。
 
 
 `junit-jupiter-migration-support`

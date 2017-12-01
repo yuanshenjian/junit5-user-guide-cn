@@ -143,7 +143,7 @@ ExecutionCondition defines the Extension API for programmatic, conditional test 
 > 扩展开发人员可以选择在单个扩展中实现任意数量的上述接口。具体示例请参阅 [`SpringExtension`](https://github.com/spring-projects/spring-framework/tree/master/spring-test/src/main/java/org/springframework/test/context/junit/jupiter/SpringExtension.java) 的源代码。
 
 
-#### 5.6.1. 测试执行回调之前和之后
+#### 5.6.1. 测试执行之前和之后的回调
 
 [`BeforeTestExecutionCallback`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/BeforeTestExecutionCallback.html) 和 [`AfterTestExecutionCallback`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/AfterTestExecutionCallback.html) 分别为`Extensions`定义了添加行为的API，这些行为将在执行测试方法*之前*和*之后立即执行*。因此，这些回调非常适合于定时器、跟踪器以及其他类似的场景。如果你需要实现围绕`@BeforeEach`和`@AfterEach`方法调用的回调，实现`BeforeEachCallback`和`AfterEachCallback`即可。
 
