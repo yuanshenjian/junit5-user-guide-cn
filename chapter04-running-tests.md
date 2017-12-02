@@ -61,7 +61,7 @@ Eclipse 4.7（*Oxygen*）的测试版支持JUnit Platform和Junit Jupiter。关�
 
 #### 4.1.3. 其他 IDE
 
-在本文写作之时，并没有其他任何IDE可以像IntelliJ IDEA或Eclipse的测试版一样可以直接在JUnit Platform上运行Java测试。但是，Junit团队提供了另外两种折中的方法让JUnit 5可以在其他的IDE上使用。你可以尝试手动使用 [Console Launcher](#) 或者通过 [ 基于JUnit的Runner](#) 来执行测试。
+在本文写作之时，并没有其他任何IDE可以像IntelliJ IDEA或Eclipse的测试版一样可以直接在JUnit Platform上运行Java测试。但是，Junit团队提供了另外两种折中的方法让JUnit 5可以在其他的IDE上使用。你可以尝试手动使用 [控制台启动器](#43-控制台启动器) 或者通过 [基于JUnit 4的Runner](#44-使用junit-4运行junit-platform) 来执行测试。
 
 
 ### 4.2. 构建工具支持
@@ -173,6 +173,8 @@ junitPlatform {
 ```
 
 如果你通过`engines {include …​}`或`engines {exclude …​}`来提供一个*测试引擎ID*，那么JUnit Gradle插件将会只运行你希望运行的那个测试引擎。同样，如果你通过`tags {include …​}`或者`tags {exclude …​}`提供一个*标记*，JUnit Gradle插件将只运行相应标记的测试（例如，通过JUnit Jupiter测试的`@Tag`注解来过滤）。同理，关于包名，可以通过`packages {include …​}`或者`packages {exclude …​}`配置要包含或排除的包名。
+
+<a id="配置参数-gradle"></a>
 
 ##### 配置参数
 你可以使用`configurationParameter`或者`configurationParameters` DSL来设置配置参数，从而影响测试发现和执行。前者可以配置单独的配置参数，后者可以使用一个配置参数的map来一次性配置多个键-值对。所有的key和value都必须是`String`类型。
@@ -412,6 +414,8 @@ JUnit团队已经为Maven Surefire开发了一个非常基本的提供者，它�
 ...
 ```
 
+<a id="配置参数-maven"></a>
+
 ##### 配置参数
 你可以使用`configurationParameters`属性以Java `Properties`文件的语法提供键值对来设置配置参数，从而影响测试发现和执行。
 
@@ -483,7 +487,7 @@ Test run finished after 64 ms
 >📒 ***退出码***  
 > 如果任何容器或测试失败，[ConsoleLauncher](http://junit.org/junit5/docs/current/api/org/junit/platform/console/ConsoleLauncher.html) 就会以状态码1退出，否则退出码为0.
 
-#### Options
+#### 4.3.1. Options
 
 ```sh
 Option                                        Description
@@ -568,7 +572,7 @@ Option                                        Description
 
 如果某个类被标注了`@RunWith(JUnitPlatform.class)`注解，它就可以在那些支持JUnit 4但是还不支持JUnit Platform的IDE和构建系统中直接运行。
 
->📒 由于JUnit Platform具备一些JUnit 4不具备的功能，因此运行器只能部分支持JUnit Platform的功能，特别是在报告方面（请参阅 [显示名称 vs 技术名称](#442-显示名称与技术名称)）。但是就目前来说，`JUnitPlatform`运行器是一个简单的入门方式。
+>📒 由于JUnit Platform具备一些JUnit 4不具备的功能，因此运行器只能部分支持JUnit Platform的功能，特别是在报告方面（请参阅 [显示名称与技术名称](#442-显示名称与技术名称)）。但是就目前来说，`JUnitPlatform`运行器是一个简单的入门方式。
 
 #### 4.4.1. 设置
 你需要在类路径中添加以下的组件和它们的依赖。可以在 [依赖元数据](#21-依赖元数据) 中查看关于group ID, artifact ID 和版本的详细信息。
@@ -585,7 +589,7 @@ Option                                        Description
 *  `junit-platform-commons` 在*test*范围内
 *  `opentest4j` 在*test*范围内
 
-#### 4.4.2. 展示名称 vs 技术名称
+#### 4.4.2. 展示名称与技术名称
 默认情况下，*显示名称*会被使用在测试产出物上，但是当`JUnitPlatform`运行器使用Gradle或者Maven等构建工具来运行测试时，生成的测试报告通常需要包含测试产出物的*技术名称*（例如，使用完整类名），而不是像测试类的简单名称或包含特殊字符的自定义显示名称这种较短的显示名称。为了在测试报告中使用技术名称，在`@RunWith(JUnitPlatform.class)`注解旁声明 `@UseTechnicalNames`注解即可。
 
 #### 4.4.3. 单一测试类
@@ -636,16 +640,16 @@ public class JUnit4SuiteDemo {
 ### 4.5. 配置参数
 除了告诉平台要包含哪些测试类、测试引擎以及要扫描哪些包等之外，有时还需要提供额外的自定义配置参数，该参数特定于特定的测试引擎。例如，JUnit Jupiter `TestEngine`支持以下用例中的*配置参数*。
 
-* [Changing the Default Test Instance Lifecycle](#)
-* [Enabling Automatic Extension Detection](#)
-* [Deactivating Conditions](#)
+* [更改默认的测试实例生命周期](#381-更改默认的测试实例生命周期)
+* [启用自动扩展检测](#启用自动扩展检测)
+* [停用条件](#531-停用条件)
 
 *配置参数*是一种基于文本的键值对，可以通过以下任何一种机制将其提供给运行在JUnit Platform上的测试引擎。
 
-1. `LauncherDiscoveryRequestBuilder `中的`configurationParameter()`和`configurationParameters()`方法可以用来构建提供给 [`Launcher` API](#) 的请求。当使用JUnit Platform提供的某一种工具运行测试时，你可以采用如下所示的方式指定配置参数：
- * [控制台启动器](#): 使用`--config`命令行选项。
- * [Gradle插件](#): 使用`configurationParameter`或者`configurationParameters`DSL。
- * [Maven Surefire 提供者](#配置参数): 使用 `configurationParameters` 属性。
+1. `LauncherDiscoveryRequestBuilder `中的`configurationParameter()`和`configurationParameters()`方法可以用来构建提供给 [`Launcher` API](#71-junit-platform启动器api) 的请求。当使用JUnit Platform提供的某一种工具运行测试时，你可以采用如下所示的方式指定配置参数：
+ * [控制台启动器](#43-控制台启动器): 使用`--config`命令行选项。
+ * [Gradle插件](#配置参数-gradle): 使用`configurationParameter`或者`configurationParameters`DSL。
+ * [Maven Surefire 提供者](#配置参数-maven): 使用 `configurationParameters` 属性。
 2. JVM 系统属性
 3. JUnit Platform配置文件：该文件命名为`junit-platform.properties`，在类路径根目下，并遵循Java `Properties`文件的语法。
 

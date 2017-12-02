@@ -131,7 +131,7 @@
 
 **范围**：配置参数和错误修复。
 
->⚠️ 这是一个预发行版，包含一些重大更改。如果想在捆绑了旧版里程碑版本的IntelliJ IDEA中使用此版本，请参阅上面的 [说明](#)。
+>⚠️ 这是一个预发行版，包含一些重大更改。如果想在捆绑了旧版里程碑版本的IntelliJ IDEA中使用此版本，请参阅上面的 [说明](#411-intellij-idea)。
 
 关于此版本所有已关闭问题和请求的完整列表，请参阅GitHub上JUnit存储库中的 [5.0 RC3](https://github.com/junit-team/junit5/milestone/13?closed=1) 里程碑页面。
 
@@ -145,8 +145,8 @@
 
 ###### 新功能和改进
 - 现在可以通过许多新的方式提供`配置参数`：
-	- 通过类路径根目录下的`junit-platform.properties`文件。详情请参阅 [配置参数]()。
-	- 通过 [控制台启动器]() 中的`--config`命令行选项。
+	- 通过类路径根目录下的`junit-platform.properties`文件。详情请参阅 [配置参数](#45-配置参数)。
+	- 通过 [控制台启动器](#43-控制台启动器) 中的`--config`命令行选项。
 	- 通过Gradle插件的`configurationParameter`或`configurationParameters` DSL。
 	- 通过Maven Surefire提供这程序的`configurationParameters`属性。
 	
@@ -166,7 +166,7 @@
 - 默认的`getStore()`方法已经从`ExtensionContext`接口中移除。要访问全局存储，需要显式调用`getStore(Namespace.GLOBAL)`方法。
 
 ###### 新功能和改进
-- 现在可以通过名为`junit.jupiter.testinstance.lifecycle.default`的配置参数或JVM系统属性来设置*默认*的测试实例生命周期模式。详情请参阅 [更改默认测试实例生命周期]()。
+- 现在可以通过名为`junit.jupiter.testinstance.lifecycle.default`的配置参数或JVM系统属性来设置*默认*的测试实例生命周期模式。详情请参阅 [更改默认的测试实例生命周期](#381-更改默认的测试实例生命周期)。
 - 在参数化测试中使用`@CsvSource`或`@CsvFileSource`时，如果CSV解析器没有从输入中读取到任何字符，并且输入位于引号内，则返回空字符串`""`而不是`null`。
 
 
@@ -184,7 +184,7 @@
 
 **范围**：修复`junit-jupiter-engine`的Gradle消耗
 
-> ⚠️ 这是一个预发行版，包含一些重大更改。如果想在捆绑了旧版里程碑版本的IntelliJ IDEA中使用此版本，请参阅上面的 [说明](#)。
+> ⚠️ 这是一个预发行版，包含一些重大更改。如果想在捆绑了旧版里程碑版本的IntelliJ IDEA中使用此版本，请参阅上面的 [说明](#411-intellij-idea)。
 
 
 关于此版本所有已关闭的问题和请求的完整列表，请参阅GitHub上JUnit仓库中的 [5.0 RC2](https://github.com/junit-team/junit5/milestone/12?closed=1)里程碑页面。
@@ -207,7 +207,7 @@
 
 **范围**：5.0 GA之前的错误修复和文档改进
 
-> ⚠️ 这是一个预发行版，包含一些重大更改。如果想在捆绑了旧版里程碑版本的IntelliJ IDEA中使用此版本，请参阅上面的 [说明](#)。
+> ⚠️ 这是一个预发行版，包含一些重大更改。如果想在捆绑了旧版里程碑版本的IntelliJ IDEA中使用此版本，请参阅上面的 [说明](#411-intellij-idea)。
 
 关于此版本所有已关闭的问题和请求的完整列表，请参阅GitHub上JUnit仓库中的 [5.0 RC1](https://github.com/junit-team/junit5/milestone/9?closed=1)里程碑页面。
 
