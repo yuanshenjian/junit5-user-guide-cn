@@ -6,7 +6,7 @@
 
 **范围**：自5.0.1版本以来的错误修复和小的改进。
 
-关于此版本所有已关闭的问题和请求的完整列表，请参阅GitHub上JUnit仓库中的 [5.0.2](https://github.com/junit-team/junit5/milestone/17?closed=1) 里程碑页面。
+关于此版本所有已关闭的问题和pull request的完整列表，请参阅GitHub上JUnit仓库中的 [5.0.2](https://github.com/junit-team/junit5/milestone/17?closed=1) 里程碑页面。
 
 
 #### JUnit Platform
@@ -56,7 +56,7 @@
 
 **范围**：修复了5.0.0版的错误
 
-关于此版本所有已关闭的问题和请求的完整列表，请参阅GitHub上JUnit仓库中的 [5.0.1](https://github.com/junit-team/junit5/milestone/16?closed=1) 里程碑页面。
+关于此版本所有已关闭的问题和pull request的完整列表，请参阅GitHub上JUnit仓库中的 [5.0.1](https://github.com/junit-team/junit5/milestone/16?closed=1) 里程碑页面。
 
 #### 整体改进
 - 所有的包现在都有一个`optional`的依赖，而不需要在其发布的Maven POM中强制依赖*@API Guardian* JAR包。
@@ -84,7 +84,7 @@
 
 **范围**：首个通用版本
 
-关于此版本所有已关闭的问题和请求的完整列表，请参阅GitHub上JUnit仓库中的 [5.0 GA](https://github.com/junit-team/junit5/milestone/10?closed=1) 里程碑页面。
+关于此版本所有已关闭的问题和pull request的完整列表，请参阅GitHub上JUnit仓库中的 [5.0 GA](https://github.com/junit-team/junit5/milestone/10?closed=1) 里程碑页面。
 
 
 #### JUnit Platform
@@ -133,7 +133,7 @@
 
 >⚠️ 这是一个预发行版，包含一些重大更改。如果想在捆绑了旧版里程碑版本的IntelliJ IDEA中使用此版本，请参阅上面的 [说明](#411-intellij-idea)。
 
-关于此版本所有已关闭问题和请求的完整列表，请参阅GitHub上JUnit存储库中的 [5.0 RC3](https://github.com/junit-team/junit5/milestone/13?closed=1) 里程碑页面。
+关于此版本所有已关闭的问题和pull request的完整列表，请参阅GitHub上JUnit存储库中的 [5.0 RC3](https://github.com/junit-team/junit5/milestone/13?closed=1) 里程碑页面。
 
 
 #### JUnit Platform
@@ -187,7 +187,7 @@
 > ⚠️ 这是一个预发行版，包含一些重大更改。如果想在捆绑了旧版里程碑版本的IntelliJ IDEA中使用此版本，请参阅上面的 [说明](#411-intellij-idea)。
 
 
-关于此版本所有已关闭的问题和请求的完整列表，请参阅GitHub上JUnit仓库中的 [5.0 RC2](https://github.com/junit-team/junit5/milestone/12?closed=1)里程碑页面。
+关于此版本所有已关闭的问题和pull request的完整列表，请参阅GitHub上JUnit仓库中的 [5.0 RC2](https://github.com/junit-team/junit5/milestone/12?closed=1)里程碑页面。
 
 
 #### JUnit Platform
@@ -209,7 +209,7 @@
 
 > ⚠️ 这是一个预发行版，包含一些重大更改。如果想在捆绑了旧版里程碑版本的IntelliJ IDEA中使用此版本，请参阅上面的 [说明](#411-intellij-idea)。
 
-关于此版本所有已关闭的问题和请求的完整列表，请参阅GitHub上JUnit仓库中的 [5.0 RC1](https://github.com/junit-team/junit5/milestone/9?closed=1)里程碑页面。
+关于此版本所有已关闭的问题和pull request的完整列表，请参阅GitHub上JUnit仓库中的 [5.0 RC1](https://github.com/junit-team/junit5/milestone/9?closed=1)里程碑页面。
 
 
 #### JUnit Platform
@@ -240,4 +240,3 @@
 
 #### JUnit Vintage
 除了内部重构之外没有变化。
-
