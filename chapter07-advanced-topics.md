@@ -96,6 +96,6 @@ Junit 目前提供了两种开箱即用的 [`TestEngine`](http://junit.org/junit
 
 #### 7.1.4 插入你自己的测试执行监听器
 
-In addition to the public Launcher API method for registering test execution listeners programmatically, custom TestExecutionListener implementations discovered at runtime via Java’s java.util.ServiceLoader facility are automatically registered with the DefaultLauncher
+> In addition to the public Launcher API method for registering test execution listeners programmatically, custom TestExecutionListener implementations discovered at runtime via Java’s java.util.ServiceLoader facility are automatically registered with the DefaultLauncher.
 
 除了以编程方式来注册测试执行监听器的公共 [`Launcher`](http://junit.org/junit5/docs/current/api/org/junit/platform/launcher/Launcher.html)  API方法之外，在运行时由Java的`java.util.ServiceLoader`工具发现的自定义 [`TestExecutionListener`](http://junit.org/junit5/docs/current/api/org/junit/platform/launcher/TestExecutionListener.html) 实现会被自动注册到`DefaultLauncher`。 例如，一个实现了 [`TestExecutionListener`](http://junit.org/junit5/docs/current/api/org/junit/platform/launcher/TestExecutionListener.html) 并声明在`/META-INF/services/org.junit.platform.launcher.TestExecutionListener`文件中的`example.TestInfoPrinter`类会被自动加载和注册。

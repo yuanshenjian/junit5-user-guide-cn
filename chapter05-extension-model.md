@@ -56,12 +56,7 @@ class MyTestsV2 {
 
 除了 [声明式扩展注册](#521-声明式扩展注册) 支持使用注解外，JUnit Jupiter同样也支持通过Java的`java.util.ServiceLoader`机制来做*全局的扩展注册*。采用这种机制后自动的检测`classpath`下的第三方扩展，并自动完成注册。
 
-
->Specifically, a custom extension can be registered by supplying its fully qualified class name in a file named org.junit.jupiter.api.extension.Extension within the /META-INF/services folder in its enclosing JAR file.
-
-
-另外，自定义扩展可以通过提供它的全类名来完成注册，该扩展被定义在它所在的JAR文件中的`/META-INF/services`目录下的`org.junit.jupiter.api.extension.Extension`文件里。
-
+具体来说，自定义扩展可以通过在`org.junit.jupiter.api.extension.Extension`文件中提供其全类名来完成注册，该文件位于其封闭的JAR文件中的`/META-INF/services`目录下。
 
 ##### 启用自动扩展检测
 
@@ -80,9 +75,6 @@ class MyTestsV2 {
 扩展在测试类层次结构中以自顶向下的语义被继承。同样，在类级别注册的扩展会被方法级的扩展继承。此外，特定的扩展实现只能针对给定的扩展上下文及其父上下文进行一次注册。因此，任何尝试注册重复的扩展实现都将被忽略。
 
 ### 5.3. 条件测试执行
-
-ExecutionCondition defines the Extension API for programmatic, conditional test execution.
-
 [`ExecutionCondition`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/ExecutionCondition.html) 定为程序化的条件测试执行定义了`Extension`API。
 
 每个容器（例如，测试类）都会对`ExecutionCondition`进行解析，从而确定是否应根据提供的`ExtensionContext`执行其包含的所有测试。类似地，`ExecutionCondition`会被每个测试解析，从而确定是否应该根据提供的`ExtensionContext`执行给定的测试方法。

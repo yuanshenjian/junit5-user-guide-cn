@@ -568,7 +568,7 @@ Option                                        Description
 ### 4.4. 使用JUnit 4运行JUnit Platform
 >The JUnitPlatform runner is a JUnit 4 based Runner which enables you to run any test whose programming model is supported on the JUnit Platform in a JUnit 4 environment — for example, a JUnit Jupiter test class.
 
-`JunitPlatform`运行器是一个基于JUnit 4的`Runner`，它让你能够在一个JUnit 4环境中的JUnit Platform上运行任何编程模型被支持的测试，例如，JUnit Jupiter测试类。
+`JunitPlatform` 运行器是一个基于JUnit 4的`Runner`，它让你能够在JUnit 4环境中运行那些编程模型被JUnit Platform所支持的任何测试，例如，JUnit Jupiter测试类。
 
 如果某个类被标注了`@RunWith(JUnitPlatform.class)`注解，它就可以在那些支持JUnit 4但是还不支持JUnit Platform的IDE和构建系统中直接运行。
 

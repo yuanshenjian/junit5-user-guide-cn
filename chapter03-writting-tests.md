@@ -29,7 +29,7 @@ JUnit Jupiter 支持使用下面表格中的注解来配置测试和扩展框架
 | @RepeatedTest | 表示该方法是一个 [重复测试](#312-重复测试) 的测试模板。这样的方法会被*继承*，除非它们被*覆盖*了。 |
 | @TestFactory  | 表示该方法是一个 [动态测试](#315-动态测试) 的测试工厂。这样的方法会被*继承*，除非它们被*覆盖*了。 |
 | @TestInstance  | 用于配置所标注的测试类的 [测试实例生命周期](#38-测试实例生命周期)。这些注解会被*继承*。 |
-| @TestTemplate  | 表示该方法是一个 [测试模板](#314-测试模板)，它会依据注册的 [提供者](#58-为测试模板提供调用上下文)所返回的的调用上下文的数量被多次调用。 这样的方法会被*继承*，除非它们被*覆盖*了。|
+| @TestTemplate  | 表示该方法是一个 [测试模板](#314-测试模板)，它会依据注册的 [提供者](#58-为测试模板提供调用上下文) 所返回的的调用上下文的数量被多次调用。 这样的方法会被*继承*，除非它们被*覆盖*了。|
 | @DisplayName  | 为测试类或测试方法声明一个定制化的展示名字。该注解不能被*继承*。 |
 | @BeforeEach   | 表示使用了该注解的方法应该在当前类中**每一个**使用了`@Test`,`@RepeatedTest`,`@ParameterizedTest`或者`@TestFactory`注解的方法*之前*执行；类似于JUnit 4的 `@Before`。这样的方法会被*继承*，除非它们被*覆盖*了。|
 | @AfterEach    | 表示使用了该注解的方法应该在当前类中**每一个**使用了`@Test`,`@RepeatedTest`,`@ParameterizedTest`或者`@TestFactory`注解的方法*之后*执行；类似于JUnit 4的 `@After`。这样的方法会被*继承*，除非它们被*覆盖*了。 |
@@ -1010,7 +1010,7 @@ Junit Jupiter提供一些开箱即用的*源*注解。接下来每个子章节�
 ##### @ValueSource
 `@ValueSource`是最简单来源之一。它允许你指定一个基本类型的数组（String、int、long或double），并且它只能为每次调用提供一个参数。
 
-```
+```java
 @ParameterizedTest
 @ValueSource(ints = { 1, 2, 3 })
 void testWithValueSource(int argument) {
