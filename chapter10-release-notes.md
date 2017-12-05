@@ -755,7 +755,7 @@ module foo.bar {
 * `TestInfo`和`ExtensionContext`新增了`getTestClass()`和`getTestMethod()`方法。
 * 移除了`TestInfo`和`ExtensionContext`中的`getName()`方法，取而代之的是通过当前的测试类名或方法名获取具体的名称。
 
-####JUnit Vintage
+#### JUnit Vintage
 * `junit4`引擎ID已经被重命名为`junit-vintage`。
 * `Junit4TestEngine`已经被重命名为`VintageTestEngine`。
 
