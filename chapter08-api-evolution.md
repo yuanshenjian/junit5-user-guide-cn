@@ -1,8 +1,5 @@
 ## 8. API演变
-
->One of the major goals of JUnit 5 is to improve maintainers' capabilities to evolve JUnit despite its being used in many projects. With JUnit 4 a lot of stuff that was originally added as an internal construct only got used by external extension writers and tool builders. That made changing JUnit 4 especially difficult and sometimes impossible.
-
-JUnit 5的主要目标之一是提高维护者演进改善JUnit的能力，尽管很多项目正在使用它。在JUnit 4中，很多最初作为内部构造而被添加的内容只能被外部扩展编写器和工具构建器使用。这就使得改变JUnit 4异常困难，甚至有时是不可能的。
+JUnit 5的主要目标之一是提高维护者发展演进JUnit的能力，尽管它在许多项目被使用。在JUnit 4中，起初作为内部构造而被添加的大量内容只能被外部扩展编写器和工具构建器使用。这就使得改变JUnit 4异常困难，甚至有时是不可能的。
 
 这就是为什么JUnit 5为所有公开的接口、类和方法引入了一个明确的生命周期。
 
