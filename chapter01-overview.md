@@ -1,11 +1,7 @@
-# JUnit 5 User Guide
-`Stefan Bechtold•Sam Brannen•Johannes Link•Matthias Merdes•Marc Philipp•Christian Stein - Version 5.0.2`
-
-
 ## 1. 概述
 本文档的目标是为那些编写测试、扩展作者和引擎作者以及构建工具和IDE供应商的程序员提供综合全面的参考。
 
-本文档的PDF格式[下载链接](http://junit.org/junit5/docs/current/user-guide/index.pdf)。
+本文档中文PDF文档 [即将发布](#)。
 
 ### 1.1. JUnit 5 是什么?
 与以前版本的JUnit不同，JUnit5由几个不同的模块组成，它们分别来自于三个不同的子项目。
@@ -24,4 +20,3 @@ JUnit 5需要Java 8（或更高）的运行时环境。不过，你仍然可以�
 ### 1.3. 获取帮助
 与JUnit 5相关问题，可以在 [Stack Overflow](https://stackoverflow.com/questions/tagged/junit5)
 进行提问，或者在 [Gitter](https://gitter.im/junit-team/junit5) 上跟我们进行交流。
-

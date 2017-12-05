@@ -654,9 +654,3 @@ public class JUnit4SuiteDemo {
 3. JUnit Platform配置文件：该文件命名为`junit-platform.properties`，在类路径根目下，并遵循Java `Properties`文件的语法。
 
 > 📒 配置参数会按照上面定义的顺序查找。所以，直接提供给`Launcher`的配置参数优先于通过系统属性和配置文件提供的配置参数。同样，通过系统属性提供的配置参数优先于通过配置文件提供的参数。
-
-
-
-
-
-

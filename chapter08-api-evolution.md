@@ -66,5 +66,3 @@ That’s why JUnit 5 introduces a defined lifecycle for all publicly available i
 ### 8.3. @API工具支持
 
 [@API Guardian](https://github.com/apiguardian-team/apiguardian) 项目计划为使用 [@API](https://apiguardian-team.github.io/apiguardian/docs/current/api/) 注解的API的发布者和消费者提供工具支持。例如，工具支持可能会提供一种方法来检查是否按照`@API`注解声明来使用JUnit API。
-
-

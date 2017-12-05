@@ -2,7 +2,7 @@
 
 ### 5.1. 概述
 
-相比于JUnit4中的`Runner`，`@Rule`以及`@ClassRule`等多个扩展点，JUnit Jupiter的扩展模型由一个连贯的概念组成：`Extension`API。但是，需要注意的是 `Extension`本身也只是一个标记接口。
+相比于JUnit4中的`Runner`、`@Rule`以及`@ClassRule`等多个扩展点，JUnit Jupiter的扩展模型由一个连贯的概念组成：`Extension`API。但是，需要注意的是 `Extension`本身也只是一个标记接口。
 
 ### 5.2. 注册扩展
 
