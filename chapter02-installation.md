@@ -15,9 +15,7 @@
 
 `junit-platform-commons`  
 
-These utilities are intended solely for usage within the JUnit framework itself. Any usage by external parties is not supported. Use at your own risk!
-
-JUnit 内部通用类库/实用工具。这些实用工具仅用于JUnit框架本身。不支持任何外部使用。外部使用风险自负。
+JUnit 内部通用类库/实用工具，它们仅用于JUnit框架本身，*不支持任何外部使用*，外部使用风险自负。
 
 `junit-platform-console`  
 
