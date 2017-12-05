@@ -727,21 +727,23 @@ module foo.bar {
 * `Junit5TestEngine`已经被重命名为`JupiterTestEngine`。
 * 现在，`Assertions`提供了以下支持：
 	* `assertEquals()`方法可以对基本类型使用
-	* `assertEquals()`方法可以对包含增量的double类型和floats类型的值使用
+	* `assertEquals()`方法可以对包含增量的double类型和float类型的值使用
 	* `assertArrayEquals()`
 	* 现在期望值与实际值都被提供给`AssertionFailedError`。
-* [动态测试](#315-动态测试):现在，测试可以通过lambda表达式在运行时被动态注册。
-* 现在，`TestInfo`通过`getTags()`方法提供了获取标签的方法。
-* 现在，`@AfterEach`注解所标注的方法以及*after*回调会在被`@Test`、`@BeforeEach`注解所标注的方法或*before*回调抛出异常后被调用。
+* [动态测试](#315-动态测试)：现在，测试可以通过lambda表达式在运行时被动态注册。
+* 现在，`TestInfo`通过`getTags()`方法提供了获取Tag的方法。
+* 如果`@Test`、`@BeforeEach`或*before*回调引发异常，现在将调用`@AfterEach`方法和*after*回调函数。
 * 现在，`@AfterAll`注解所标注的方法以及*after all*回调一定会被调用。
-* 现在，在测试类的层级结构中，父类或父级接口上使用的可重复注解，例如`@ExtendWith`和`@Tag`,会被发现。
+* 现在，可以在测试类层次结构中的超类以及接口中发现可重复的注解，例如`@ExtendWith`和`@Tag`。
 * 现在，在测试类或接口的层级结构中，扩展将会被*自上而下*地注册。
-* 现在，测试和容器的 [执行条件可以被禁用](#531-停用条件)。
+* 现在，测试和容器的 [执行条件可以被禁用](#531-禁用条件)。
 * `InstancePostProcessor`已被重命名为`TestInstancePostProcessor`。
-	* 现在，`ParameterResolver`API是基于`java.lang.reflect.Executable`的，因此可以被用来解析一般方法和构造器的参数。
-	* 新的`ParameterContext`用来作为参数传递给`ParameterResolver`扩展的方法`supports()`和`resolve()`。
+	* 现在，`TestInstancePostProcessor`实现正确地应用在`@Nested`测试类层次结构中。 
+* `MethodParameterResolver`已被重命名为`ParameterResolver`。
+	* 现在，`ParameterResolver`API是基于`java.lang.reflect.Executable`的，因此可以被用来解析方法*和构造器*的参数。
+	* 新的`ParameterContext`用来作为参数传递给`ParameterResolver`扩展的`supports()`和`resolve()`方法。
 	* 现在，`ParameterResolver`扩展支持基础类型的解析。
-* `ExtensionPointRegistry`和`ExtensionRegistrar`已经被移除，取而代之的是通过`@ExtendWith`注解完成的声明式注册。
+* `ExtensionPointRegistry`和`ExtensionRegistrar`已经被移除，现在通过`@ExtendWith`注解完成声明式注册。
 * `AfterAllExtensionPoint`已经被重命名为`AfterAllCallback`。
 * `AfterAllExtensionPoint`已经被重命名为`AfterAllCallback`。
 * `BeforeEachExtensionPoint`已经被重命名为`BeforeEachCallback`。
@@ -749,11 +751,11 @@ module foo.bar {
 * 新增了`BeforeTestExecutionCallback`与`AfterTestExecutionCallback`扩展API。
 * `ExceptionHandlerExtensionPoint`已经被重命名为`TestExecutionExceptionHandler`。
 * 现在，测试异常通过`TestExtensionContext`被提供给扩展。
-* 现在，在`ExtensionContext`中，很多方法都支持类型安全变体。
+* `ExtensionContext.Store`现在支持许多方法的类型安全变体。
 * 现在，`ExtensionContext.getElement()`方法返回`Optional`类型。
 * `Namespace.of()`已经被重命名为`Namespace.create()`。
 * `TestInfo`和`ExtensionContext`新增了`getTestClass()`和`getTestMethod()`方法。
-* 移除了`TestInfo`和`ExtensionContext`中的`getName()`方法，取而代之的是通过当前的测试类名或方法名获取具体的名称。
+* 移除了`TestInfo`和`ExtensionContext`中的`getName()`方法，现在通过当前的测试类或测试方法来获取上下文特定的名称。
 
 #### JUnit Vintage
 * `junit4`引擎ID已经被重命名为`junit-vintage`。
@@ -765,3 +767,7 @@ module foo.bar {
 
 **范围**：JUnit 5的Alpha版本
 
+```
+版本 5.0.2
+最后更新 2017-09-16 20:47:17 CEST
+```
