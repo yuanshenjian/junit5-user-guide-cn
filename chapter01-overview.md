@@ -15,7 +15,7 @@
 **JUnit Vintage** 提供了一个`TestEngine`，用于在平台上运行基于JUnit 3和JUnit 4 的测试。
 
 ### 1.2. 支持的Java版本
-JUnit 5需要Java 8（或更高）的运行时环境。不过，你仍然可以测试那些经由老版本JDK编译的代码。
+JUnit 5需要Java 8（或更高）的运行时环境。不过，你仍然可以测试那些由老版本JDK编译的代码。
 
 ### 1.3. 获取帮助
 与JUnit 5相关问题，可以在 [Stack Overflow](https://stackoverflow.com/questions/tagged/junit5)
