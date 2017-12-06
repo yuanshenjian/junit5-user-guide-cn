@@ -456,7 +456,7 @@ module foo.bar {
 * `ConsoleLauncher`的选项`--hide-details`被弃用了，请改用`--details none`
 * ZIP发布包包含的控制台启动器不再提供，取代它的是一个独立的可执行的JAR发行版。更多细节见下面的"New Feature"部分。
 * `ReflectionUtils`中的枚举类`MethodSortOrder`被重命名为`HierarchyTraversalMode`，产生的影响是应该使用`ReflectionSupport`来代替`ReflectionUtils`。
-* `Launcher`中的方法`execute(LauncherDiscoveryRequest launcherDiscoveryRequest)`已经被弃用，且在M5发布将会被移除。Instead use the following new method that registers supplied TestExecutionListeners in addition to already registered listeners but only for the supplied LauncherDiscoveryRequest: execute(LauncherDiscoveryRequest launcherDiscoveryRequest, TestExecutionListener…​ listeners)
+* `Launcher`中的方法`execute(LauncherDiscoveryRequest launcherDiscoveryRequest)`已经被弃用，并将在里程碑版本M5中删除。取代它的是新方法`execute(LauncherDiscoveryRequest launcherDiscoveryRequest, TestExecutionListener…​ listeners)`，除了已经注册的监听器之外，该方法还可以用于注册已提供的`TestExecutionListener`，但也仅限于已提供的`LauncherDiscoveryRequest `。
 
 ##### 新特性与改进
 * 自定义的`TestExecutionListener`实现现在可以通过Java的`ServiceLoader`机制自动注册。
