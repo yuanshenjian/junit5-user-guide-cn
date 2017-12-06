@@ -18,7 +18,7 @@ class FirstJUnit5Tests {
 ```
 
 ### 3.1. 注解
-JUnit Jupiter 支持使用下面表格中的注解来配置测试和扩展框架。
+JUnit Jupiter支持使用下面表格中的注解来配置测试和扩展框架。
 
 所有的核心注解都位于`junit-jupiter-api`模块的 [org.junit.jupiter.api ](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/package-summary.html) 包中。
 

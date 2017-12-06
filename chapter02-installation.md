@@ -1,5 +1,5 @@
 ## 2. 安装
-最终版本和里程碑的包已经被部署到Maven仓库中心了。
+最终版本和里程碑版本已经被部署到Maven仓库中心。
 
 快照版本被部署到 [Sonatype 快照库](https://oss.sonatype.org/content/repositories/snapshots) 中的 [/org/junit](https://oss.sonatype.org/content/repositories/snapshots/org/junit/)目录下。
 
@@ -19,32 +19,32 @@ JUnit 内部通用类库/实用工具，它们仅用于JUnit框架本身，*不�
 
 `junit-platform-console`  
 
-支持从控制台中查找和执行JUnit Platform上的测试。详情参考 [控制台启动器](#43-控制台启动器)。
+支持从控制台中发现和执行JUnit Platform上的测试。详情请参阅 [控制台启动器](#43-控制台启动器)。
 	
 
 `junit-platform-console-standalone`  
 
-一个包含了Maven仓库中的 [junit-platform-console-standalone](https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone) 目录下所有依赖项的可执行JAR包。详情参考 [控制台启动器](#43-控制台启动器)。
+一个包含了Maven仓库中的 [junit-platform-console-standalone](https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone) 目录下所有依赖项的可执行JAR包。详情请参阅 [控制台启动器](#43-控制台启动器)。
 
 
 `junit-platform-engine`  	
 
-测试引擎的公共API。详情参考 [插入你自己的测试引擎](#713-插入你自己的测试引擎)
+测试引擎的公共API。详情请参阅 [插入你自己的测试引擎](#713-插入你自己的测试引擎)
 
 
 `junit-platform-gradle-plugin`  	
 
-支持使用 [Gralde](#421-gradle) 来查找和执行JUnit Platform上的测试。
+支持使用 [Gralde](#421-gradle) 来发现和执行JUnit Platform上的测试。
 
 
 `junit-platform-launcher`	
 
-配置和加载测试计划的公共API -- 典型的使用场景是IDE和构建工具。详情参考 [JUnit Platform启动器API](#71-junit-platform启动器api)。
+配置和加载测试计划的公共API -- 典型的使用场景是IDE和构建工具。详情请参阅 [JUnit Platform启动器API](#71-junit-platform启动器api)。
 
 
 `junit-platform-runner`
 
-在JUnit Platform上以JUnit 4的环境执行测试和测试套件的运行器。详情参考 [使用JUnit 4运行JUnit Platform](#44-使用junit-4运行junit-platform)。
+在一个JUnit 4环境中的JUnit Platform上执行测试和测试套件的运行器。详情请参阅 [使用JUnit 4运行JUnit Platform](#44-使用junit-4运行junit-platform)。
    
    
 `junit-platform-suite-api`
@@ -54,7 +54,7 @@ JUnit 内部通用类库/实用工具，它们仅用于JUnit框架本身，*不�
 
 `junit-platform-surefire-provider`
 
-支持使用 [Maven Surefire](#422-maven) 来查找和执行JUnit Platform上的测试。
+支持使用 [Maven Surefire](#422-maven) 来发现和执行JUnit Platform上的测试。
 
 
 #### 2.1.2. JUnit Jupiter
@@ -81,7 +81,7 @@ JUnit Jupiter测试引擎的实现，仅仅在运行时需要。
 
 `junit-jupiter-migration-support`
 
-支持从JUnit 4的迁移到JUnit Jupiter，仅仅在运行选择了JUnit 4规则的测试时需要。
+支持从JUnit 4迁移到JUnit Jupiter，仅在使用了JUnit 4规则的测试中才需要。
 
 
 #### 2.1.3. JUnit Vintage
@@ -99,7 +99,7 @@ JUnit Vintage测试引擎实现，允许在新的JUnit Platform上运行低版�
 
 #### 2.1.4. 可选的依赖
 
-以上所有的包在它们已发布的Maven POM中都有一个可选的依赖，位于紧随其后的@API Guardian JAR包中。
+以上所有的包在它们已发布的Maven POM中都有一个可选的依赖，位于紧随其后的*@API Guardian* JAR包中。
 
 * **Group ID**: org.apiguardian
 
