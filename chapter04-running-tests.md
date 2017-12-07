@@ -638,11 +638,11 @@ public class JUnit4SuiteDemo {
 
 *配置参数*是一种基于文本的键值对，可以通过以下任何一种机制将其提供给运行在JUnit Platform上的测试引擎。
 
-1. `LauncherDiscoveryRequestBuilder `中的`configurationParameter()`和`configurationParameters()`方法可以用来构建提供给 [`Launcher` API](#71-junit-platform启动器api) 的请求。当使用JUnit Platform提供的某一种工具运行测试时，你可以采用如下所示的方式指定配置参数：
+1. `LauncherDiscoveryRequestBuilder`中的`configurationParameter()`和`configurationParameters()`方法可以用来构建提供给 [`Launcher` API](#71-junit-platform启动器api) 的请求。当使用JUnit Platform提供的某一种工具运行测试时，你可以采用如下所示的方式指定配置参数：
  * [控制台启动器](#43-控制台启动器): 使用`--config`命令行选项。
  * [Gradle插件](#配置参数-gradle): 使用`configurationParameter`或者`configurationParameters`DSL。
  * [Maven Surefire 提供者](#配置参数-maven): 使用 `configurationParameters` 属性。
-2. JVM 系统属性
-3. JUnit Platform配置文件：该文件命名为`junit-platform.properties`，在类路径根目下，并遵循Java `Properties`文件的语法。
+2. JVM 系统属性。
+3. JUnit Platform配置文件：该文件命名为`junit-platform.properties`，位于类路径根目录下，并遵循Java `Properties`文件的语法。
 
-> 📒 配置参数会按照上面定义的顺序查找。所以，直接提供给`Launcher`的配置参数优先于通过系统属性和配置文件提供的配置参数。同样，通过系统属性提供的配置参数优先于通过配置文件提供的参数。
+>📒 配置参数会按照上面定义的顺序查找。所以，直接提供给`Launcher`的配置参数优先于通过系统属性和配置文件提供的配置参数。同样，通过系统属性提供的配置参数优先于通过配置文件提供的参数。

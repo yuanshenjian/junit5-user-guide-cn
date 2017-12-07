@@ -2,14 +2,13 @@
 
 ### 5.1. 概述
 
-相比于JUnit4中的`Runner`、`@Rule`以及`@ClassRule`等多个扩展点，JUnit Jupiter的扩展模型由一个连贯的概念组成：`Extension`API。但是，需要注意的是 `Extension`本身也只是一个标记接口。
+不同于JUnit4中的`Runner`、`@Rule`以及`@ClassRule`等多个扩展点，JUnit Jupiter的扩展模型由一个连贯的概念组成：`Extension`API。但是，需要注意的是 `Extension`本身也只是一个标记接口。
 
 ### 5.2. 注册扩展
-
 JUnit Jupiter中的扩展可以通过 [`@ExtenWith`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/ExtendWith.html) 注解显式注册，或者通过Java的 [`ServiceLoader`机制](#522-自动扩展注册) 自动注册。
 
 #### 5.2.1. 声明式扩展注册
-开发者可以通过在测试接口、测试类、测试方法或者自定义的 [*组合注解*](#311-元注解和组合注解) 上标注`@ExtendWith(...)`并提供要注册扩展类的引用，从而以*声明式*的方式注册一个或多个扩展。
+开发者可以通过在测试接口、测试类、测试方法或者自定义的 [*组合注解*](#311-元注解和组合注解) 上标注`@ExtendWith(...)`并提供要注册扩展类的引用，从而以*声明式* 的方式注册一个或多个扩展。
 
 例如，要给某个测试方法注册一个自定义的`MockitoExtension`，你可以参照如下的方式标注该方法。
 
@@ -54,13 +53,12 @@ class MyTestsV2 {
 
 #### 5.2.2. 自动扩展注册
 
-除了 [声明式扩展注册](#521-声明式扩展注册) 支持使用注解外，JUnit Jupiter同样也支持通过Java的`java.util.ServiceLoader`机制来做*全局的扩展注册*。采用这种机制后自动的检测`classpath`下的第三方扩展，并自动完成注册。
+除了 [声明式扩展注册](#521-声明式扩展注册) 支持使用注解外，JUnit Jupiter同样也支持通过Java的`java.util.ServiceLoader`机制来做*全局的扩展注册*。采用这种机制后会自动的检测`classpath`下的第三方扩展，并自动完成注册。
 
 具体来说，自定义扩展可以通过在`org.junit.jupiter.api.extension.Extension`文件中提供其全类名来完成注册，该文件位于其封闭的JAR文件中的`/META-INF/services`目录下。
 
 ##### 启用自动扩展检测
-
-自动检测是一种高级特性，因此默认情况下是关闭的。要启用它，只需要在配置文件中将 `junit.jupiter.extensions.autodetection.enabled`的*配置参数*设置为 `true`即可。该参数可以作为JVM系统属性、或作为一个传递给`Launcher`的`LauncherDiscoveryRequest`中的配置参数、再或者通过JUnit Platform配置文件（详情请参阅 [配置参数](#45-配置参数)）来提供。
+自动检测是一种高级特性，默认情况下它是关闭的。要启用它，只需要在配置文件中将 `junit.jupiter.extensions.autodetection.enabled`的*配置参数* 设置为 `true`即可。该参数可以作为JVM系统属性、或作为一个传递给`Launcher`的`LauncherDiscoveryRequest`中的配置参数、再或者通过JUnit Platform配置文件（详情请参阅 [配置参数](#45-配置参数)）来提供。
 
 例如，要启用扩展的自动检测，你可以在启动JVM时传入如下系统参数。
 
