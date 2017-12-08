@@ -20,9 +20,9 @@
 
 ###### 新特性与改进
 
-- JUnit Platform Maven Surefire提供者程序现在支持`redirectTestOutputToFile` Surefire功能。
+- JUnit Platform Maven Surefire provider现在支持`redirectTestOutputToFile` Surefire功能。
 
-- JUnit Platform Maven Surefire提供者程序现在会忽略通过`<includeTags/>`，`<groups/>`，`<excludeTags/>`和`<excludedGroups/>`提供的空字符串。
+- JUnit Platform Maven Surefire provider现在会忽略通过`<includeTags/>`，`<groups/>`，`<excludeTags/>`和`<excludedGroups/>`提供的空字符串。
 
 
 #### JUnit Jupiter
@@ -31,9 +31,7 @@
 
 - `@CsvSource`或`@CsvFileSource`输入行中的尾随空格不再生成空值。
 
-- 以前，`@EnableRuleMigrationSupport`无法识别`@Rule`方法，该方法返回一个已支持的`TestRule`类型的子类型。而且，它错误地实例化了某些多次使用方法声明的规则。现在，一旦启用，它将实例化所有声明的规则（字段*和*方法），并按照JUnit 4使用的顺序来调用它们。
-
-> - Previously, disabled test classes were eagerly instantiated when Lifecycle.PER_CLASS was used. Now, ExecutionCondition evaluation always takes place before test class instantiation.
+- 以前，`@EnableRuleMigrationSupport`无法识别`@Rule`方法，该方法返回一个已支持的`TestRule`类型的子类型。而且，它错误地实例化了某些多次使用方法声明的`Rule`。现在，一旦启用，它将实例化所有声明的`Rule`（字段*和*方法），并按照JUnit 4使用的顺序来调用它们。
 
 - 以前，当使用`Lifecycle.PER_CLASS`时，被禁用的测试类会被迫切地实例化。现在，`ExecutionCondition`总是在测试类实例化之前就被解析。
 
@@ -59,7 +57,7 @@
 关于此版本所有已关闭的问题和pull request的完整列表，请参阅GitHub上JUnit仓库中的 [5.0.1](https://github.com/junit-team/junit5/milestone/16?closed=1) 里程碑页面。
 
 #### 整体改进
-- 所有的包现在都有一个`optional`的依赖，而不需要在其发布的Maven POM中强制依赖*@API Guardian* JAR包。
+- 所有的artifact现在都有一个`optional`的依赖，而不需要在其发布的Maven POM中强制依赖*@API Guardian* JAR包。
 
 #### JUnit Platform
 没有变化。
@@ -67,8 +65,8 @@
 #### JUnit Jupiter
 
 ###### Bug修复
-- 如果测试类中未声明JUnit 4 `ExpectedException`规则，`junit-jupiter-migrationsupport`模块中的`ExpectedExceptionSupport`不会再吃掉异常。
-	- 因此，现在可以使用`@EnableRuleMigrationSupport`和`ExpectedExceptionSupport`，而不用声明`ExpectedException`规则。
+- 如果测试类中未声明JUnit 4 `ExpectedException` Rule，`junit-jupiter-migrationsupport`模块中的`ExpectedExceptionSupport`不会再吃掉异常。
+	- 因此，现在可以使用`@EnableRuleMigrationSupport`和`ExpectedExceptionSupport`，而不用声明`ExpectedException` Rule。
 
 
 #### JUnit Vintage
@@ -112,7 +110,7 @@
 - `AbstractTestDescriptor`中的`getParent()`方法现在是`final`的。
 
 ###### 新特性与改进
-- `AbstractTestDescriptor`中的`children`字段现在是`protected`的，从而让子类能够访问。
+- `AbstractTestDescriptor`中的`children`字段现在是`protected`的，从而允许子类访问。
 
 
 #### JUnit Jupiter
@@ -139,21 +137,20 @@
 #### JUnit Platform
 
 ###### Bug修复
-- 源JAR包不再包含每个源文件两次。
-- The Maven Surefire provider now reports a failed test with a cause that is not an instance of AssertionError as an error instead of a failure for compatibility reasons.
-- Maven Surefire提供者程序现在报告一个失败的测试，其原因不是`AssertionError`的一个实例就是一个*错误*，而不是因为兼容性导致的*失败*。
+- 源JAR文件不再包含每个源文件两次。
+- 如果一个失败的测试不是抛出一个`AssertionError`的实例，Maven Surefire provider现在会将其报告为错误而不是由于兼容性引起的失败，	
 
 ###### 新特性与改进
 - 现在可以通过许多新的方式提供`配置参数`：
 	- 通过类路径根目录下的`junit-platform.properties`文件。详情请参阅 [配置参数](#45-配置参数)。
 	- 通过 [控制台启动器](#43-控制台启动器) 中的`--config`命令行选项。
 	- 通过Gradle插件的`configurationParameter`或`configurationParameters` DSL。
-	- 通过Maven Surefire提供这程序的`configurationParameters`属性。
+	- 通过Maven Surefire provider的`configurationParameters`属性。
 	
 #### JUnit Jupiter
 
 ###### Bug修复
-- 源JAR包不再包含每个源文件两次。
+- 源JAR文件不再包含每个源文件两次。
 - `ExecutionContext.Store.getOrComputeIfAbsent`现在在计算值之前会在其祖父级上下文中查找值（并在其父级中递归）。
 - `ExecutionContext.Store.getOrComputeIfAbsent()`现在是现成安全的。
 - 如果唯一ID属于不同的测试引擎，`JupiterTestEngine`就不会再尝试解析通过其中一个`DiscoverySelectors.selectUniqueId()`方法选择的唯一ID。
@@ -166,14 +163,14 @@
 - 默认的`getStore()`方法已经从`ExtensionContext`接口中移除。要访问全局存储，需要显式调用`getStore(Namespace.GLOBAL)`方法。
 
 ###### 新特性与改进
-- 现在可以通过名为`junit.jupiter.testinstance.lifecycle.default`的配置参数或JVM系统属性来设置*默认*的测试实例生命周期模式。详情请参阅 [更改默认的测试实例生命周期](#381-更改默认的测试实例生命周期)。
+- 现在可以通过名为`junit.jupiter.testinstance.lifecycle.default`的配置参数或JVM系统属性来设置*默认* 的测试实例生命周期模式。详情请参阅 [更改默认的测试实例生命周期](#381-更改默认的测试实例生命周期)。
 - 在参数化测试中使用`@CsvSource`或`@CsvFileSource`时，如果CSV解析器没有从输入中读取到任何字符，并且输入位于引号内，则返回空字符串`""`而不是`null`。
 
 
 #### JUnit Vintage
 
 ###### Bug修复
-- 源JAR包不再包含每个源文件两次。
+- 源JAR文件不再包含每个源文件两次。
 - 现在可以通过`DiscoverySelectors`中的`selectMethod()`变体在JUnit 4参数化测试类中选择单个方法。
 
 
@@ -215,7 +212,7 @@
 #### JUnit Platform
 
 ###### Bug修复
-- 现在可以通过类，方法名，参数类型或完全限定的方法名来*选择*未被实现类覆盖的通用接口`default`方法。这适用于`DiscoverySelectors`中的方法选择器以及`ReflectionSupport`中的`findMethod()`变体。
+- 现在可以通过类，方法名，参数类型或完全限定的方法名来*选择* 未被实现类覆盖的通用接口`default`方法。这适用于`DiscoverySelectors`中的方法选择器以及`ReflectionSupport`中的`findMethod()`变体。
 - 在使用`ReflectionSupport`中的`findMethods()`搜索类层次结构中的方法时，现在可以正确发现一个非重写的接口`default`方法，其方法签名被本地声明的方法重载。
 - 在使用`ReflectionSupport`中的`findMethods()`搜索类层次结构中的方法时，不再发现重写的接口`default`方法。
 
@@ -228,7 +225,7 @@
 #### JUnit Jupiter
 
 ###### Bug修复
-- 与`@BeforeAll`，`@AfterAll`，`@BeforeEach`或`@AfterEach`注解标注的生命周期方法有关的配置错误在测试发现阶段不再停止执行整个测试计划。相反，现在在执行受影响的测试类时就会报告这样的错误。
+- 与`@BeforeAll`、`@AfterAll`、`@BeforeEach`或`@AfterEach`注解标注的生命周期方法有关的配置错误在测试发现阶段不再停止执行整个测试计划。相反，现在在执行受影响的测试类时就会报告这样的错误。
 - 测试计划中已经正确地包含了一个未覆盖的接口默认方法，其方法签名被本地声明的方法重载。这适用于使用了Jupiter注解（如`@Test`，`@BeforeEach`等）的`default`方法。
 - 测试计划中不再包含重写的接口`default`方法。这适用于使用了Jupiter注解（如`@Test`，`@BeforeEach`等）的`default`方法。
 
@@ -260,7 +257,7 @@ module foo.bar {
 }
 ```
 
-通常在类路径上就可以运行测试，这方面Java 8和Java 9没什么区别。只要支持JUnit平台，大多数的命令行工具和IDE都可以*开箱即用*JUnit 5。如果你选择的开发工具不支持JUnit平台，可以使用`ConsoleLauncher`，甚至可以使用可执行的`junit-platform-console-standalone`一站式jar包。
+通常在类路径上就可以运行测试，这方面Java 8和Java 9没什么区别。只要支持JUnit平台，大多数的命令行工具和IDE都可以*开箱即用* JUnit 5。如果你选择的开发工具不支持JUnit平台，可以使用`ConsoleLauncher`，甚至可以使用可执行的`junit-platform-console-standalone`一站式jar包。
 
 要在模块路径中运行JUnit Jupiter测试，可以通过一个Java 9兼容的构建工具 [pro](https://github.com/forax/pro) 来实现。
 
@@ -271,16 +268,16 @@ module foo.bar {
 #### JUnit Platform
 
 ###### Bug修复
-* 为了删除前导和尾随的空白，所有的Tag都被*修剪*了。这适用于任何直接通过`TagFilter.includeTags()`和`TagFilter.excludeTags()`或者间接通过`@IncludeTags`,`@ExcludeTags`，JUnit Platform控制台启动器，JUnit Platform的Gradle插件和JUnit平台的Maven Surefire provider所提供的任何Tag。
+* 为了删除前导和尾随的空白，所有的Tag都被*修剪* 了。这适用于任何直接通过`TagFilter.includeTags()`和`TagFilter.excludeTags()`或者间接通过`@IncludeTags`,`@ExcludeTags`，JUnit Platform控制台启动器，JUnit Platform的Gradle插件和JUnit平台的Maven Surefire provider所提供的任何Tag。
 
 ###### 弃用和彻底改变
 * 所有的Tag现在都要满足以下语法规则：
 	* 标签不能是`null`或者*空白*。
-	* *修剪*的标签不能包含空白。
-	* *修剪*的标签不能包含ISO控制字符。
+	* *修剪* 的标签不能包含空白。
+	* *修剪* 的标签不能包含ISO控制字符。
 * 如果提供的Tag在语法上是无效的，`TagFilter.includeTags()`,`TagFilter.excludeTags()`和`TestTag.create()`工厂方法现在会抛出一个`PreconditionViolationException`异常。
-* `EngineDiscoveryRequest`的方法`getDiscoveryFiltersByType`已经被改名为`getFiltersByType`。
-* `UniqueId`的方法`getSegments()`现在返回一个不可变的列表。
+* `EngineDiscoveryRequest`的`getDiscoveryFiltersByType`方法已经被改名为`getFiltersByType`。
+* `UniqueId`的`getSegments()`方法现在返回一个不可变的列表。
 * `AbstractTestDescriptor`的方法`setSource`被删除，替代它的是一个包含`source`变量的构造函数。
 
 ###### 新特性与改进
@@ -305,9 +302,8 @@ module foo.bar {
 
 ###### 新特性与改进
 * 现在可以使用`Assertions `中的所有`fail(...)`方法来实现单语句lambda表达式，从而避免需要实现具有显式返回值的代码块。
-* `ExtensionContext`中的新方法`getRoot()`能够容易的获得最高的，*root*扩展上下文。
-* `ExtensionContext` API中的新方法`getRequiredTestClass()`、`getRequiredTestInstance()`和`getRequiredTestMethod()`更加便捷，可用于
-在需要这些元素的用例中检索测试类，测试实例和测试方法。
+* `ExtensionContext`中的新方法`getRoot()`能够容易的获得最高的，*root* 扩展上下文。
+* `ExtensionContext` API中的新方法`getRequiredTestClass()`、`getRequiredTestInstance()`和`getRequiredTestMethod()`更加便捷，可用于在需要这些元素的用例中检索测试类，测试实例和测试方法。
 * 类似`@TestInstance`和`@Disabled`的类级注解现在可以被声明与测试接口上（也称为测试特征）。
 * 如果针对单个方法解析了多个`TestDescriptor`，则现在会记录一条警告。 这有助于调试由多个竞争注解（例如`@Test`，`@RepeatedTest`，`@ParameterizedTest`，`@TestFactory`等）同时注解的方法导致的错误。
 * 包含无效标记语法的`@Tag`声明现在将被记录为警告，但会被有效地忽略掉。
@@ -350,7 +346,7 @@ module foo.bar {
 
 #### JUnit Platform
 
-####### Bug修复
+###### Bug修复
 
 * 如果选择器是通过不具有显式参数类型的`DiscoverySelectors`创建的，则`MethodSelector.getMethodParameterTypes()`不会为参数类型返回`null`。 具体来说，如果参数类型没有被提供并且不能推导，则返回一个空字符串。同样，如果参数类型没有明确提供，但可以推导（例如，通过提供的`Method`引用），`getMethodParameterTypes()`现在返回一个包含推导的参数类型的字符串。
 * `ConsoleLauncher`现在打印对应异常的`toString()`方法的内容作为回退机制，而非在`Details.TREE`模式下抛出`NullPointerException`。
@@ -366,12 +362,12 @@ module foo.bar {
 * `TestDescriptor`类中的默认方法`pruneTree()`和`hasTests()`已被移除。
 
 ###### 新特性与改进
-* 当使用`DiscoverySelectors`通过完全限定的方法名称来选择一个方法，或者通过提供`methodParameterTypes`作为一个逗号分隔的字符串时，可以使用*源代码语法*来描述数组参数类型，如基本数组`int[]`和`java.lang.String[]`作为一个对象数组。 此外，现在可以使用JVM的内部字符串表示来描述多维数组类型（例如，`[[[I`代表`int[][][]`，`[[Ljava.lang.String;`代表 `java.lang.String[][]`等）或*源代码语法*（例如，`boolean[][][]`，`java.lang.Double[][]`等）。
+* 当使用`DiscoverySelectors`通过完全限定的方法名称来选择一个方法，或者通过提供`methodParameterTypes`作为一个逗号分隔的字符串时，可以使用*源代码语法* 来描述数组参数类型，如基本数组`int[]`和`java.lang.String[]`作为一个对象数组。 此外，现在可以使用JVM的内部字符串表示来描述多维数组类型（例如，`[[[I`代表`int[][][]`，`[[Ljava.lang.String;`代表 `java.lang.String[][]`等）或*源代码语法*（例如，`boolean[][][]`，`java.lang.Double[][]`等）。
 * `JUnit`的平台的`Gradle`插件的`junitPlatformTest`任务现在可以在构建的配置阶段直接访问。
 * `JUnit Platform Gradle`插件与`Gradle Kotlin DSL`配合使用效果更佳。
 * 当通过Java的`ServiceLoader`机制发现`TestEngine`时，现在将尝试确定引擎类的加载位置，如果位置URL可用，则将在配置级别进行记录。
 * `mayRegisterTests()`方法可用来表示一个`TestDescriptor`将在执行过程中注册动态测试。
-* 现在可以查询`TestPlan`是否包含`Test()`。 这被`Surefire`提供者用来决定一个类是否是一个应该被执行的测试类。
+* 现在可以查询`TestPlan`是否包含`Test()`。 这被`Surefire` provider用来决定一个类是否是一个应该被执行的测试类。
 * `ENGINE`枚举常量已从`TestDescriptor.Type`中移除。`EngineDescriptor`的默认类型现在是`TestDescriptor.Type.CONTAINER`。
 
 
@@ -415,7 +411,7 @@ module foo.bar {
 	* 在`@Nested`测试类中声明`@BeforeAll`和`@AfterAll`方法。
 	* 在接口`default`方法上声明`@BeforeAll`和`@AfterAll`。
 	* 用Kotlin编程语言实现的测试类中的`@BeforeAll`和`@AfterAll`方法的简化声明。
-* `Assertions.assertAll()`现在将跟踪几乎所有类型的异常（而不是只跟踪`AssertionError`类型的异常），除非异常是一个被列入*黑名单*的异常，在这种情况下，它将被立即重新抛出。
+* `Assertions.assertAll()`现在将跟踪几乎所有类型的异常（而不是只跟踪`AssertionError`类型的异常），除非异常是一个被列入*黑名单* 的异常，在这种情况下，它将被立即重新抛出。
 * 如果`@ParameterizedTest`接受一个数组作为参数，那么当为参数化测试的调用生成显示名称时，数组的字符串表示形式将被转换为人类可读的格式。
 * `@EnumSource`现在提供了一个枚举常量选择模式，用于控制如何解释提供的名称。支持的模式包括：`INCLUDE`和`EXCLUDE`，以及基于正则表达式的模式匹配，如`MATCH_ALL`模式和`MATCH_ANY`模式。
 * 扩展现在可以通过使用新引入的引擎级`ExtensionContext`的`Store`来在顶级测试类中共享状态。
@@ -434,7 +430,7 @@ module foo.bar {
 ### 5.0.0-M4
 **发布时间**： 2017.04.01
 
-**范围**：JUnit 5的第4个里程碑发布，主要关注点在于测试模板、反复测试和参数化测试。
+**范围**：JUnit 5的第4个里程碑发布，主要关注点在于测试模板、重复测试和参数化测试。
 
 关于此版本所有已关闭的问题和pull request的完整列表，请参阅GitHub上的JUnit仓库中的 [5.0 M4](https://github.com/junit-team/junit5/milestone/7?closed=1) 里程碑页面。
 
@@ -443,7 +439,7 @@ module foo.bar {
 ##### Bug修复
 * 为了保证可重复的构建，JUnit Platform的Gradle插件为其依赖增加了一个修复版本（和插件版本相同），替换了默认的动态版本方案（即`1.+`）。
 * JUnit平台的Gradle插件如今明确地应用在`java`插件的内置Gradle中，因为它对应用程序有一个隐含的依赖关系。
-* `ReflectionUtils`中的所有`findMethods()`实现不再返回合成方法。结果中不再包含隐含的 [override-equal](https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.4.2)方法。
+* `ReflectionUtils`中的所有`findMethods()`实现不再返回合成方法。结果中不再包含隐含的 [override-equal](https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.4.2) 方法。
 * 在`TestIdentifier`和`TestDescriptor`中引入`getLegacyReportingName()`。这使得JUnit Platform的Gradle插件和Surefire Provider能够通过`getLegacyReportingName()`解析类和方法名，而不再使用资源位置。
 * 在路径中包含空格（％20）的JAR文件现在在用于类路径扫描例程之前已被正确解码。
 * 更新了`ReflectionUtils`中的`findNestedClasses()`方法，以便搜索嵌套类也返回继承的嵌套类（无论它们是否为静态）。
@@ -461,13 +457,13 @@ module foo.bar {
 ##### 新特性与改进
 * 自定义的`TestExecutionListener`实现现在可以通过Java的`ServiceLoader`机制自动注册。
 * `TestEngine `API添加了新的默认方法`getGroupId()`,`getArtifactId()`和`getVersion()`，这些方法用来调试和报告。默认情况下，包属性（一般来自JAR属性清单）用来决定发行ID和版本号；而组ID默认是空的。更多细节请参阅Javadoc的 [TestEngine](http://junit.org/junit5/docs/current/api/org/junit/platform/engine/TestEngine.html) 文档。
-* 已发现的测试引擎的记录信息得到增强，包括组ID，工件ID和每个测试引擎的版本，如果它们能够通过`getGroupId()`，`getArtifactId()`，以及`getVersion()`方法获取。
+* 已发现的测试引擎的记录信息得到增强，包括group ID、artifact ID和每个测试引擎的版本，如果它们能够通过`getGroupId()`，`getArtifactId()`，以及`getVersion()`方法获取。
 * 现在，`ConsoleLauncher` 的`--scan-classpath`允许扫描JAR文件作为显式参数提供的测试（请参阅 [Options](#431-options)）。
 * 现在，`ConsoleLauncher`中新的`--details<Details>`选项允许在执行测试时选择一个输出细节的模式。可以使用`none`、`flat`、`tree`，或者`verbose`中的一个来指定该模式。如果没有指定，则只会输出汇总和测试失败信息（请参阅 [Options](#431-options)）。
-* 可执行的`junit-platform-console-standalone-1.0.2.jar`包在默认的构建过程中生成，并存储于已在**Maven Central**中发布的 `junit-platform-console-standalone/build/libs`路径下。该jar包包含了Jupiter和Vintage测试引擎及其所有依赖。它在手动管理其依赖项的项目中提供了JUnit 5的无障碍使用，类似于JUnit 4中广为人知的简单JAR包管理。
+* 可执行的`junit-platform-console-standalone-1.0.2.jar`包在默认的构建过程中生成，并存储于已在 [Maven 中心库](https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone) 发布的 `junit-platform-console-standalone/build/libs`路径下。该jar包包含了Jupiter和Vintage测试引擎及其所有依赖。它在手动管理其依赖项的项目中提供了JUnit 5的无障碍使用，类似于JUnit 4中广为人知的 [plain-old JAR](https://github.com/junit-team/junit4/wiki/Download-and-Install#plain-old-jar) 管理。
 * `ConsoleLauncher`中新增的`--exclude-classname (--N)`选项可以接受一个正则表达式来排除那些全类名匹配的类。当这个选项重复时，所有的模式将使用 "或" 语义进行组合。
-* 新的JUnit Platform支持包`org.junit.platform.commons.support`包含了许多正在维护的工具方法，这些方法可用于注解、反射，以及类路径扫描任务。我们鼓励`TestEngine`和`Extension`作者使用这些支持方法，以便与JUnit Platform的行为保持一致。
-* 压缩了`TestDescriptor.isTest()`和`TestDescriptor.isContainer()`的内部逻辑，使得其返回值从两个独立的布尔属性值转变为名为`TestDescriptor.Type`的枚举类.详细信息请参阅下一小节。
+* 新的JUnit Platform支持包`org.junit.platform.commons.support`包含了许多正在维护的工具方法，这些方法可用于注解、反射，以及类路径扫描任务。我们鼓励`TestEngine`和`Extension`开发人员（author）使用这些支持方法，以便与JUnit Platform的行为保持一致。
+* 压缩了`TestDescriptor.isTest()`和`TestDescriptor.isContainer()`的内部逻辑，使得其返回值从两个独立的布尔属性值转变为名为`TestDescriptor.Type`的枚举类。详细信息请参阅下一小节。
 * 引入了`TestDescriptor.Type`枚举类以及对应的方法`TestDescriptor.getType()`，用于定义所有可能的描述符类型。原来的`TestDescriptor.isTest（）`和`TestDescriptor.isContainer（）`现在委托给`TestDescriptor.Type`常量。
 * 引入了`TestDescriptor.prune()`和`TestDescriptor.pruneTree()`方法，它们允许引擎作者自定义JUnit平台触发修剪时的处理办法。
 * `TestIdentifier`现在使用新的`TestDescriptor.Type`枚举来存储底层类型。它可以通过新的`TestIdentifier.getType()`方法获取。此外，`TestIdentifier.isTest()`和`TestIdentifier.isContainer()`现在委托`TestDescriptor.Type`的常量。
@@ -489,7 +485,7 @@ module foo.bar {
 
 ###### 新特性与改进
 
-* 新增了`@ParameterizedTest `注解，从而为*参数化测试*提供了极好的支持。请参阅 [参数化测试](#313-参数化测试)。
+* 新增了`@ParameterizedTest `注解，从而为*参数化测试* 提供了极好的支持。请参阅 [参数化测试](#313-参数化测试)。
 * 新增了`@RepeatedTest`注解和`RepetitionInfo`API,从而为*重复测试*提供了极好的支持。请参阅 [重复测试](#312-重复测试)。
 * 引入了新的注解`@TestTemplate`，并附带了对应的扩展点`TestTemplateInvocationContextProvider`。
 * 现在，`Assertions.assertThrows()`方法在生成断言失败的消息时，会采用规范名称作为异常类型。
@@ -558,8 +554,8 @@ module foo.bar {
 * 包名现在可以通过JUnit Platform Gradle插件（请参阅 [配置过滤器](#配置过滤器)）和[`ConsoleLauncher`](http://junit.org/junit5/docs/current/api/org/junit/platform/console/ConsoleLauncher.html)（请参阅 [Options](#431-options)）的过滤器配置来包含或排除。
 * 现在，`junit-platform-console`不再强依赖于[JOptSimple](https://pholser.github.io/jopt-simple/)。因此，现在可以测试那些使用该库的不同版本的自定义代码。
 * 现在，包选择器的解析会扫描JAR文件。
-* Surefire供应商现在支持forking。
-* Surefire供应商想在支持使用标记过滤，可以通过以下方法：
+* Surefire provider现在支持forking。
+* Surefire provider现在支持使用标记过滤，可以通过以下方法：
 	* 包含: `groups/includeTags`
 	* 排除：`excludedGroups/excludeTags`
 * Surefire Provider现在获得了Apache License v2.0许可。
@@ -582,7 +578,7 @@ module foo.bar {
 
 ###### 新特性与改进
 
-* 支持`Assertions`中的lambda表达式的延迟和抢占超时。请参阅 [`AssertionsDemo`](#34-断言) 中的示例，更多详细信息请参阅[org.junit.jupiter.Assertions](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Assertions.html) JavaDoc。
+* 支持`Assertions`中的lambda表达式的延迟和抢占超时。请参阅 [`AssertionsDemo`](#34-断言) 中的示例，更多详细信息请参阅 [org.junit.jupiter.Assertions](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Assertions.html) JavaDoc。
 * 新的`assertIterableEquals()`断言会校验两个可迭代对象是否深度一致（查阅Java文档获取细节）。
 * `Assertions.assertAll()`的新变体接收可执行流（即，`Stream<Executable>`）。
 * 现在，`Assertions.assertThrows()`方法将返回抛出的异常。
@@ -619,7 +615,7 @@ module foo.bar {
 * `DiscoverySelectors`中基于通用名称的发现选择器（即`selectName()`和`selectNames()`）已经被废弃，建议使用`selectPackage(String)`、`selectClass(String)`和`selectMethod(String)`方法。
 
 ###### 新特性
-* `DiscoverySelectors`中的新方法`selectMethod(String)`支持选择 *全限定方法名*。
+* `DiscoverySelectors`中的新方法`selectMethod(String)`支持选择*完全限定方法名*。
 
 #### JUnit Jupiter
 
@@ -637,7 +633,7 @@ module foo.bar {
 **范围**： JUnit 5的第一个里程碑发布
 
 ##### 变更摘要
-下面首先给出整体改动。而有关Platform、Jupiter，以及Vintage的细节变动，可以查阅后面的专项信息。对于本次发布相关的 commit 信息，可以通过查看 [5.0 M1](https://github.com/junit-team/junit5/milestone/2?closed=1)里程碑页面在GitHub上的JUnit代码库了解。
+下面首先给出整体改动。而有关Platform、Jupiter，以及Vintage的细节变动，可以查阅后面的专项信息。对于本次发布相关的commit信息，可以通过查看 [5.0 M1](https://github.com/junit-team/junit5/milestone/2?closed=1)里程碑页面在GitHub上的JUnit代码库了解。
 
 * 在已发布的JAR清单中，包含了额外的元数据，例如`Create-By`、`Built-By`、`Build-Date`、`Build-Time`、`Build-Revision`、`Implementation-Title`、`Implementation-Version`、`Implementation-Vendor`等。
 * 当前发布的工件中，包含了`LICENSE.md`和`META-INF`。
@@ -683,7 +679,7 @@ module foo.bar {
 
 #### JUnit Platform
 * 重命名`ConsoleRunner`为`ConsoleLauncher`。
-* 现在，`ConsoleLauncher`在退出时总会返回状态码，并且已经移除了*激活退出码*的标志位。
+* 现在，`ConsoleLauncher`在退出时总会返回状态码，并且已经移除了*激活退出码* 的标志位。
 * `junit-platform-console`不再在`junit-platform-runner`、`junit-jupiter-engine`或`junit-vintage-engine`上定义传递依赖。
 * 现在，`JUnit5`运行器已经被重命名为`JUnitPlatform`。
 	* `@Packages`已经被重命名为`@SelectPackages`。
@@ -704,7 +700,7 @@ module foo.bar {
 	* 现在，测试报告中会用全限定类名和真正的方法名来取代先前的显示名称。
 * 现在，`Testidentifier`中的唯一标识符是`String`类型。
 * 现在，`TestSource`是有着专用层级结构的接口，它由`CompositeTestSource`、 `JavaSource`、`JavaPackageSource`、`JavaClassSource`、`JavaMethodSource`、`UriSource`、`FileSystemSource`、`DirectorySource`和`FileSource`构成。
-* 新增了`DiscoverySelectors`类，用于集中管理所有的*select*方法，同时将所有`DiscoverySelector `工厂方法转移到新增类中。
+* 新增了`DiscoverySelectors`类，用于集中管理所有的*select* 方法，同时将所有`DiscoverySelector `工厂方法转移到新增类中。
 * `Test.filter()`已经被重命名为`Filter.apply()`。
 * `TestTag.of()`已被重命名为`TestTag.create()`。
 * `TestDiscoveryRequestBuilder`已被重命名为`LauncherDiscoveryRequest`。
@@ -714,7 +710,7 @@ module foo.bar {
 * 引入了`ConfigurationParameters`，`Laucher`可以通过`EngineDiscoveryRequest`和`ExecutionRequest`将配置参数传递给引擎。
 * `Container`和`Leaf`抽象类已经从`HierarchicalTestEngine`中移除。
 * `getName()`方法已经被从`TestIdentifier`和`TestDescriptor`中移除，取而代之的是通过`TestSource`获取一个实现类的具体名称。
-* 现在，测试引擎在本质上是完全动态的。也就是说，`TestEngine`无需在*发现阶段*创建`TestDescriptor`条目；现在，TestEngine现在可以选择在执行阶段注册容器和测试。
+* 现在，测试引擎在本质上是完全动态的。也就是说，`TestEngine`无需在*发现阶段* 创建`TestDescriptor`条目；现在，TestEngine现在可以选择在执行阶段注册容器和测试。
 * 包括和排除对引擎和Tag的支持已经完全修改。
 	* 引擎和Tag不再是`required`，而是`included`。
 	* 现在，`ConsoleLauncher`支持以下选项：`t`/`include-tag`、`T`/`exclude-tag`、`e`/`include-engine`、`E`/`exclude-engine`。
@@ -732,15 +728,15 @@ module foo.bar {
 	* 现在期望值与实际值都被提供给`AssertionFailedError`。
 * [动态测试](#315-动态测试)：现在，测试可以通过lambda表达式在运行时被动态注册。
 * 现在，`TestInfo`通过`getTags()`方法提供了获取Tag的方法。
-* 如果`@Test`、`@BeforeEach`或*before*回调引发异常，现在将调用`@AfterEach`方法和*after*回调函数。
-* 现在，`@AfterAll`注解所标注的方法以及*after all*回调一定会被调用。
+* 如果`@Test`、`@BeforeEach`或*before* 回调引发异常，现在将调用`@AfterEach`方法和*after* 回调函数。
+* 现在，`@AfterAll`注解所标注的方法以及*after all* 回调一定会被调用。
 * 现在，可以在测试类层次结构中的超类以及接口中发现可重复的注解，例如`@ExtendWith`和`@Tag`。
-* 现在，在测试类或接口的层级结构中，扩展将会被*自上而下*地注册。
+* 现在，在测试类或接口的层级结构中，扩展将会被*自上而下* 地注册。
 * 现在，测试和容器的 [执行条件可以被禁用](#531-禁用条件)。
 * `InstancePostProcessor`已被重命名为`TestInstancePostProcessor`。
 	* 现在，`TestInstancePostProcessor`实现正确地应用在`@Nested`测试类层次结构中。 
 * `MethodParameterResolver`已被重命名为`ParameterResolver`。
-	* 现在，`ParameterResolver`API是基于`java.lang.reflect.Executable`的，因此可以被用来解析方法*和构造器*的参数。
+	* 现在，`ParameterResolver`API是基于`java.lang.reflect.Executable`的，因此可以被用来解析方法*和构造器* 的参数。
 	* 新的`ParameterContext`用来作为参数传递给`ParameterResolver`扩展的`supports()`和`resolve()`方法。
 	* 现在，`ParameterResolver`扩展支持基础类型的解析。
 * `ExtensionPointRegistry`和`ExtensionRegistrar`已经被移除，现在通过`@ExtendWith`注解完成声明式注册。

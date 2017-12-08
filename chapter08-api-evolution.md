@@ -5,15 +5,14 @@ JUnit 5的主要目标之一是提高维护者发展演进JUnit的能力，尽�
 
 
 ### 8.1. API 版本和状态
-
-每个发布的包都有一个版本号`<major>.<minor>.<patch>`，所有公开的接口、类和方法都使用 [@API Guardian](https://github.com/apiguardian-team/apiguardian) 项目中的 [@API](https://apiguardian-team.github.io/apiguardian/docs/current/api/) 进行标注。`@API`注解的`status`属性可以被赋予下面表格中的值。
+每个已发布的artifact都有一个版本号`<major>.<minor>.<patch>`，所有公开的接口、类和方法都使用 [@API Guardian](https://github.com/apiguardian-team/apiguardian) 项目中的 [@API](https://apiguardian-team.github.io/apiguardian/docs/current/api/) 进行标注。`@API`注解的`status`属性可以被赋予下面表格中的值。
 
 | 状态 | 描述 |
 |:---|:---|
 | INTERNAL | 只能被JUnit自身使用，可能会被删除，但不事先另行通知。 |
-| DEPRECATED | 不应再使用；可能会在下一个小版本中消失。 |
+| DEPRECATED | 不应该再使用；可能会在下一个小版本中消失。 |
 | EXPERIMENTAL | 用于我们正在收集反馈的新的试验性功能。谨慎使用这个元素；它可能会在未来被提升为`MAINTAINED`或`STABLE`，但也可能在没有事先通知的情况下被移除，即使在一个补丁中。 |
-| MAINTAINED | 用于*至少*在当前主要版本的下一个次要版本中不会以反向不兼容的方式更改的功能。如果计划删除，则会首先将其降为`DEPRECATED`。 |
+| MAINTAINED | 用于*至少* 在当前主要版本的下一个次要版本中不会以反向不兼容的方式更改的功能。如果计划删除，则会首先将其降为`DEPRECATED`。 |
 | STABLE | 用于在当前主版本（5. *）中不会以反向不兼容的方式更改的功能。 |
 
 如果`@API`注解出现在某个类型上，则认为它也适用于该类型的所有公共成员。一个成员可以声明一个稳定性更低的`status`值。

@@ -570,16 +570,16 @@ Option                                        Description
 你需要在类路径中添加以下的组件和它们的依赖。可以在 [依赖元数据](#21-依赖元数据) 中查看关于group ID, artifact ID 和版本的详细信息。
 
 ##### 显式依赖
-* `junit-4.12.jar` 在*test* 范围内：使用JUnit 4运行测试。
-* `junit-platform-runner` 在*test* 范围内：`JUnitPlatform`运行器的位置。
-* `junit-jupiter-api` 在*test* 范围内：编写测试的API，包括 `@Test` 等。
+* `junit-4.12.jar` 在*test* 作用域内：使用JUnit 4运行测试。
+* `junit-platform-runner` 在*test* 作用域内：`JUnitPlatform`运行器的位置。
+* `junit-jupiter-api` 在*test* 作用域内：编写测试的API，包括 `@Test` 等。
 * `junit-jupiter-engine` 在*test runtime* 范围内：JUnit Jupiter引擎API的实现。
 
 ##### 可传递的依赖
-* `junit-platform-launcher` 在*test* 范围内
-*  `junit-platform-engine` 在*test* 范围内
-*  `junit-platform-commons` 在*test* 范围内
-*  `opentest4j` 在*test* 范围内
+* `junit-platform-launcher` 在*test* 作用域内
+*  `junit-platform-engine` 在*test* 作用域内
+*  `junit-platform-commons` 在*test* 作用域内
+*  `opentest4j` 在*test* 作用域内
 
 #### 4.4.2. 展示名称与技术名称
 默认情况下，*显示名称* 会被使用在测试产出物上，但是当`JUnitPlatform`运行器使用Gradle或者Maven等构建工具来运行测试时，生成的测试报告通常需要包含测试产出物的*技术名称*（例如，使用完整类名），而不是像测试类的简单名称或包含特殊字符的自定义显示名称这种较短的显示名称。为了在测试报告中使用技术名称，在`@RunWith(JUnitPlatform.class)`注解旁声明 `@UseTechnicalNames`注解即可。
