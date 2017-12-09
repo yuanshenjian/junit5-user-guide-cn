@@ -29,7 +29,7 @@ JUnit 内部通用类库/实用工具，它们仅用于JUnit框架本身，*不�
 
 `junit-platform-engine`  	
 
-测试引擎的公共API。详情请参阅 [插入你自己的测试引擎](#713-插入你自己的测试引擎)
+测试引擎的公共API。详情请参阅 [插入你自己的测试引擎](#713-插入你自己的测试引擎)。
 
 
 `junit-platform-gradle-plugin`  	
