@@ -740,7 +740,7 @@ module foo.bar {
 	* 新的`ParameterContext`用来作为参数传递给`ParameterResolver`扩展的`supports()`和`resolve()`方法。
 	* 现在，`ParameterResolver`扩展支持基础类型的解析。
 * `ExtensionPointRegistry`和`ExtensionRegistrar`已经被移除，现在通过`@ExtendWith`注解完成声明式注册。
-* `AfterAllExtensionPoint`已经被重命名为`AfterAllCallback`。
+* `BeforeAllExtensionPoint`已经被重命名为`BeforeAllCallback`。
 * `AfterAllExtensionPoint`已经被重命名为`AfterAllCallback`。
 * `BeforeEachExtensionPoint`已经被重命名为`BeforeEachCallback`。
 * `BeforeAllExtensionPoint`已经被重命名为`BeforeAllCallback`。
