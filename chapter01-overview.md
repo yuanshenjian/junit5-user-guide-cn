@@ -1,7 +1,7 @@
 ## 1. 概述
 本文档的目标是为那些编写测试的程序员、扩展开发人员（extension authors）和引擎开发人员（engine authors）以及构建工具和IDE供应商提供综合全面的参考。
 
-本文档PDF格式 [下载](https://github.com/sjyuan-cc/sjyuan-cc.github.io/raw/master/assets/documents/junit5-user-guide-cn.pdf)。
+
 
 ### 1.1. JUnit 5 是什么?
 JUnit 5跟以前的JUnit版本不一样，它由几大不同的模块组成，这些模块分别来自三个不同的子项目。
