@@ -3,7 +3,7 @@
 bg: "junit5.png"
 layout: junit5
 title: "JUnit 5 用户指南"
-permalink: /junit5/5.0.2/user-guide-cn
+permalink: /junit5/5.0.2/user-guide-cn/
 summary: "中文版"
 version: 5.0.2
 last_updated_date: 2018-01-05
