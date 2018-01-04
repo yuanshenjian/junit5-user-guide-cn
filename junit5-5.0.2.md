@@ -53,7 +53,33 @@ last_updated_date: 2018-01-05
 
 ---
 
-{% include_relative 5.0.2/chapter10-release-notes.md %}
+## 10. 发布记录
+
+{% include_relative release-notes/release-notes-5.0.2.md %}
+
+{% include_relative release-notes/release-notes-5.0.1.md %}
+
+{% include_relative release-notes/release-notes-5.0.0.md %}
+
+{% include_relative release-notes/release-notes-5.0.0-RC3.md %}
+
+{% include_relative release-notes/release-notes-5.0.0-RC2.md %}
+
+{% include_relative release-notes/release-notes-5.0.0-RC1.md %}
+
+{% include_relative release-notes/release-notes-5.0.0-M6.md %}
+
+{% include_relative release-notes/release-notes-5.0.0-M5.md %}
+
+{% include_relative release-notes/release-notes-5.0.0-M4.md %}
+
+{% include_relative release-notes/release-notes-5.0.0-M3.md %}
+
+{% include_relative release-notes/release-notes-5.0.0-M2.md %}
+
+{% include_relative release-notes/release-notes-5.0.0-M1.md %}
+
+{% include_relative release-notes/release-notes-5.0.0-ALPHA.md %}
 
 
 
