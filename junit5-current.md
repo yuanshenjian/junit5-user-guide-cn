@@ -3,7 +3,7 @@
 bg: "junit5.png"
 layout: junit5
 title: "JUnit 5 用户指南"
-permalink: /junit5/user-guide-cn/
+permalink: /junit5/current/user-guide-cn/
 summary: "中文版"
 
 ---
