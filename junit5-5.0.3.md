@@ -3,10 +3,10 @@
 bg: "junit5.png"
 layout: junit5
 title: "JUnit 5 用户指南"
-permalink: /junit5/5.0.2/user-guide-cn/
+permalink: /junit5/5.0.3/user-guide-cn/
 summary: "中文版"
-version: 5.0.2
-last_updated_date: 2018-01-05
+version: 5.0.3
+last_updated_date: 2018-01-15
 
 ---
 
@@ -54,7 +54,6 @@ last_updated_date: 2018-01-05
 ---
 
 {% include_relative chapter10-release-notes-{{ page.version }}.md %}
-
 
 
 
