@@ -2,7 +2,9 @@
 
 该工程中包含了JUnit5 User Guide文档的中文翻译。
 
-原文链接：<http://junit.org/junit5/docs/current/user-guide/>
+中文文档链接：<http://sjyuan.cc/junit5/user-guide-cn/>
+
+英文文档链接：<http://junit.org/junit5/docs/current/user-guide/>
 
 
 ## 翻译说明
