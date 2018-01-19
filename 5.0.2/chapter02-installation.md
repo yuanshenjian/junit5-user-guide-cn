@@ -98,8 +98,7 @@ JUnit Vintage测试引擎实现，允许在新的JUnit Platform上运行低版�
 
 
 #### 2.1.4. 可选的依赖
-
-以上所有的包在它们已发布的Maven POM中都有一个可选的依赖，位于紧随其后的*@API Guardian* JAR包中。
+以上所有artifacts在它们已发布的Maven POM中对下面的*@API Guardian* JAR文件存在一个`可选`的依赖。
 
 * **Group ID**: org.apiguardian
 
@@ -110,7 +109,7 @@ JUnit Vintage测试引擎实现，允许在新的JUnit Platform上运行低版�
 
 ### 2.2. 依赖关系图
 
-![](http://junit.org/junit5/docs/current/user-guide/images/component-diagram.svg)
+![](http://junit.org/junit5/docs/5.0.2/user-guide/images/component-diagram.svg)
 
 
 ### 2.3 JUnit Jupiter示例工程

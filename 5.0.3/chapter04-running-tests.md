@@ -4,7 +4,7 @@
 
 #### 4.1.1. IntelliJ IDEA
 
-IntelliJ IDEA 从 2016.2 版本开始支持在JUnit Platform上运行测试。详情请参阅 [IntelliJ IDEA的相关博客](https://blog.jetbrains.com/idea/2016/08/using-junit-5-in-intellij-idea/)。
+IntelliJ IDEA 从 2016.2 版本开始支持在JUnit Platform上运行测试。详情请参阅 [IntelliJ IDEA的相关博客](https://blog.jetbrains.com/idea/2016/08/using-junit-5-in-intellij-idea/)。但是请注意，我们建议使用IDEA 2017.3或更新的版本，因为这些较新版本的IDEA会根据项目中使用的API版本自动下载这些JAR文件：`junit-platform-launcher`，`junit-jupiter-engine`和`junit-vintage-engine`。
 
 ###### *表格1. Junit5 版本对应的 IntelliJ IDEA*
 
@@ -15,15 +15,21 @@ IntelliJ IDEA 从 2016.2 版本开始支持在JUnit Platform上运行测试。�
 | 2017.1.2 | M4|
 | 2017.2.1 | M5|
 | 2017.2.3 | RC2|
+
+IntelliJ IDEA (prior to IDEA 2017.3) bundles a certain version of JUnit 5. Thus,
+if you want to use a newer version of JUnit Jupiter, execution of tests within the IDE
+might fail due to version conflicts. In such cases, please follow the instructions below
+to use a newer version of JUnit 5 than the one bundled with IntelliJ IDEA.
+
  
-> ⚠️ IntelliJ IDEA 与 JUnit5 的特定版本绑定，也就是说，如果你使用了Jupiter API更新的里程碑版本，执行测试时可能不起作用。这种情况一致持续到JUnit 5第一个GA版本发布才得到改善。在这之前，你可以在IntelliJ IDEA中按照下面所示的方法使用JUnit 5的新版本。
+> ⚠️ IntelliJ IDEA（早于IDEA 2017.3） 与 JUnit5 的特定版本绑定，也就是说，如果你想使用更新版本的Jupiter API，在IDE中执行测试可能会因为版本冲突而失败。在这种情况下，请按照下面的说明去使用一个比捆绑在IntelliJ IDEA中的版本更新的JUnit 5。
  
-要想使用JUnit 5的不同版本，你需要在classpath中手动添加`junit-platform-launcher`、`junit-jupiter-engine`和`junit-vintage-engine`的JAR文件。
+要想使用JUnit 5的不同版本（比如，5.0.3），你需要在类路径中引入相应版本的`junit-platform-launcher`、`junit-jupiter-engine`和`junit-vintage-engine`的JAR文件。
 
 ###### *添加Gradle依赖*
 
 ```java
-// Only needed to run tests in an IntelliJ IDEA that bundles an older version
+// Only needed to run tests in a version of IntelliJ IDEA that bundles an older version
 testRuntime("org.junit.platform:junit-platform-launcher:1.0.2")
 testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.2")
 testRuntime("org.junit.vintage:junit-vintage-engine:4.12.2")
@@ -32,7 +38,7 @@ testRuntime("org.junit.vintage:junit-vintage-engine:4.12.2")
 ###### *添加Maven依赖*
 
 ```xml
-!-- Only required to run tests in an IntelliJ IDEA that bundles an older version -->
+<!-- Only required to run tests in a version of IntelliJ IDEA that bundles an older version -->
 <dependency>
     <groupId>org.junit.platform</groupId>
     <artifactId>junit-platform-launcher</artifactId>
@@ -55,11 +61,14 @@ testRuntime("org.junit.vintage:junit-vintage-engine:4.12.2")
 
 
  
-#### 4.1.2. Eclipse 测试版支持
-Eclipse 4.7（*Oxygen*）的测试版支持JUnit Platform和Junit Jupiter。关于如何配置，请参阅 [Eclipse JDT UI/JUnit 5](https://wiki.eclipse.org/JDT_UI/JUnit_5) wiki页面。
+#### 4.1.2. Eclipse
+自从Eclipse Oxygen.1a（4.7.1a）版本发布开始，Eclipse IDE提供了对JUnit平台的支持。
+
+有关在Eclipse中使用JUnit 5的更多信息，请参阅官方 [Eclipse Project Oxygen.1a (4.7.1a) - New and Noteworthy](https://www.eclipse.org/eclipse/news/4.7.1a/#junit-5-support) 文档中的*Eclipse support
+for JUnit 5* 章节。
 
 #### 4.1.3. 其他 IDE
-在本文写作之时，并没有其他任何IDE可以像IntelliJ IDEA或Eclipse的测试版一样可以直接在JUnit Platform上运行Java测试。但是，Junit团队提供了另外两种折中的方法让JUnit 5可以在其他的IDE上使用。你可以尝试手动使用 [控制台启动器](#43-控制台启动器) 或者通过 [基于JUnit 4的Runner](#44-使用junit-4运行junit-platform) 来执行测试。
+在本文写作之时，并没有其他任何IDE可以像IntelliJ IDEA和Eclipse一样可以直接在JUnit Platform上运行Java测试。但是，Junit团队提供了另外两种折中的方法让JUnit 5可以在其他的IDE上使用。你可以尝试手动使用 [控制台启动器](#43-控制台启动器) 或者通过 [基于JUnit 4的Runner](#44-使用junit-4运行junit-platform) 来执行测试。
 
 
 ### 4.2. 构建工具支持
@@ -285,7 +294,7 @@ JUnit团队已经为Maven Surefire开发了一个非常基础的provider，它�
         ...
         <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>2.19</version>
+            <version>2.19.1</version>
             <dependencies>
                 <dependency>
                     <groupId>org.junit.platform</groupId>
@@ -311,7 +320,7 @@ JUnit团队已经为Maven Surefire开发了一个非常基础的provider，它�
         ...
         <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>2.19</version>
+            <version>2.19.1</version>
             <dependencies>
                 <dependency>
                     <groupId>org.junit.platform</groupId>
@@ -349,7 +358,7 @@ JUnit团队已经为Maven Surefire开发了一个非常基础的provider，它�
         ...
         <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>2.19</version>
+            <version>2.19.1</version>
             <dependencies>
                 <dependency>
                     <groupId>org.junit.platform</groupId>
@@ -379,6 +388,20 @@ JUnit团队已经为Maven Surefire开发了一个非常基础的provider，它�
 ...
 ```
 
+##### 运行单个测试类
+JUnit Plaform Surefire Provider支持Maven Surefire插件所支持的测试JVM系统属性。例如，你只想要运行`org.example.MyTest`测试类中的测试方法，你可以在命令行执行`mvn -Dtest = org.example.MyTest test`。有关更多详细信息，请参阅 [Maven Surefire Plugin](https://maven.apache.org/surefire/maven-surefire-plugin/examples/single-test.html) 的文档。
+
+##### 按测试类名过滤
+Maven Surefire插件将扫描全类名与以下模式匹配的测试类。
+
+- `**/Test*.java`
+
+- `**/*Test.java`
+
+- `**/*TestCase.java`
+
+但是请注意，你可以通过在`pom.xml`文件中配置显式`include`和`exclude`规则来覆盖其默认行为。有关详细信息，请参阅 [Inclusions and Exclusions of Tests](https://maven.apache.org/surefire/maven-surefire-plugin/examples/inclusion-exclusion.html) 的文档。
+
 ##### 按Tag过滤
 使用以下配置属性，你可以通过Tag来过滤测试。
 
@@ -392,7 +415,7 @@ JUnit团队已经为Maven Surefire开发了一个非常基础的provider，它�
         ...
         <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>2.19</version>
+            <version>2.19.1</version>
             <configuration>
                 <properties>
                     <includeTags>acceptance</includeTags>
@@ -420,7 +443,7 @@ JUnit团队已经为Maven Surefire开发了一个非常基础的provider，它�
         ...
         <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>2.19</version>
+            <version>2.19.1</version>
             <configuration>
                 <properties>
                     <configurationParameters>

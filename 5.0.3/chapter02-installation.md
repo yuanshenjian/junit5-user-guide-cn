@@ -97,20 +97,27 @@ JUnit Jupiter测试引擎的实现，仅仅在运行时需要。
 JUnit Vintage测试引擎实现，允许在新的JUnit Platform上运行低版本的JUnit测试，即那些以JUnit 3或JUnit 4风格编写的测试。
 
 
-#### 2.1.4. 可选的依赖
+#### 2.1.4. 依赖
+以上所有artifacts在它们已发布的Maven POM中都依赖了下面的*@API Guardian* JAR文件。
 
-以上所有的包在它们已发布的Maven POM中都有一个可选的依赖，位于紧随其后的*@API Guardian* JAR包中。
+* **Group ID**: `org.apiguardian`
 
-* **Group ID**: org.apiguardian
+* **Artifact ID**: `apiguardian-api`
 
-* **Artifact ID**: apiguardian-api
+* **Version**: `1.0.0`
 
-* **Version**: 1.0.0
+此外，上面大部分artifacts都对下面的*OpenTest4J* JAR文件有直接或传递的依赖关系。
+
+* **Group ID**: `org.opentest4j`
+
+* **Artifact ID**: `opentest4j`
+
+* **Version**: `1.0.0`
 
 
 ### 2.2. 依赖关系图
 
-![](http://junit.org/junit5/docs/current/user-guide/images/component-diagram.svg)
+![](http://junit.org/junit5/docs/5.0.3/user-guide/images/component-diagram.svg)
 
 
 ### 2.3 JUnit Jupiter示例工程
