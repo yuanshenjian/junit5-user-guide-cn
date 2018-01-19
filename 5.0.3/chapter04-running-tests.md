@@ -15,12 +15,6 @@ IntelliJ IDEA 从 2016.2 版本开始支持在JUnit Platform上运行测试。�
 | 2017.1.2 | M4|
 | 2017.2.1 | M5|
 | 2017.2.3 | RC2|
-
-IntelliJ IDEA (prior to IDEA 2017.3) bundles a certain version of JUnit 5. Thus,
-if you want to use a newer version of JUnit Jupiter, execution of tests within the IDE
-might fail due to version conflicts. In such cases, please follow the instructions below
-to use a newer version of JUnit 5 than the one bundled with IntelliJ IDEA.
-
  
 > ⚠️ IntelliJ IDEA（早于IDEA 2017.3） 与 JUnit5 的特定版本绑定，也就是说，如果你想使用更新版本的Jupiter API，在IDE中执行测试可能会因为版本冲突而失败。在这种情况下，请按照下面的说明去使用一个比捆绑在IntelliJ IDEA中的版本更新的JUnit 5。
  
