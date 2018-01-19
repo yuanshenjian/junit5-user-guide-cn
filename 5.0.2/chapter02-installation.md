@@ -9,7 +9,7 @@
 
 * **Group ID**: `org.junit.platform`
 
-* **Version**: `1.0.2`
+* **Version**: `{{ platform_version }}`
 
 * **Artifact IDs:**
 
@@ -60,7 +60,7 @@ JUnit 内部通用类库/实用工具，它们仅用于JUnit框架本身，*不�
 #### 2.1.2. JUnit Jupiter
 * **Group ID**: `org.junit.jupiter`
 
-* **Version**: `5.0.2`
+* **Version**: `{{ jupiter_version }}`
 
 * **Artifact IDs**:
 
@@ -88,7 +88,7 @@ JUnit Jupiter测试引擎的实现，仅仅在运行时需要。
 
 * **Group ID**: `org.junit.vintage`
 
-* **Version**: `4.12.2`
+* **Version**: `{{ vintage_version }}`
 
 * **Artifact ID**:
 
@@ -100,11 +100,11 @@ JUnit Vintage测试引擎实现，允许在新的JUnit Platform上运行低版�
 #### 2.1.4. 可选的依赖
 以上所有artifacts在它们已发布的Maven POM中对下面的*@API Guardian* JAR文件存在一个`可选`的依赖。
 
-* **Group ID**: org.apiguardian
+* **Group ID**: `org.apiguardian`
 
-* **Artifact ID**: apiguardian-api
+* **Artifact ID**: `apiguardian-api`
 
-* **Version**: 1.0.0
+* **Version**: `{{ apiguardian_version }}`
 
 
 ### 2.2. 依赖关系图

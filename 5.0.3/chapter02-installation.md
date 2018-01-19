@@ -9,7 +9,7 @@
 
 * **Group ID**: `org.junit.platform`
 
-* **Version**: `1.0.2`
+* **Version**: `{{ platform_version }}`
 
 * **Artifact IDs:**
 
@@ -60,7 +60,7 @@ JUnit 内部通用类库/实用工具，它们仅用于JUnit框架本身，*不�
 #### 2.1.2. JUnit Jupiter
 * **Group ID**: `org.junit.jupiter`
 
-* **Version**: `5.0.2`
+* **Version**: `{{ jupiter_version }}`
 
 * **Artifact IDs**:
 
@@ -88,7 +88,7 @@ JUnit Jupiter测试引擎的实现，仅仅在运行时需要。
 
 * **Group ID**: `org.junit.vintage`
 
-* **Version**: `4.12.2`
+* **Version**: `{{ vintage_version }}`
 
 * **Artifact ID**:
 
@@ -104,7 +104,7 @@ JUnit Vintage测试引擎实现，允许在新的JUnit Platform上运行低版�
 
 * **Artifact ID**: `apiguardian-api`
 
-* **Version**: `1.0.0`
+* **Version**: `{{ apiguardian_version }}`
 
 此外，上面大部分artifacts都对下面的*OpenTest4J* JAR文件有直接或传递的依赖关系。
 
@@ -112,7 +112,7 @@ JUnit Vintage测试引擎实现，允许在新的JUnit Platform上运行低版�
 
 * **Artifact ID**: `opentest4j`
 
-* **Version**: `1.0.0`
+* **Version**: `{{ ota4j_version }}`
 
 
 ### 2.2. 依赖关系图
@@ -123,6 +123,6 @@ JUnit Vintage测试引擎实现，允许在新的JUnit Platform上运行低版�
 ### 2.3 JUnit Jupiter示例工程
 [junit5-samples](https://github.com/junit-team/junit5-samples) 代码库中包含了一系列基于JUnit Jupiter和JUnit Vintage的示例工程。你可以在下面的项目中找到相应的`build.gradle`和`pom.xml`文件：
 
-- Gradle工程：[junit5-gradle-consumer](https://github.com/junit-team/junit5-samples/tree/r5.0.2/junit5-gradle-consumer).
+- Gradle工程：[junit5-gradle-consumer](https://github.com/junit-team/junit5-samples/tree/r5.0.3/junit5-gradle-consumer).
 
-- Maven工程：[junit5-maven-consumer](https://github.com/junit-team/junit5-samples/tree/r5.0.2/junit5-maven-consumer).
+- Maven工程：[junit5-maven-consumer](https://github.com/junit-team/junit5-samples/tree/r5.0.3/junit5-maven-consumer).

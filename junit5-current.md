@@ -17,6 +17,8 @@ active: junit5
 
 ---
 
+{% include_relative {{site.junit.current_version}}/chapter00-constants.md %}
+
 {% include_relative {{site.junit.current_version}}/chapter01-overview.md %}
 
 ---
