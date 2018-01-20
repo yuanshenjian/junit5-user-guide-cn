@@ -9,7 +9,7 @@
 
 #### 整体改进
 
-- 在5.0.1中，所有工件被更改为在其发布的 Maven POMs中的*@API Guardian* JAR中有一个可选的，而不是必须的依赖项。然而，虽然Java编译器应该忽略缺少的注解类型，但很多用户都报告说，编译测试时，如果在类路径中没有*@API Guardian* JAR，会导致`javac`发出的警告，如下所示：
+- 在5.0.1中，所有artifacts被更改为在其发布的 Maven POMs中的*@API Guardian* JAR中有一个可选的，而不是必须的依赖项。然而，虽然Java编译器应该忽略缺少的注解类型，但很多用户都报告说，编译测试时，如果在类路径中没有*@API Guardian* JAR，会导致`javac`发出的警告，如下所示：
 
 ```
 warning: unknown enum constant Status.STABLE 
