@@ -24,9 +24,9 @@ IntelliJ IDEA 从 2016.2 版本开始支持在JUnit Platform上运行测试。�
 
 ```java
 // Only needed to run tests in an IntelliJ IDEA that bundles an older version
-testRuntime("org.junit.platform:junit-platform-launcher:1.0.2")
-testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.2")
-testRuntime("org.junit.vintage:junit-vintage-engine:4.12.2")
+testRuntime("org.junit.platform:junit-platform-launcher:{{ platform_version }}")
+testRuntime("org.junit.jupiter:junit-jupiter-engine:{{ jupiter_version }}")
+testRuntime("org.junit.vintage:junit-vintage-engine:{{ vintage_version }}")
 ```
 
 ###### *添加Maven依赖*
@@ -36,19 +36,19 @@ testRuntime("org.junit.vintage:junit-vintage-engine:4.12.2")
 <dependency>
     <groupId>org.junit.platform</groupId>
     <artifactId>junit-platform-launcher</artifactId>
-    <version>1.0.2</version>
+    <version>{{ platform_version }}</version>
     <scope>test</scope>
 </dependency>
 <dependency>
     <groupId>org.junit.jupiter</groupId>
     <artifactId>junit-jupiter-engine</artifactId>
-    <version>5.0.2</version>
+    <version>{{ jupiter_version }}</version>
     <scope>test</scope>
 </dependency>
 <dependency>
     <groupId>org.junit.vintage</groupId>
     <artifactId>junit-vintage-engine</artifactId>
-    <version>4.12.2</version>
+    <version>{{ vintage_version }}</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -92,7 +92,7 @@ apply plugin: 'org.junit.platform.gradle.plugin'
 
 ```groovy
 junitPlatform {
-    platformVersion '1.0.2' // optional, defaults to plugin version
+    platformVersion '{{ platform_version }}' // optional, defaults to plugin version
     logManager 'org.apache.logging.log4j.jul.LogManager'
     reportsDir file('build/test-results/junit-platform') // this is the default
     // enableStandardTestTask true
@@ -193,8 +193,8 @@ junitPlatform {
 
 ```groovy
 dependencies {
-    testCompile("org.junit.jupiter:junit-jupiter-api:5.0.2")
-    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.2")
+    testCompile("org.junit.jupiter:junit-jupiter-api:{{ jupiter_version }}")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:{{ jupiter_version }}")
 }
 ```
 
@@ -202,8 +202,8 @@ dependencies {
 
 ```groovy
 dependencies {
-    testCompile("junit:junit:4.12")
-    testRuntime("org.junit.vintage:junit-vintage-engine:4.12.2")
+    testCompile("junit:junit:{{ junit4_version }}")
+    testRuntime("org.junit.vintage:junit-vintage-engine:{{ vintage_version }}")
 }
 ```
 
@@ -290,7 +290,7 @@ JUnit团队已经为Maven Surefire开发了一个非常基础的provider，它�
                 <dependency>
                     <groupId>org.junit.platform</groupId>
                     <artifactId>junit-platform-surefire-provider</artifactId>
-                    <version>1.0.2</version>
+                    <version>{{ platform_version }}</version>
                 </dependency>
             </dependencies>
         </plugin>
@@ -316,12 +316,12 @@ JUnit团队已经为Maven Surefire开发了一个非常基础的provider，它�
                 <dependency>
                     <groupId>org.junit.platform</groupId>
                     <artifactId>junit-platform-surefire-provider</artifactId>
-                    <version>1.0.2</version>
+                    <version>{{ platform_version }}</version>
                 </dependency>
                 <dependency>
                     <groupId>org.junit.jupiter</groupId>
                     <artifactId>junit-jupiter-engine</artifactId>
-                    <version>5.0.2</version>
+                    <version>{{ jupiter_version }}</version>
                 </dependency>
             </dependencies>
         </plugin>
@@ -333,7 +333,7 @@ JUnit团队已经为Maven Surefire开发了一个非常基础的provider，它�
     <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-api</artifactId>
-        <version>5.0.2</version>
+        <version>{{ jupiter_version }}</version>
         <scope>test</scope>
     </dependency>
 </dependencies>
@@ -354,13 +354,13 @@ JUnit团队已经为Maven Surefire开发了一个非常基础的provider，它�
                 <dependency>
                     <groupId>org.junit.platform</groupId>
                     <artifactId>junit-platform-surefire-provider</artifactId>
-                    <version>1.0.2</version>
+                    <version>{{ platform_version }}</version>
                 </dependency>
                 ...
                 <dependency>
                     <groupId>org.junit.vintage</groupId>
                     <artifactId>junit-vintage-engine</artifactId>
-                    <version>4.12.2</version>
+                    <version>{{ vintage_version }}</version>
                 </dependency>
             </dependencies>
         </plugin>
@@ -372,7 +372,7 @@ JUnit团队已经为Maven Surefire开发了一个非常基础的provider，它�
     <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>4.12</version>
+        <version>{{ junit4_version }}</version>
         <scope>test</scope>
     </dependency>
 </dependencies>
@@ -570,7 +570,7 @@ Option                                        Description
 你需要在类路径中添加以下的组件和它们的依赖。可以在 [依赖元数据](#21-依赖元数据) 中查看关于group ID, artifact ID 和版本的详细信息。
 
 ##### 显式依赖
-* `junit-4.12.jar` 在*test* 作用域内：使用JUnit 4运行测试。
+* `junit-{{ junit4_version }}.jar` 在*test* 作用域内：使用JUnit 4运行测试。
 * `junit-platform-runner` 在*test* 作用域内：`JUnitPlatform`运行器的位置。
 * `junit-jupiter-api` 在*test* 作用域内：编写测试的API，包括 `@Test` 等。
 * `junit-jupiter-engine` 在*test runtime* 范围内：JUnit Jupiter引擎API的实现。

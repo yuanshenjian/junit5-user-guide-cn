@@ -33,9 +33,9 @@ JUnit Jupiter支持使用下面表格中的注解来配置测试和扩展框架�
 | @DisplayName  | 为测试类或测试方法声明一个自定义的显示名称。该注解不能被*继承*。 |
 | @BeforeEach   | 表示使用了该注解的方法应该在当前类中**每一个**使用了`@Test`、`@RepeatedTest`、`@ParameterizedTest`或者`@TestFactory`注解的方法*之前* 执行；类似于JUnit 4的 `@Before`。这样的方法会被*继承*，除非它们被*覆盖*。|
 | @AfterEach    | 表示使用了该注解的方法应该在当前类中**每一个**使用了`@Test`、`@RepeatedTest`、`@ParameterizedTest`或者`@TestFactory`注解的方法*之后* 执行；类似于JUnit 4的 `@After`。这样的方法会被*继承*，除非它们被*覆盖*。 |
-| @BeforeAll    | 表示使用了该注解的方法应该在当前类中**所有**使用了`@Test`、`@RepeatedTest`、`@ParameterizedTest`或者`@TestFactory`注解的方法*之前* 执行；类似于JUnit 4的 `@BeforeClass`。这样的方法会被*继承*（除非它们被*隐藏* 或*覆盖*），并且它必须是 `static`方法（除非"per-class" [测试实例生命周期](#38-测试实例生命周期) 被使用）。|
-| @AfterAll     | 表示使用了该注解的方法应该在当前类中所有使用了`@Test`、`@RepeatedTest`、`@ParameterizedTest`或者`@TestFactory`注解的方法之后执行；类似于JUnit 4的 `@AfterClass`。这样的方法会被*继承*（除非它们被*隐藏* 或*覆盖*），并且它必须是 `static`方法（除非"per-class" [测试实例生命周期](#38-测试实例生命周期) 被使用）。|
-| @Nested       | 表示使用了该注解的类是一个内嵌、非静态的测试类。`@BeforeAll`和`@AfterAll`方法不能直接在`@Nested`测试类中使用，（除非"per-class" [测试实例生命周期](#38-测试实例生命周期) 被使用）。该注解不能被*继承*。|
+| @BeforeAll    | 表示使用了该注解的方法应该在当前类中**所有**使用了`@Test`、`@RepeatedTest`、`@ParameterizedTest`或者`@TestFactory`注解的方法*之前* 执行；类似于JUnit 4的 `@BeforeClass`。这样的方法会被*继承*（除非它们被*隐藏* 或*覆盖*），并且它必须是 `static`方法（除非`"per-class"` [测试实例生命周期](#38-测试实例生命周期) 被使用）。|
+| @AfterAll     | 表示使用了该注解的方法应该在当前类中所有使用了`@Test`、`@RepeatedTest`、`@ParameterizedTest`或者`@TestFactory`注解的方法之后执行；类似于JUnit 4的 `@AfterClass`。这样的方法会被*继承*（除非它们被*隐藏* 或*覆盖*），并且它必须是 `static`方法（除非`"per-class"` [测试实例生命周期](#38-测试实例生命周期) 被使用）。|
+| @Nested       | 表示使用了该注解的类是一个内嵌、非静态的测试类。`@BeforeAll`和`@AfterAll`方法不能直接在`@Nested`测试类中使用，（除非`"per-class"` [测试实例生命周期](#38-测试实例生命周期) 被使用）。该注解不能被*继承*。|
 | @Tag          | 用于声明过滤测试的*tags*，该注解可以用在方法或类上；类似于TesgNG的测试组或JUnit 4的分类。该注解能被*继承*，但仅限于类级别，而非方法级别。
 | @Disable      | 用于*禁用*一个测试类或测试方法；类似于JUnit 4的`@Ignore`。该注解不能被继承。 |
 | @ExtendWith   | 用于注册自定义 [扩展](#5-扩展模型)。该注解不能被*继承*。 |
@@ -401,13 +401,13 @@ class TaggingDemo {
 ```
 
 ### 3.8. 测试实例生命周期
-为了隔离地执行单个测试方法，以及避免由于不稳定的测试实例状态引发非预期的副作用，JUnit会在执行每个测试方法执行之前创建一个新的实例（参考下面的注释说明如何定义一个*测试* 方法）。这个"per-method"测试实例生命周期是JUnit Jupiter的默认行为，这点类似于JUnit以前的所有版本。
+为了隔离地执行单个测试方法，以及避免由于不稳定的测试实例状态引发非预期的副作用，JUnit会在执行每个测试方法执行之前创建一个新的实例（参考下面的注释说明如何定义一个*测试* 方法）。这个`"per-method"`测试实例生命周期是JUnit Jupiter的默认行为，这点类似于JUnit以前的所有版本。
 
 如果你希望JUnit Jupiter在同一个实例上执行所有的测试方法，在你的测试类上加上注解`@TestInstance(Lifecycle.PER_CLASS)`即可。启用了该模式后，每一个测试类只会创建一次实例。因此，如果你的测试方法依赖实例变量存储的状态，你可能需要在`@BeforeEach`或`@AfterEach`方法中重置状态。
 
-"per-class"模式相比于默认的"per-method"模式有一些额外的好处。具体来说，使用了"per-class"模式之后，你就可以在非静态方法和接口的`default`方法上声明`@BeforeAll`和 `@AfterAll`。因此，"per-class"模式使得在`@Nested`测试类中使用`@BeforeAll`和`@AfterAll`注解成为了可能。
+`"per-class"`模式相比于默认的`"per-method"`模式有一些额外的好处。具体来说，使用了`"per-class"`模式之后，你就可以在非静态方法和接口的`default`方法上声明`@BeforeAll`和 `@AfterAll`。因此，`"per-class"`模式使得在`@Nested`测试类中使用`@BeforeAll`和`@AfterAll`注解成为了可能。
 
-如果你使用Kotlin编程语言来编写测试，你会发现通过将测试实例的生命周期模式切换到"per-class"更容易实现`@BeforeAll`和`@AfterAll`方法。
+如果你使用Kotlin编程语言来编写测试，你会发现通过将测试实例的生命周期模式切换到`"per-class"`更容易实现`@BeforeAll`和`@AfterAll`方法。
 
 >📒 在测试实例生命周期的上下文中，任何使用了`@Test`、`@RepeatedTest`、`@ParameterizedTest`、`@TestFactory`或者`@TestTemplate`注解的方法都是*测试* 方法。
 
@@ -425,7 +425,7 @@ class TaggingDemo {
 
 `junit.jupiter.testinstance.lifecycle.default = per_class`
 
-> ⚠️  如果没有做到应用一致的配置，更改*默认* 的测试实例生命周期模式可能会导致不可预测的结果和脆弱的构建。例如，如果构建将"per-class"语义配置为默认值，但是IDE中的测试却使用"per-method"的语义来执行，这样会增加在构建服务器上调试错误的难度。因此，建议更改JUnit Platform配置文件中的默认值，而不是通过JVM系统属性。
+> ⚠️  如果没有做到应用一致的配置，更改*默认* 的测试实例生命周期模式可能会导致不可预测的结果和脆弱的构建。例如，如果构建将"per-class"语义配置为默认值，但是IDE中的测试却使用`"per-method"`的语义来执行，这样会增加在构建服务器上调试错误的难度。因此，建议更改JUnit Platform配置文件中的默认值，而不是通过JVM系统属性。
 
 
 ### 3.9. 嵌套测试
@@ -1322,7 +1322,7 @@ JUnit Juppiter的 [注解](#31-注解) 章节描述的标准`@Test`注解跟JUni
 
 >译者注：同一个`@TestFactory`所生成的n个动态测试，`@BeforeEach`和`@AfterEach`只会在这n个动态测试开始前和结束后各执行一次，不会为每一个单独的动态测试都执行。
 
-从JUnit Jupiter 5.0.2开始，动态测试必须始终由工厂方法创建；不过，在后续的发行版中，这可以通过注册工具来提供。
+在JUnit Jupiter {{ jupiter_version }}中，动态测试必须始终由工厂方法创建；不过，在后续的发行版中，这可能会得到注册工具的补充。
 
 > ⚠️ 动态测试目前是一个试验性功能。详细信息请参阅 [试验性API](#82-试验性api) 中的表格。
 

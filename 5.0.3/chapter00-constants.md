@@ -3,3 +3,4 @@
 {% assign vintage_version = '4.12.3' %}
 {% assign apiguardian_version = '1.0.0' %}
 {% assign ota4j_version = '1.0.0' %}
+{% assign junit4_version = '4.12' %}
