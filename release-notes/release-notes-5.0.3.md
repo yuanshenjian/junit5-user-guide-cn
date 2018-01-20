@@ -47,7 +47,7 @@
 
 - `@Tag`和`@Tags`注解现在在测试类层次结构中被继承。
 
-- 由于JUnit 平台的`AnnotationUtils`类的变化，当搜索类层次结构中的给定元注解时，使用给定的`@Inherited`注解进行元注解的非继承*组合注解* 现在会被认为是隐式的继承。
+- 由于JUnit Platform的`AnnotationUtils`类的变化，当搜索类层次结构中的给定元注解时，使用给定的`@Inherited`注解进行元注解的非继承*组合注解* 现在会被认为是隐式的继承。
 	- 例如，*组合注解* 即便未被声明为`@Inherited`，现在也会在父类中声明的自定义*组合注解* 上发现诸如`@Testinstance`等`@Inherited`注解。
 
 
