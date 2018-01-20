@@ -6,6 +6,10 @@
 
 英文文档链接：<http://junit.org/junit5/docs/current/user-guide/>
 
+## 贡献者
+[袁慎建](http://sjyuan.cc/about/) • [王亚鑫](http://www.jianshu.com/u/048f932015bc) • [何僵乐](http://www.jianshu.com/u/ab3e5acc3f2c) • [赵琪琪](https://www.jianshu.com/u/2db65e841261)
+
+有关贡献者列表，请参阅 [贡献者列表](https://github.com/sjyuan-cc/junit5-user-guide-cn/graphs/contributors)。
 
 ## 翻译说明
 
@@ -21,20 +25,12 @@
 - ### 1.1. JUnit 5 是什么?
 
 
-### 中英文保留
-可以只出现译文，也可以中英段落间隔开，一段英文，紧接着是一段中文翻译。建议翻译中存在意思拿不准的就保留英文方便快速校对，例如：
-
-The **JUnit Platform** serves as a foundation for [launching testing frameworks]() on the JVM. It also defines the [TestEngine](http://junit.org/junit5/docs/current/api/org/junit/platform/engine/TestEngine.html) API for developing a testing framework that runs on the platform. Furthermore, the platform provides a [Console Launcher]() to launch the platform from the command line and build plugins for[Gradle]() and [Maven]() as well as a [JUnit 4 based Runner]() for running any `TestEngine` on the platform.  
-
-**JUnit Platform**是在JVM上 [启动测试框架]() 的基础平台。它还定义了[TestEngine](http://junit.org/junit5/docs/current/api/org/junit/platform/engine/TestEngine.html) API，该API可用于开发运行在平台上的测试框架。此外，平台还提供了一个从命令行或者 [Gradle]() 和 [Maven]() 插件来启动平台的 [控制台启动器]() ，它就好比一个 [基于JUnit 4的Runner]() 在平台上运行任何`TestEngine`。
-
-
 ### 超链接
 超链接两端各保留一个空格。段落中存在超链接，如果链接到外部，翻译段落中也同样链接到外部。如果是文档内部链接，预留出超链接格式，但不填写内容。例如：
 
 ```
 - [TestEngine](http://junit.org/junit5/docs/current/api/org/junit/platform/engine/TestEngine.html)
-- [基于JUnit的Runner]()
+- [基于JUnit的Runner](#)
 ```
 
 
@@ -50,18 +46,17 @@ The **JUnit Platform** serves as a foundation for [launching testing frameworks]
 - 提交Git commit格式如下：
 
 ```
-$ git commit -m "[chapter01] - Translate 1.1"
-$ git commit -m "[chapter03] - Translate 3.11"
-$ git commit -m "[chapter03] - Complete chapter03"
-
-$ git commit -m "[chapter03] - Review chapter03"
+$ git commit -m "Translate 1.1"
+$ git commit -m "Complete chapter03"
+$ git commit -m "Review chapter03"
+$ git commit -m "Polish release note 5.0.3"
 ```
 
-
-## 翻译计划
-- 2017.10.01 之前完成初稿翻译。
-- 2017.12.05 之前完成交叉Review。
-- 2018.01.01 发布v1.0。
+## 发布计划
+- 2017.10.01 完成初稿翻译
+- 2017.12.05 完成Review
+- 2018.01.05 发布v5.0.2
+- 2018.01.20 发布v5.0.3
 
 
 
