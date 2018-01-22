@@ -26,11 +26,11 @@
 
 - 当失败测试的异常消息包含XML CDATA结束标记`]]>`时，由`ConsoleLauncher`和Gradle插件生成的XML报告不再无效。
 
-- `ConsoleLauncher`，Gradle插件，和Maven Surefire provider现在尝试在XML报告中的`<testcase/>`元素的`classname`属性中写入有效的类名称。此外，动态测试和测试模板调用的`name`属性（如重复测试和参数化测试）现在后缀为调用的索引，因此它们可以通过报告工具区分。
+- `ConsoleLauncher`、Gradle插件和Maven Surefire provider现在尝试在XML报告中的`<testcase/>`元素的`classname`属性中写入有效的类名称。此外，动态测试和测试模板调用的`name`属性（如重复测试和参数化测试）现在后缀为调用的索引，因此它们可以通过报告工具区分。
 
 - 当把`<testcase/>`元素的`name`属性写入XML报告时， Maven Surefire provider现在包含方法参数类型。但是，由于Maven Surefire的限制，它们被写为`methodName(type)`，而不是`methodName(type)`。
 
-- 当搜索类层次结构中的给定元注解时，使用给定的`@Inherited`注解进行元注解的非继承*组合注解* 现在会被认为是隐式的继承。
+- 当搜索类层次结构中的给定元注解时，使用给定的`@Inherited`注解进行元注解的非继承*组合注解* 现在会被认为是隐式继承的。
 
 ###### 新特性与改进
 
@@ -47,7 +47,7 @@
 
 - `@Tag`和`@Tags`注解现在在测试类层次结构中被继承。
 
-- 由于JUnit Platform的`AnnotationUtils`类的变化，当搜索类层次结构中的给定元注解时，使用给定的`@Inherited`注解进行元注解的非继承*组合注解* 现在会被认为是隐式的继承。
+- 由于JUnit Platform的`AnnotationUtils`类的变化，当搜索类层次结构中的给定元注解时，使用给定的`@Inherited`注解进行元注解的非继承*组合注解* 现在会被认为是隐式继承的。
 	- 例如，*组合注解* 即便未被声明为`@Inherited`，现在也会在父类中声明的自定义*组合注解* 上发现诸如`@Testinstance`等`@Inherited`注解。
 
 
