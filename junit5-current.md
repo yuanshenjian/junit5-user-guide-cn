@@ -55,9 +55,9 @@ active: junit5
 
 ---
 
-{% include_relative chapter10-release-notes-{{ site.junit.current_version }}.md %}
-
-
+{% if page.version != '5.0.2' and page.version != '5.0.3'  %}
+  {% include_relative {{ site.junit.current_version }}/chapter10-release-notes.md %}
+{% endif %}
 
 
 
