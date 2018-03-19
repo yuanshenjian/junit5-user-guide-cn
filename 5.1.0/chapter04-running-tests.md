@@ -6,24 +6,17 @@
 
 IntelliJ IDEA 从 2016.2 版本开始支持在JUnit Platform上运行测试。详情请参阅 [IntelliJ IDEA的相关博客](https://blog.jetbrains.com/idea/2016/08/using-junit-5-in-intellij-idea/)。但是请注意，我们建议使用IDEA 2017.3或更新的版本，因为这些较新版本的IDEA会根据项目中使用的API版本自动下载这些JAR文件：`junit-platform-launcher`，`junit-jupiter-engine`和`junit-vintage-engine`。
 
-###### *表格1. Junit5 版本对应的 IntelliJ IDEA*
-
-| **IntelliJ IDEA 版本** | **捆绑的 JUnit 5 版本** |
-|:--------------|:------------|
-| 2016.2 | M2 |
-| 2016.3.1 | M3|
-| 2017.1.2 | M4|
-| 2017.2.1 | M5|
-| 2017.2.3 | RC2|
- 
-> ⚠️ IntelliJ IDEA（早于IDEA 2017.3） 与 JUnit5 的特定版本绑定，也就是说，如果你想使用更新版本的Jupiter API，在IDE中执行测试可能会因为版本冲突而失败。在这种情况下，请按照下面的说明去使用一个比捆绑在IntelliJ IDEA中的版本更新的JUnit 5。
+> ⚠️ IntelliJ IDEA版本在IDEA 2017.3之前捆绑了特定版本的 JUnit 5。
+因此，如果你想使用更新版本的JUnit Jupiter，那么执行测试
+由于版本冲突，IDE可能会失败。在这种情况下，请按照说明进行操作
+下面使用比IntelliJ IDEA捆绑的更新版本的JUnit 5。
  
 要想使用JUnit 5的不同版本（比如，{{ jupiter_version }}），你需要在类路径中引入相应版本的`junit-platform-launcher`、`junit-jupiter-engine`和`junit-vintage-engine` JAR文件。
 
 ###### *添加Gradle依赖*
 
 ```java
-// Only needed to run tests in a version of IntelliJ IDEA that bundles an older version
+// Only needed to run tests in a version of IntelliJ IDEA that bundles older versions
 testRuntime("org.junit.platform:junit-platform-launcher:{{ platform_version }}")
 testRuntime("org.junit.jupiter:junit-jupiter-engine:{{ jupiter_version }}")
 testRuntime("org.junit.vintage:junit-vintage-engine:{{ vintage_version }}")
@@ -32,7 +25,7 @@ testRuntime("org.junit.vintage:junit-vintage-engine:{{ vintage_version }}")
 ###### *添加Maven依赖*
 
 ```xml
-<!-- Only required to run tests in a version of IntelliJ IDEA that bundles an older version -->
+<!-- Only needed to run tests in a version of IntelliJ IDEA that bundles older versions -->
 <dependency>
     <groupId>org.junit.platform</groupId>
     <artifactId>junit-platform-launcher</artifactId>
@@ -96,15 +89,13 @@ apply plugin: 'org.junit.platform.gradle.plugin'
 ```groovy
 junitPlatform {
     platformVersion '{{ platform_version }}' // optional, defaults to plugin version
-    logManager 'org.apache.logging.log4j.jul.LogManager'
     reportsDir file('build/test-results/junit-platform') // this is the default
     // enableStandardTestTask true
     // selectors (optional)
     // filters (optional)
+    // logManager (optional)
 }
 ```
-
-设置`logManager`会让JUnit Gradle插件将`java.util.logging.manager`系统属性设置为当前所提供的`java.util.logging.LogManager`实现类的*全类名*。上面的示例演示了如何将log4j配置为`LogManager` 。
 
 JUnit Gradle插件在默认情况下会禁用标准的Gradle `test`任务，但可以通过`enableStandardTestTask`标志来启用。
 
@@ -155,7 +146,7 @@ junitPlatform {
             // exclude 'junit-vintage'
         }
         tags {
-            include 'fast', 'smoke'
+            include 'fast', 'smoke & feature-a'
             // exclude 'slow', 'ci'
         }
         packages {
@@ -209,6 +200,19 @@ dependencies {
     testRuntime("org.junit.vintage:junit-vintage-engine:{{ vintage_version }}")
 }
 ```
+
+##### 配置日志（可选）
+JUnit使用`java.util.logging`包（a.k.a *JUL*）中的Java Logging API发出警告和调试信息。请参阅 [LogManager](https://docs.oracle.com/javase/8/docs/api/java/util/logging/LogManager.html) 的官方文档以获取配置选项。
+
+或者，可以将日志消息重定向到其他日志框架，例如 [Log4j](https://logging.apache.org/log4j/2.x/) 或 [Logback](https://logback.qos.ch/)。要使用提供 [LogManager](https://docs.oracle.com/javase/8/docs/api/java/util/logging/LogManager.html) 自定义实现的日志框架，请配置JUnit Gradle插件的`logManager`扩展属性。这会将`java.util.logging.manager`系统属性设置为要使用的 [LogManager](https://docs.oracle.com/javase/8/docs/api/java/util/logging/LogManager.html) 实现提供的*全限定类名称*。下面的示例演示了如何配置Log4j 2.x（有关详细信息，请参阅 [Log4j JDK Logging Adapter](https://logging.apache.org/log4j/2.x/log4j-jul/index.html)）。
+
+```groovy
+junitPlatform {
+    logManager 'org.apache.logging.log4j.jul.LogManager'
+}
+```
+
+其他日志框架提供了不同的方式来重定向使用`java.util.logging`记录的消息。例如，对于 [Logback](https://logback.qos.ch/)，您可以通过向运行时类路径添加附加依赖项来使用 [JUL to SLF4J Bridge](https://www.slf4j.org/legacy.html#jul-to-slf4j)
 
 ##### 使用JUnit Gradle插件
 一旦应用并配置了JUnit Gradle插件，你就可以使用新的`junitPlatformTest`任务（在可用的Gralde task中会多出一个名为`junitPlatformTest`的Task）。
@@ -399,8 +403,8 @@ Maven Surefire插件将扫描全类名与以下模式匹配的测试类。
 ##### 按Tag过滤
 使用以下配置属性，你可以通过Tag来过滤测试。
 
-* 要包含一个 tag，可以使用`groups`或者`includeTags`
-* 要排除一个 tag，可以使用`excludedGroups`或者`excludeTags`
+* 要包含一个 *tags* 或者 *tag expressions*，可以使用`groups`或者`includeTags`
+* 要排除一个 *tags* 或者 *tag expressions*，可以使用`excludedGroups`或者`excludeTags`
 
 ```xml
 ...
@@ -412,7 +416,7 @@ Maven Surefire插件将扫描全类名与以下模式匹配的测试类。
             <version>2.19.1</version>
             <configuration>
                 <properties>
-                    <includeTags>acceptance</includeTags>
+                    <includeTags>acceptance | !feature-a</includeTags>
                     <excludeTags>integration, regression</excludeTags>
                 </properties>
             </configuration>
@@ -663,3 +667,25 @@ public class JUnit4SuiteDemo {
 3. JUnit Platform配置文件：该文件命名为`junit-platform.properties`，位于类路径根目录下，并遵循Java `Properties`文件的语法。
 
 >📒 配置参数会按照上面定义的顺序查找。所以，直接提供给`Launcher`的配置参数优先于通过系统属性和配置文件提供的配置参数。同样，通过系统属性提供的配置参数优先于通过配置文件提供的参数。
+
+### 4.6. 标记表达式
+
+标记表达式是运算符`！`，`＆`和`|`的布尔表达式。另外，`（`和`）`可用于调整运算符优先级。
+
+*Table 1. Operators (in descending order of precedence*
+
+| **Operator** | **Meaning** | **Associativity** |
+|:-------------|:------------|:------------|
+| `!` | not | right |
+| `&` | and | left |
+| `|` | or | left |
+
+如果您在多个维度上标记测试，tag expressions 可帮助您选择要执行的测试。通过测试类型（例如，*micro*, *integration*, *end-to-end*）和特征（例如，**foo**，**bar**，**baz**）标记以下表达式可能很有用。
+
+| **Tag Expression** | **Selection** |
+|:-------------|:------------|
+| `foo` | `all tests for foor` |
+| `bar | baz` | `all tests for bar plus all tests for baz` |
+| `bar & baz` | `all tests foro the interaction between bar and baz` |
+| `foo & !end-to-end` | `all tests for foo, but not the end-to-end tests` |
+| `(micro | integration) & (foo | baz)` | `all micro or integration tests for foo or baz` |

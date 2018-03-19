@@ -338,7 +338,9 @@ class AssumptionsDemo {
 ```
 
 ### 3.6. 禁用测试
-下面是一个被禁用的测试用例。
+可以通过 [@Disable](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/Disabled.html) 注解，通过 [条件测试执行](#37-条件执行测试)中讨论的注释之一或通过自定义  [ExecutionCondition](#53-条件测试执行) *禁用* 整个测试类或单个测试方法。
+
+下面是一个 `@Disable` 的测试用例。
 
 ```java
 import org.junit.jupiter.api.Disabled;
@@ -352,7 +354,7 @@ class DisabledClassDemo {
 }
 ```
 
-下面是一个包含被禁用测试方法的测试用例。
+下面是一个包含`@Disable`测试方法的测试类。
 
 ```java
 import org.junit.jupiter.api.Disabled;
@@ -371,15 +373,184 @@ class DisabledTestsDemo {
 }
 ```
 
-### 3.7. 标记和过滤
+### 3.7. 条件测试执行
+JUnit Jupiter中的[ExecutionCondition](#53-条件测试执行)扩展API允许开发人员以编程方式基于某些条件启用或禁用容器或测试。这种情况的最简单示例是内置的[DisabledCondition](https://github.com/junit-team/junit5/blob/r5.1.0/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/DisabledCondition.java)，它支持[@Disabled](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/Disabled.html)注释（请参阅[禁用测试](#36-禁用测试)）。除了`@Disabled`之外，JUnit Jupiter还支持 `org.junit.jupiter.api.condition`包中的其他几个基于注释的条件，允许开发人员以 *声明* 方式启用或禁用容器和测试。详情请参阅一下章节。
+
+> 💡 组成注解  
+请注意，以下部分中列出的任何 *条件注释* 也可用作元注释，以创建自定义 *组合注释*。例如，[@EnabledOnOs Demo]() 中的`@TestOnMac`注释显示了如何将`@Test`和`@EnabledOnOs`合并到一个可重用的注释中。
+
+> ⚠️ 以下各节中列出的每个条件注释只能在给定的测试接口，测试类或测试方法上声明一次。如果条件注释在给定元素上直接存在，间接存在或元存在多次，则仅使用由JUnit发现的第一个此类注释；任何其他声明都将被默默忽略。但是请注意，每个条件注释可以与`org.junit.jupiter.api.condition`包中的其他条件一起使用。
+
+#### 3.7.1 操作系统条件
+可以通过 [@EnabledOnOs](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/EnabledOnOs.html) 和 [@DisabledOnOs](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/DisabledOnOs.html) 注释在特定操作系统上启用或禁用容器或测试。
+
+```java
+@Test
+@EnabledOnOs(MAC)
+void onlyOnMacOs() {
+    // ...
+}
+
+@TestOnMac
+void testOnMac() {
+    // ...
+}
+
+@Test
+@EnabledOnOs({ LINUX, MAC })
+void onLinuxOrMac() {
+    // ...
+}
+
+@Test
+@DisabledOnOs(WINDOWS)
+void notOnWindows() {
+    // ...
+}
+
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@Test
+@EnabledOnOs(MAC)
+@interface TestOnMac {
+}
+```
+
+#### 3.7.2 Java运行时环境条件
+可以通过 [@EnabledOnJre](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/EnabledOnJre.html) 和 [@DisabledOnJre](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/DisabledOnJre.html) 注释在特定版本的Java运行时环境（JRE）上启用或禁用容器或测试。
+
+```java
+@Test
+@EnabledOnJre(JAVA_8)
+void onlyOnJava8() {
+    // ...
+}
+
+@Test
+@EnabledOnJre({ JAVA_9, JAVA_10 })
+void onJava9Or10() {
+    // ...
+}
+
+@Test
+@DisabledOnJre(JAVA_9)
+void notOnJava9() {
+    // ...
+}
+```
+
+#### 3.7.3. 系统属性条件
+可以通过 [@EnabledIfSystemProperty](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/EnabledIfSystemProperty.html) 和 [@DisabledIfSystemProperty](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/DisabledIfSystemProperty.html) 批注根据指定的JVM系统属性的值启用或禁用容器或测试。通过`matches`属性提供的值将被解释为正则表达式。
+
+```java
+@Test
+@EnabledIfSystemProperty(named = "os.arch", matches = ".*64.*")
+void onlyOn64BitArchitectures() {
+    // ...
+}
+
+@Test
+@DisabledIfSystemProperty(named = "ci-server", matches = "true")
+void notOnCiServer() {
+    // ...
+}
+```
+
+#### 3.7.4. 环境变量条件
+通过[@EnabledIfEnvironmentVariable](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/EnabledIfEnvironmentVariable.html)和[@DisabledIfEnvironmentVariable](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/DisabledIfEnvironmentVariable.html)注释，可以根据来自底层操作系统的命名环境变量的值启用或禁用容器或测试。通过`matches`属性提供的值将被解释为正则表达式。
+
+```java
+@Test
+@EnabledIfEnvironmentVariable(named = "ENV", matches = "staging-server")
+void onlyOnStagingServer() {
+    // ...
+}
+
+@Test
+@DisabledIfEnvironmentVariable(named = "ENV", matches = ".*development.*")
+void notOnDeveloperWorkstation() {
+    // ...
+}
+```
+
+#### 3.7.5 基于脚本的条件
+根据对通过[@EnabledIf](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/EnabledIf.html)或[@DisabledIf](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/DisabledIf.html)注释配置的脚本的评估，JUnit Jupiter提供了 *启用或禁用* 容器或测试的功能。脚本可以用JavaScript，Groovy或任何其他支持Java脚本API的脚本语言编写，由JSR 223定义。
+
+> ⚠️ 通过[@EnabledIf](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/EnabledIf.html)或[@DisabledIf](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/DisabledIf.html)执行条件测试目前是一项试验性功能。有关详细信息，请参阅[实验性API](#82-试验性api)中的表格。
+
+> 💡 如果脚本的逻辑仅依赖于当前的操作系统，当前的Java运行时环境版本，特定的JVM系统属性或特定的环境变量，则应考虑使用专用于此目的的内置注释之一。有关更多详细信息，请参阅本章的前几节。
+
+> 📒 如果您发现自己多次使用基于脚本的相同条件，请考虑编写一个专用的 [ExecutionCondition](#53-条件测试执行) 扩展，以便以更快，更安全，更易维护的方式实现条件。
+
+```java
+@Test // Static JavaScript expression.
+@EnabledIf("2 * 3 == 6")
+void willBeExecuted() {
+    // ...
+}
+
+@RepeatedTest(10) // Dynamic JavaScript expression.
+@DisabledIf("Math.random() < 0.314159")
+void mightNotBeExecuted() {
+    // ...
+}
+
+@Test // Regular expression testing bound system property.
+@DisabledIf("/32/.test(systemProperty.get('os.arch'))")
+void disabledOn32BitArchitectures() {
+    assertFalse(System.getProperty("os.arch").contains("32"));
+}
+
+@Test
+@EnabledIf("'CI' == systemEnvironment.get('ENV')")
+void onlyOnCiServer() {
+    assertTrue("CI".equals(System.getenv("ENV")));
+}
+
+@Test // Multi-line script, custom engine name and custom reason.
+@EnabledIf(value = {
+                "load('nashorn:mozilla_compat.js')",
+                "importPackage(java.time)",
+                "",
+                "var today = LocalDate.now()",
+                "var tomorrow = today.plusDays(1)",
+                "tomorrow.isAfter(today)"
+            },
+            engine = "nashorn",
+            reason = "Self-fulfilling: {result}")
+void theDayAfterTomorrow() {
+    LocalDate today = LocalDate.now();
+    LocalDate tomorrow = today.plusDays(1);
+    assertTrue(tomorrow.isAfter(today));
+}
+```
+
+##### 脚本绑定
+以下名称绑定到每个脚本上下文，因此在脚本中使用。*访问者* 通过简单的`String get（String name）`方法提供对类似地图结构的访问。
+
+| **Name** | **Type** | **Description** |
+|:--------------|:------------|:------------|
+| systemEnvironment | accessor | Operating system environment variable accessor. |
+| systemProperty | accessor | JVM system property accessor. |
+| JunitConfigurationParameter | accessor | Configuration parameter accessor. |
+| JunitDisplayName | String | Display name of the test or container. |
+| junitTags | Set<String> | All tags assigned to the test or container. |
+| junitUniqueId | String | Unique ID of the test or container. |
+
+### 3.8. 标记和过滤
 测试类和测试方法可以被`@Tag`注解标记。那些标记可以在后面被用来过滤 [测试发现和执行](#4-运行测试)。
 
-#### 3.7.1. 标记的语法规则
+#### 3.8.1. 标记的语法规则
 * 标记不能为`null`或*空*。
 * *trimmed* 的标记不能包含空格。
 * *trimmed* 的标记不能包含IOS字符。
 * *trimmed* 的标记不能包含一下*保留*字符。
-	* `,`, `(`, `)`, `&`, `|`, `!`
+	* `,`：逗号
+	* `(`：左括号
+	* `)`：右括号
+	* `&`：& 符号
+	* `|`：竖线
+	* `!`：感叹号
 
 
 >📒 上述的"trimmed"指的是两端的空格字符被去除掉。
@@ -400,7 +571,7 @@ class TaggingDemo {
 }
 ```
 
-### 3.8. 测试实例生命周期
+### 3.9. 测试实例生命周期
 为了隔离地执行单个测试方法，以及避免由于不稳定的测试实例状态引发非预期的副作用，JUnit会在执行每个测试方法执行之前创建一个新的实例（参考下面的注释说明如何定义一个*测试* 方法）。这个"per-method"测试实例生命周期是JUnit Jupiter的默认行为，这点类似于JUnit以前的所有版本。
 
 如果你希望JUnit Jupiter在同一个实例上执行所有的测试方法，在你的测试类上加上注解`@TestInstance(Lifecycle.PER_CLASS)`即可。启用了该模式后，每一个测试类只会创建一次实例。因此，如果你的测试方法依赖实例变量存储的状态，你可能需要在`@BeforeEach`或`@AfterEach`方法中重置状态。
@@ -412,7 +583,7 @@ class TaggingDemo {
 >📒 在测试实例生命周期的上下文中，任何使用了`@Test`、`@RepeatedTest`、`@ParameterizedTest`、`@TestFactory`或者`@TestTemplate`注解的方法都是*测试* 方法。
 
 
-#### 3.8.1. 更改默认的测试实例生命周期
+#### 3.9.1. 更改默认的测试实例生命周期
 如果测试类或测试接口上没有使用`@TestInstance`注解，JUnit Jupiter 将使用*默认* 的生命周期模式。标准的*默认* 模式是`PER_METHOD`。然而，整个测试计划执行的*默认值* 是可以被更改的。要更改默认测试实例生命周期模式，只需将`junit.jupiter.testinstance.lifecycle.default`*配置参数* 设置为定义在`TestInstance.Lifecycle`中的枚举常量名称即可，名称忽略大小写。它也作为一个JVM系统属性、作为一个传递给`Launcher`的`LauncherDiscoveryRequest`中的*配置参数*、或通过JUnit Platform配置文件来提供（详细信息请参阅 [配置参数](#45-配置参数)）。
 
 例如，要将默认测试实例生命周期模式设置为`Lifecycle.PER_CLASS`，你可以使用以下系统属性启动JVM。
@@ -428,7 +599,7 @@ class TaggingDemo {
 > ⚠️  如果没有做到应用一致的配置，更改*默认* 的测试实例生命周期模式可能会导致不可预测的结果和脆弱的构建。例如，如果构建将`"per-class"`语义配置为默认值，但是IDE中的测试却使用`"per-method"`的语义来执行，这样会增加在构建服务器上调试错误的难度。因此，建议更改JUnit Platform配置文件中的默认值，而不是通过JVM系统属性。
 
 
-### 3.9. 嵌套测试
+### 3.10. 嵌套测试
 嵌套测试让测试编写者能够表示出几组测试用例之间的关系。下面来看一个精心设计的例子。
 
 *一个用于测试栈的嵌套测试套件*
@@ -523,7 +694,7 @@ class TestingAStackDemo {
 >📒 `@Nested`测试类必须是*非静态嵌套类*（即内部类），并且可以有任意多层的嵌套。这些内部类被认为是测试类家族的正式成员，但有一个例外：`@BeforeAll`和`@AfterAll`方法*默认* 不会工作。原因是Java不允许内部类中存在`static`成员。不过这种限制可以使用`@TestInstance(Lifecycle.PER_CLASS)`标注`@Nested`测试类来绕开（请参阅 [测试实例生命周期](#38-测试实例生命周期)）。
 
 
-### 3.10. 构造函数和方法的依赖注入
+### 3.11. 构造函数和方法的依赖注入
 在之前的所有JUnit版本中，测试构造函数和方法是不允许传入参数的（至少不能使用标准的`Runner`实现）。JUnit Jupiter一个主要的改变是：允许给测试类的构造函数和方法传入参数。这带来了更大的灵活性，并且可以在构造函数和方法上使用*依赖注入*。
 
 [ParameterResolver](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/ParameterResolver.html) 为测试扩展定义了API，它可以在运行时*动态* 解析参数。如果一个测试的构造函数或者`@Test`、`@TestFactory`、`@BeforeEach`、`@AfterEach`、`@BeforeAll`或者 `@AfterAll`方法接收一个参数，这个参数就必须在运行时被一个已注册的`ParameterResolver`解析。
@@ -633,7 +804,7 @@ class MyMockitoTest {
 }
 ```
 
-### 3.11. 测试接口和默认方法
+### 3.12. 测试接口和默认方法
 JUnit Jupiter允许将`@Test`、`@RepeatedTest`、`@ParameterizedTest`、`@TestFactory`、`TestTemplate`、`@BeforeEach`和`@AfterEach`注解声明在接口的`default`方法上。*如果* 测试接口或测试类使用了`@TestInstance(Lifecycle.PER_CLASS)`注解（请参阅 [测试实例生命周期](#38-测试实例生命周期)），则可以在测试接口中的`static`方法或接口的`default`方法上声明`@BeforeAll`和`@AfterAll`。下面来看一些例子。
 
 ```java
@@ -827,7 +998,7 @@ class StringTests implements ComparableContract<String>, EqualsContract<String> 
 >📒 上述测试仅仅作为例子，因此它们是不完整的。
 
 
-### 3.12. 重复测试
+### 3.13. 重复测试
 
 在JUnit Jupiter中，我们可以使用`@RepeatedTest`注解并指定所需的重复次数来重复运行一个测试方法。每个重复测试的调用就像执行常规的`@Test`方法一样，完全支持相同的生命周期回调和扩展。
 
@@ -855,7 +1026,7 @@ void repeatedTest() {
 为了以编程方式获取有关当前重复和总重复次数的信息，开发人员可以选择将一个`RepetitionInfo`的实例注入到`@RepeatedTest`，`@BeforeEach`或`@AfterEach`方法中。
 
 
-#### 3.12.1. 重复测试示例
+#### 3.13.1. 重复测试示例
 本节末尾的`RepeatedTestsDemo`类将演示几个重复测试的示例。
 
 `repeatedTest()`方法与上一节中的示例相同;而`repeatedTestWithRepetitionInfo()`演示了如何将`RepetitionInfo`实例注入到测试中，从而获取当前重复测试的总重复次数。
@@ -978,9 +1149,9 @@ class RepeatedTestsDemo {
 │     └─ Wiederholung 5 von 5 ✔
 ```
 
-### 3.13. 参数化测试
+### 3.14. 参数化测试
 
-参数化测试可以用不同的参数多次运行测试。除了使用`@ParameterizedTest`注解，它们的声明跟`@Test`的方法没有区别。此外，你必须声明至少一个参数源来给每次调用提供参数。
+参数化测试可以用不同的参数多次运行试。除了使用[@ParameterizedTest](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/params/ParameterizedTest.html) 注解，它们的声明跟`@Test`的方法没有区别。此外，你必须声明至少一个参数源来给每次调用提供参数。
 
 > ⚠️ 参数化测试目前是一个试验性功能。详细信息请参阅 [试验性API](#82-试验性api) 中的表格。
 
@@ -1001,10 +1172,10 @@ palindromes(String) ✔
 └─ [3] able was I ere I saw elba ✔
 ```
 
-#### 3.13.1. 必需的设置
+#### 3.14.1. 必需的设置
 为了使用参数化测试，你必须添加`junit-jupiter-params`依赖。详细信息请参考 [依赖元数据](#21-依赖元数据)。
 
-#### 3.13.2. 参数源
+#### 3.14.2. 参数源
 Junit Jupiter提供一些开箱即用的*源* 注解。接下来每个子章节将提供一个简要的概述和一个示例。更多信息请参阅 [`org.junit.jupiter.params.provider`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/params/provider/package-summary.html) 包中的JavaDoc。
 
 ##### @ValueSource
@@ -1175,7 +1346,7 @@ static class MyArgumentsProvider implements ArgumentsProvider {
 }
 ```
 
-#### 3.13.3. 参数转换
+#### 3.14.3. 参数转换
 
 ##### 隐式转换
 为了支持像`@CsvSource`这样的使用场景，JUnit Jupiter提供了一些内置的隐式类型转换器。转换过程取决于每个方法参数的声明类型。
@@ -1244,7 +1415,7 @@ void testWithExplicitJavaTimeConverter(@JavaTimeConversionPattern("dd.MM.yyyy") 
 }
 ```
 
-#### 3.13.4. 自定义显示名称
+#### 3.14.4. 自定义显示名称
 
 默认情况下，参数化测试调用的显示名称包含了该特定调用的索引和所有参数的`String`表示形式。不过，你可以通过`@ParameterizedTest`注解的`name`属性来自定义调用的显示名称，如下面代码所示。
 
@@ -1274,7 +1445,7 @@ Display name of container ✔
 |`{0}, {1}, …​`| 单个参数|
 
 
-#### 3.13.5. 生命周期和互操作性
+#### 3.14.5. 生命周期和互操作性
 参数化测试的每次调用拥有跟普通`@Test`方法相同的生命周期。例如，`@BeforeEach`方法将在每次调用之前执行。类似于 [动态测试](#315-动态测试)，调用将逐个出现在IDE的测试树中。你可能会在一个测试类中混合常规`@Test`方法和`@ParameterizedTest`方法。
 
 你可以在`@ParameterizedTest`方法上使用`ParameterResolver`扩展。但是，被参数源解析的方法参数必须出现在参数列表的首位。由于测试类可能包含常规测试和具有不同参数列表的参数化测试，因此，参数源的值不会被生命周期方法（例如`@BeforeEach`）和测试类构造函数解析。
@@ -1297,12 +1468,12 @@ void afterEach(TestInfo testInfo) {
 }
 ```
 
-### 3.14. 测试模板
+### 3.15. 测试模板
 
 `@TestTemplate`方法不是一个常规的测试用例，它是测试用例的模板。因此，它的设计初衷是用来被多次调用，而调用次数取决于注册提供者返回的调用上下文数量。所以，它必须结合 [TestTemplateInvocationContextProvider](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestTemplateInvocationContextProvider.html) 扩展一起使用。测试模板方法每一次调用跟执行常规`@Test`方法一样，它也完全支持相同的生命周期回调和扩展。关于它的用例请参阅 [为测试模板提供调用上下文](#58-为测试模板提供调用上下文)。
 
 
-### 3.15. 动态测试
+### 3.16. 动态测试
 
 JUnit Juppiter的 [注解](#31-注解) 章节描述的标准`@Test`注解跟JUnit 4中的`@Test`注解非常类似。两者都描述了实现测试用例的方法。这些测试用例都是静态的，因为它们是在编译时完全指定的，而且它们的行为不能在运行时被改变。*假设提供了一种基本的动态行为形式，但其表达性却被故意地加以限制*。
 
@@ -1327,7 +1498,7 @@ JUnit Juppiter的 [注解](#31-注解) 章节描述的标准`@Test`注解跟JUni
 > ⚠️ 动态测试目前是一个试验性功能。详细信息请参阅 [试验性API](#82-试验性api) 中的表格。
 
 
-#### 3.15.1. 动态测试示例
+#### 3.16.1. 动态测试示例
 
 下面的`DynamicTestsDemo`类演示了测试工厂和动态测试的几个示例。
 
