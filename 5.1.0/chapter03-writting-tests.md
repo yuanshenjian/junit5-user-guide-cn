@@ -338,7 +338,7 @@ class AssumptionsDemo {
 ```
 
 ### 3.6. 禁用测试
-可以通过 [@Disable](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/Disabled.html) 注解，通过 [条件测试执行](#37-条件执行测试)中讨论的注释之一或通过自定义  [ExecutionCondition](#53-条件测试执行) *禁用* 整个测试类或单个测试方法。
+可以通过 [@Disable](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/Disabled.html) 注解，或者通过 [条件测试执行](#37-条件执行测试)中讨论的注解之一，再或者通过自定义的 [ExecutionCondition](#53-条件测试执行) 来*禁用* 整个测试类或单个测试方法。
 
 下面是一个 `@Disable` 的测试用例。
 
@@ -374,15 +374,17 @@ class DisabledTestsDemo {
 ```
 
 ### 3.7. 条件测试执行
-JUnit Jupiter中的[ExecutionCondition](#53-条件测试执行)扩展API允许开发人员以编程方式基于某些条件启用或禁用容器或测试。这种情况的最简单示例是内置的[DisabledCondition](https://github.com/junit-team/junit5/blob/r5.1.0/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/DisabledCondition.java)，它支持[@Disabled](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/Disabled.html)注释（请参阅[禁用测试](#36-禁用测试)）。除了`@Disabled`之外，JUnit Jupiter还支持 `org.junit.jupiter.api.condition`包中的其他几个基于注释的条件，允许开发人员以 *声明* 方式启用或禁用容器和测试。详情请参阅一下章节。
+JUnit Jupiter中的 [ExecutionCondition](#53-条件测试执行) 扩展API允许开发人员以编程的方式基于某些条件启用或禁用容器或测试。这种情况的最简单示例是内置的 [DisabledCondition](https://github.com/junit-team/junit5/blob/r5.1.0/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/DisabledCondition.java)，它支持 [@Disabled](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/Disabled.html)注释（请参阅 [禁用测试](#36-禁用测试)）。除了`@Disabled`之外，JUnit Jupiter还支持 `org.junit.jupiter.api.condition`包中的其他几个基于注解的条件，允许开发人员以 *声明* 的方式启用或禁用容器和测试。详情请参阅一下章节。
 
-> 💡 组成注解  
-请注意，以下部分中列出的任何 *条件注释* 也可用作元注释，以创建自定义 *组合注释*。例如，[@EnabledOnOs Demo]() 中的`@TestOnMac`注释显示了如何将`@Test`和`@EnabledOnOs`合并到一个可重用的注释中。
+> 💡 组合注解  
+请注意，以下部分中列出的任何 *条件注解* 也可用作元注解，以创建自定义 *组合注解*。例如，[@EnabledOnOs Demo](#writing-tests-conditional-execution-os-demo) 中的`@TestOnMac`注解显示了如何将`@Test`和`@EnabledOnOs`合并到一个可重用的注解中。
 
-> ⚠️ 以下各节中列出的每个条件注释只能在给定的测试接口，测试类或测试方法上声明一次。如果条件注释在给定元素上直接存在，间接存在或元存在多次，则仅使用由JUnit发现的第一个此类注释；任何其他声明都将被默默忽略。但是请注意，每个条件注释可以与`org.junit.jupiter.api.condition`包中的其他条件一起使用。
+> ⚠️ 以下各节中列出的每个条件注解只能在给定的测试接口，测试类或测试方法上声明一次。如果条件注解在给定元素上直接存在，间接存在或元存在多次，则仅使用由JUnit发现的第一个此类注解；任何其他声明都将被默默忽略。但是请注意，每个条件注解可以与`org.junit.jupiter.api.condition`包中的其他条件一起使用。
 
 #### 3.7.1 操作系统条件
 可以通过 [@EnabledOnOs](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/EnabledOnOs.html) 和 [@DisabledOnOs](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/DisabledOnOs.html) 注释在特定操作系统上启用或禁用容器或测试。
+
+<a id = "writing-tests-conditional-execution-os-demo"></a>
 
 ```java
 @Test
@@ -417,7 +419,7 @@ void notOnWindows() {
 ```
 
 #### 3.7.2 Java运行时环境条件
-可以通过 [@EnabledOnJre](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/EnabledOnJre.html) 和 [@DisabledOnJre](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/DisabledOnJre.html) 注释在特定版本的Java运行时环境（JRE）上启用或禁用容器或测试。
+可以通过 [@EnabledOnJre](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/EnabledOnJre.html) 和 [@DisabledOnJre](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/DisabledOnJre.html) 注解在特定版本的Java运行时环境（JRE）上启用或禁用容器或测试。
 
 ```java
 @Test
@@ -440,7 +442,7 @@ void notOnJava9() {
 ```
 
 #### 3.7.3. 系统属性条件
-可以通过 [@EnabledIfSystemProperty](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/EnabledIfSystemProperty.html) 和 [@DisabledIfSystemProperty](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/DisabledIfSystemProperty.html) 批注根据指定的JVM系统属性的值启用或禁用容器或测试。通过`matches`属性提供的值将被解释为正则表达式。
+可以通过 [@EnabledIfSystemProperty](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/EnabledIfSystemProperty.html) 和 [@DisabledIfSystemProperty](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/DisabledIfSystemProperty.html) 注解根据指定的JVM系统属性的值启用或禁用容器或测试。通过`matches`属性提供的值将被解释为正则表达式。
 
 ```java
 @Test
@@ -457,7 +459,7 @@ void notOnCiServer() {
 ```
 
 #### 3.7.4. 环境变量条件
-通过[@EnabledIfEnvironmentVariable](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/EnabledIfEnvironmentVariable.html)和[@DisabledIfEnvironmentVariable](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/DisabledIfEnvironmentVariable.html)注释，可以根据来自底层操作系统的命名环境变量的值启用或禁用容器或测试。通过`matches`属性提供的值将被解释为正则表达式。
+通过 [@EnabledIfEnvironmentVariable](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/EnabledIfEnvironmentVariable.html) 和 [@DisabledIfEnvironmentVariable](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/DisabledIfEnvironmentVariable.html) 注解，可以根据来自底层操作系统的命名环境变量的值启用或禁用容器或测试。通过`matches`属性提供的值将被解释为正则表达式。
 
 ```java
 @Test
@@ -474,13 +476,13 @@ void notOnDeveloperWorkstation() {
 ```
 
 #### 3.7.5 基于脚本的条件
-根据对通过[@EnabledIf](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/EnabledIf.html)或[@DisabledIf](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/DisabledIf.html)注释配置的脚本的评估，JUnit Jupiter提供了 *启用或禁用* 容器或测试的功能。脚本可以用JavaScript，Groovy或任何其他支持Java脚本API的脚本语言编写，由JSR 223定义。
+根据对通过 [@EnabledIf](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/EnabledIf.html) 或 [@DisabledIf](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/DisabledIf.html) 注解配置的脚本的评估，JUnit Jupiter提供了 *启用或禁用* 容器或测试的功能。脚本可以用JavaScript，Groovy或任何其他支持Java脚本API的脚本语言编写，由JSR 223定义。
 
 > ⚠️ 通过[@EnabledIf](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/EnabledIf.html)或[@DisabledIf](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/DisabledIf.html)执行条件测试目前是一项试验性功能。有关详细信息，请参阅[实验性API](#82-试验性api)中的表格。
 
 > 💡 如果脚本的逻辑仅依赖于当前的操作系统，当前的Java运行时环境版本，特定的JVM系统属性或特定的环境变量，则应考虑使用专用于此目的的内置注释之一。有关更多详细信息，请参阅本章的前几节。
 
-> 📒 如果您发现自己多次使用基于脚本的相同条件，请考虑编写一个专用的 [ExecutionCondition](#53-条件测试执行) 扩展，以便以更快，更安全，更易维护的方式实现条件。
+> 💡 如果您发现自己多次使用基于脚本的相同条件，请考虑编写一个专用的 [ExecutionCondition](#53-条件测试执行) 扩展，以便以更快，更安全，更易维护的方式实现条件。
 
 ```java
 @Test // Static JavaScript expression.

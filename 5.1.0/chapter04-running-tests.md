@@ -160,7 +160,7 @@ junitPlatform {
 }
 ```
 
-如果你通过`engines {include …​}`或`engines {exclude …​}`来提供一个*测试引擎ID*，那么JUnit Gradle插件将只运行你希望运行的那个测试引擎。同样，如果你通过`tags {include …​}`或者`tags {exclude …​}`提供一个*标记*，JUnit Gradle插件将只运行相应标记的测试（例如，通过JUnit Jupiter测试的`@Tag`注解来过滤）。同理，关于包名，可以通过`packages {include …​}`或者`packages {exclude …​}`配置要包含或排除的包名。
+如果你通过`engines {include …​}`或`engines {exclude …​}`来提供一个*测试引擎ID*，那么JUnit Gradle插件将只运行你希望运行的那个测试引擎。同样，如果你通过`tags {include …​}`或者`tags {exclude …​}`提供一个*标记* 或 [标记表达式](#46-标记表达式)，JUnit Gradle插件将只运行相应标记的测试（例如，通过JUnit Jupiter测试的`@Tag`注解来过滤）。同理，关于包名，可以通过`packages {include …​}`或者`packages {exclude …​}`配置要包含或排除的包名。
 
 <a id="配置参数-gradle"></a>
 
@@ -212,7 +212,7 @@ junitPlatform {
 }
 ```
 
-其他日志框架提供了不同的方式来重定向使用`java.util.logging`记录的消息。例如，对于 [Logback](https://logback.qos.ch/)，您可以通过向运行时类路径添加附加依赖项来使用 [JUL to SLF4J Bridge](https://www.slf4j.org/legacy.html#jul-to-slf4j)
+其他日志框架提供了不同的方式来重定向使用`java.util.logging`记录的消息。例如，对于 [Logback](https://logback.qos.ch/)，你可以通过向运行时类路径添加附加依赖项来使用 [JUL to SLF4J Bridge](https://www.slf4j.org/legacy.html#jul-to-slf4j)
 
 ##### 使用JUnit Gradle插件
 一旦应用并配置了JUnit Gradle插件，你就可以使用新的`junitPlatformTest`任务（在可用的Gralde task中会多出一个名为`junitPlatformTest`的Task）。
