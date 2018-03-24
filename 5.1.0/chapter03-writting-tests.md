@@ -478,11 +478,11 @@ void notOnDeveloperWorkstation() {
 #### 3.7.5 基于脚本的条件
 根据对通过 [@EnabledIf](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/EnabledIf.html) 或 [@DisabledIf](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/DisabledIf.html) 注解配置的脚本的评估，JUnit Jupiter提供了 *启用或禁用* 容器或测试的功能。脚本可以用JavaScript，Groovy或任何其他支持Java脚本API的脚本语言编写，由JSR 223定义。
 
-> ⚠️ 通过[@EnabledIf](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/EnabledIf.html)或[@DisabledIf](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/DisabledIf.html)执行条件测试目前是一项试验性功能。有关详细信息，请参阅[实验性API](#82-试验性api)中的表格。
+> ⚠️ 通过 [@EnabledIf](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/EnabledIf.html) 或 [@DisabledIf](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/DisabledIf.html)执行条件测试目前是一项试验性功能。有关详细信息，请参阅 [实验性API](#82-试验性api) 中的表格。
 
 > 💡 如果脚本的逻辑仅依赖于当前的操作系统，当前的Java运行时环境版本，特定的JVM系统属性或特定的环境变量，则应考虑使用专用于此目的的内置注释之一。有关更多详细信息，请参阅本章的前几节。
 
-> 💡 如果您发现自己多次使用基于脚本的相同条件，请考虑编写一个专用的 [ExecutionCondition](#53-条件测试执行) 扩展，以便以更快，更安全，更易维护的方式实现条件。
+> 📒 如果你发现自己多次使用基于脚本的相同条件，请考虑编写一个专用的 [ExecutionCondition](#53-条件测试执行) 扩展，以便以更快，更安全，更易维护的方式实现条件。
 
 ```java
 @Test // Static JavaScript expression.
@@ -528,7 +528,7 @@ void theDayAfterTomorrow() {
 ```
 
 ##### 脚本绑定
-以下名称绑定到每个脚本上下文，因此在脚本中使用。*访问者* 通过简单的`String get（String name）`方法提供对类似地图结构的访问。
+以下名称绑定到每个脚本上下文，因此在脚本中使用。*访问者* 通过简单的`String get（String name）`方法提供对类似`Map`结构的访问。
 
 | **Name** | **Type** | **Description** |
 |:--------------|:------------|:------------|
@@ -1245,6 +1245,20 @@ void testWithSimpleMethodSource(String argument) {
 }
 
 static Stream<String> stringProvider() {
+    return Stream.of("foo", "bar");
+}
+```
+
+如果你未通过`@MethodSource`明确提供工厂方法名称，则JUnit Jupiter将按照约定去搜索与当前`@ParameterizedTest`方法名称相同的工厂方法。下面来看一个例子：
+
+```java
+@ParameterizedTest
+@MethodSource
+void testWithSimpleMethodSourceHavingNoValue(String argument) {
+    assertNotNull(argument);
+}
+
+static Stream<String> testWithSimpleMethodSourceHavingNoValue() {
     return Stream.of("foo", "bar");
 }
 ```
