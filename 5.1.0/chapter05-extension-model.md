@@ -5,7 +5,10 @@
 不同于JUnit4中的`Runner`、`@Rule`以及`@ClassRule`等多个扩展点，JUnit Jupiter的扩展模型由一个连贯的概念组成：`Extension`API。但是，需要注意的是 `Extension`本身也只是一个标记接口。
 
 ### 5.2. 注册扩展
-JUnit Jupiter中的扩展可以通过 [`@ExtenWith`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/ExtendWith.html) 注解显式注册，或者通过Java的 [`ServiceLoader`机制](#522-自动扩展注册) 自动注册。
+JUnit Jupiter中的扩展可以通过 [`@ExtenWith`](#extensions-registration-declarative) 注解进行声明式注册，或者通过 [`@RegisterExtension`](#extensions-registration-programmatic) 注解进行编程式注册，再或者通过Java的 [`ServiceLoader`](#extension-registration-automatic) 机制自动注册。
+
+
+<a id = "extensions-registration-declarative"></a>
 
 #### 5.2.1. 声明式扩展注册
 开发者可以通过在测试接口、测试类、测试方法或者自定义的 [*组合注解*](#311-元注解和组合注解) 上标注`@ExtendWith(...)`并提供要注册扩展类的引用，从而以*声明式* 的方式注册一个或多个扩展。
@@ -48,12 +51,75 @@ class MyTestsV2 {
 }
 ```
 
-上述两种扩展注册方式是等价的，`MyTestV1`和`MyTestV2`都会被`FooExtension`和`BarExtension`进行扩展，且扩展顺序跟声明顺序一致。
+> 📒 *扩展注册顺序*  
+> 通过`@ExtendWith`以声明方式注册的扩展将按照它们在源代码中声明的顺序执行。例如，`MyTestsV1`和`MyTestsV2`中的测试执行将按照`FooExtension`和`BarExtension`的实际顺序进行扩展。
 
 
-#### 5.2.2. 自动扩展注册
+<a id = "extensions-registration-programmatic"></a>
 
-除了 [声明式扩展注册](#521-声明式扩展注册) 支持使用注解外，JUnit Jupiter同样也支持通过Java的`java.util.ServiceLoader`机制来做*全局的扩展注册*。采用这种机制后会自动的检测`classpath`下的第三方扩展，并自动完成注册。
+#### 5.2.2. 编程式扩展注册
+开发人员可以通过*编程的* 方式来注册扩展，只需要将测试类中的属性字段使用 [`@RegisterExtension`](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/extension/RegisterExtension.html) 注解标注即可。
+
+当一个扩展通过 [`@ExtenWith`](#extensions-registration-declarative) 声明式注册后，它就只能通过注解配置。相比之下，当通过`@RegisterExtension`注册扩展时，我们可以通过*编程* 的方式来配置扩展 - 例如，将参数传递给扩展的构造函数、静态工厂方法或构建器API。
+
+> 📒 `@RegisterExtension` 字段不能为`private`或`null` (在评估阶段) ，但可以是`static`或非静态。
+
+#####  静态字段
+如果一个`@RegisterExtension`字段是`static`的，该扩展会在那些在测试类中通过`@ExtendWith`进行注册的扩展之后被注册。这种*静态扩展* 在扩展API的实现上没有任何限制。因此，通过静态字段注册的扩展可能会实现类级别和实例级别的扩展API，例如`BeforeAllCallback`、`AfterAllCallback`和`TestInstancePostProcessor`，同样还有方法级别的扩展API，例如`BeforeEachCallback`等等。
+
+在下面的例子中，测试类中的`server`字段通过使用`WebServerExtension`所支持的构建器模式以编程的方式进行初始化。已经配置的`WebServerExtension`将在类级别自动注册为一个扩展 - 例如，要在测试类中所有测试方法运行之前启动服务器，以及在所有测试完成后停止服务器。此外，使用`@BeforeAll`或`@AfterAll`标注的静态生命周期方法以及`@BeforeEach`、`@AfterEach`和`@Test`标注的方法可以在需要的时候通过`server`字段访问该扩展的实例。
+
+*一个通过静态字段注册的扩展：*
+
+```java
+class WebServerDemo {
+
+    @RegisterExtension
+    static WebServerExtension server = WebServerExtension.builder()
+        .enableSecurity(false)
+        .build();
+
+    @Test
+    void getProductList() {
+        WebClient webClient = new WebClient();
+        String serverUrl = server.getServerUrl();
+        // Use WebClient to connect to web server using serverUrl and verify response
+        assertEquals(200, webClient.get(serverUrl + "/products").getResponseStatus());
+    }
+}
+```
+
+#####  实例字段
+如果`@RegisterExtension`字段是非静态的（例如，一个实例字段），那么该扩展将在测试类实例化之后被注册，并且在每个已注册的`TestInstancePostProcessor`被赋予后处理测试实例的机会之后（可能给被标注的字段注入要使用的扩展实例）。因此，如果这样的*实例扩展* 实现了诸如`BeforeAllCallback`、`AfterAllCallback`或`TestInstancePostProcessor`这些类级别或实例级别的扩展API，那么这些API将不会正常执行。默认情况下，实例扩展将在那些通过`@ExtendWith`在方法级别注册的扩展之后被注册。但是，如果测试类是使用了`@TestInstance(Lifecycle.PER_CLASS)`配置，实例扩展将在它们之前被注册。
+
+
+在下面的例子中，通过调用自定义`lookUpDocsDir()`方法并将结果提供给`DocumentationExtension`中的静态`forPath()`工厂方法，从而以编程的方式初始化测试类中的`docs`字段。配置的`DocumentationExtension`将在方法级别自动被注册为扩展。另外，`@BeforeEach`、`@AfterEach`和`@Test`方法可以在需要的时候通过`docs`字段访问扩展的实例。
+
+*一个通过静态字段注册的扩展：*
+
+```java
+class DocumentationDemo {
+
+    static Path lookUpDocsDir() {
+        // return path to docs dir
+    }
+
+    @RegisterExtension
+    DocumentationExtension docs = DocumentationExtension.forPath(lookUpDocsDir());
+
+    @Test
+    void generateDocumentation() {
+        // use this.docs ...
+    }
+}
+```
+
+ 
+<a id = "extension-registration-automatic"></a>
+
+#### 5.2.3. 自动扩展注册
+
+除了 [声明式扩展注册](#extensions-registration-declarative) 和 [编程式扩展注册](#extensions-registration-programmatic) 支持使用注解，JUnit Jupiter还支持通过Java的`java.util.ServiceLoader`机制进行*全局扩展注册*，采用这种机制后会自动的检测`classpath`下的第三方扩展，并自动完成注册。
 
 具体来说，自定义扩展可以通过在`org.junit.jupiter.api.extension.Extension`文件中提供其全类名来完成注册，该文件位于其封闭的JAR文件中的`/META-INF/services`目录下。
 
@@ -69,7 +135,7 @@ class MyTestsV2 {
 启用自动检测功能后，通过`ServiceLoader`机制发现的扩展将在JUnit Jupiter的全局扩展（例如对`TestInfo`，`TestReporter`等的支持）之后被添加到扩展注册表中。
 
 
-#### 5.2.3. 扩展继承
+#### 5.2.4. 扩展继承
 扩展在测试类层次结构中以自顶向下的语义被继承。同样，在类级别注册的扩展会被方法级的扩展继承。此外，特定的扩展实现只能针对给定的扩展上下文及其父上下文进行一次注册。因此，任何尝试注册重复的扩展实现都将被忽略。
 
 ### 5.3. 条件测试执行
