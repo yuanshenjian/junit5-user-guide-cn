@@ -23,10 +23,14 @@ JUnit 5的主要目标之一是提高维护者发展演进JUnit的能力，尽�
 
 | 包名 | 类名 | 类型 |
 |:---|:---|:---|
+|org.junit.jupiter.api|AssertionsKt|类|
 |org.junit.jupiter.api|DynamicContainer|类|
 |org.junit.jupiter.api|DynamicNode|类|
 |org.junit.jupiter.api|DynamicTest|类|
 |org.junit.jupiter.api|TestFactory|注解|
+|org.junit.jupiter.api.condition|DisabledIf|注解|
+|org.junit.jupiter.api.condition|EnabledIf|注解|
+|org.junit.jupiter.api.extension|ScriptEvaluationException|类|
 |org.junit.jupiter.migrationsupport.rules|EnableRuleMigrationSupport|注解|
 |org.junit.jupiter.migrationsupport.rules|ExpectedExceptionSupport|类|
 |org.junit.jupiter.migrationsupport.rules|ExternalResourceSupport|类|

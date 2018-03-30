@@ -532,12 +532,12 @@ void theDayAfterTomorrow() {
 
 | **Name** | **Type** | **Description** |
 |:--------------|:------------|:------------|
-| systemEnvironment | accessor | Operating system environment variable accessor. |
-| systemProperty | accessor | JVM system property accessor. |
-| JunitConfigurationParameter | accessor | Configuration parameter accessor. |
-| JunitDisplayName | String | Display name of the test or container. |
-| junitTags | Set<String> | All tags assigned to the test or container. |
-| junitUniqueId | String | Unique ID of the test or container. |
+| systemEnvironment | *accessor* | Operating system environment variable accessor. |
+| systemProperty | *accessor* | JVM system property accessor. |
+| JunitConfigurationParameter | *accessor* | Configuration parameter accessor. |
+| JunitDisplayName | `String` | Display name of the test or container. |
+| junitTags | `Set<String>` | All tags assigned to the test or container. |
+| junitUniqueId | `String` | Unique ID of the test or container. |
 
 ### 3.8. 标记和过滤
 测试类和测试方法可以被`@Tag`注解标记。那些标记可以在后面被用来过滤 [测试发现和执行](#4-运行测试)。
