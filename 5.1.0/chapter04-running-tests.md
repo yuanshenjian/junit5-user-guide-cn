@@ -64,8 +64,9 @@ for JUnit 5* 章节。
 
 JUnit开发团队已经开发了一款非常基础的Gradle插件，它允许你运行被`TestEngine`（例如，JUnit3、JUnit4、JUnit Jupiter以及 [Specsy](http://specsy.org/) 等）支持的任何种类的测试。关于插件的使用示例请参阅 [`junit5-gradle-consumer`](https://github.com/junit-team/junit5-samples/tree/r5.0.2/junit5-gradle-consumer) 项目中的`build.gradle`文件。
 
-❗️*Native Gradle Support Is Here!*  
-从[版本4.6](https://docs.gradle.org/4.6/release-notes.html)开始，Gradle为在JUnit平台上执行测试提供[native support](https://docs.gradle.org/current/userguide/java_plugin.html#using_junit5)。因此，`junit-platform-gradle-plugin`将在JUnit Platform 1.2中弃用，并在版本1.3中停用。请切换到Gradle的标准`test`任务并使用`JUnitPlatform()`。
+> ❗ ️️*本地Gradle支持在这里*  
+从 [版本4.6](https://docs.gradle.org/4.6/release-notes.html) 开始，Gradle为在JUnit平台上执行测试提供 [native support](https://docs
+.gradle.org/current/userguide/java_plugin.html#using_junit5)。因此，`junit-platform-gradle-plugin`将在JUnit Platform 1.2中弃用，并在版本1.3中停用。请切换到Gradle的标准`test`任务并使用`JUnitPlatform()`。
 
 ##### 启用JUnit Gradle插件
  要使用JUnit Gradle插件，你首先要确保使用了Gradle 2.5或更高的版本，然后你可以按照下面的模板来配置项目中的`build.gradle`文件。

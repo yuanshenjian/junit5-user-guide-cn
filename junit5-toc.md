@@ -82,3 +82,10 @@
 - 500-m2
 - 500-m1
 - 500-alpha
+
+
+
+⚠️: Warning
+💡: Tip
+📒: Note
+❗: Important

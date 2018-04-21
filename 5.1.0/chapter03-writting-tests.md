@@ -528,16 +528,16 @@ void theDayAfterTomorrow() {
 ```
 
 ##### 脚本绑定
-以下名称绑定到每个脚本上下文，因此在脚本中使用。*访问者* 通过简单的`String get（String name）`方法提供对类似`Map`结构的访问。
+以下名称绑定到每个脚本上下文，因此在脚本中使用。*访问器* 通过简单的`String get（String name）`方法提供对类似`Map`结构的访问。
 
-| **Name** | **Type** | **Description** |
+| **名称** | **类型** | **描述** |
 |:--------------|:------------|:------------|
-| systemEnvironment | *accessor* | Operating system environment variable accessor. |
-| systemProperty | *accessor* | JVM system property accessor. |
-| JunitConfigurationParameter | *accessor* | Configuration parameter accessor. |
-| JunitDisplayName | `String` | Display name of the test or container. |
-| junitTags | `Set<String>` | All tags assigned to the test or container. |
-| junitUniqueId | `String` | Unique ID of the test or container. |
+| systemEnvironment | *accessor* | 操作系统环境变量访问器。 |
+| systemProperty | *accessor* | JVM 系统属性访问器。 |
+| JunitConfigurationParameter | *accessor* | 配置参数访问器。 |
+| JunitDisplayName | `String` | 测试或容器的显示名称。 |
+| junitTags | `Set<String>` | 所有分配给测试或容器的标记。 |
+| junitUniqueId | `String` | 测试或容器的唯一ID。 |
 
 ### 3.8. 标记和过滤
 测试类和测试方法可以被`@Tag`注解标记。那些标记可以在后面被用来过滤 [测试发现和执行](#4-运行测试)。

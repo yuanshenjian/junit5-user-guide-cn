@@ -5,7 +5,7 @@ layout: junit5
 title: "JUnit 5 发布记录"
 permalink: /junit5/5.1.0/release-notes/
 summary: "5.1.0"
-last_updated_date: 2018-02-19
+last_updated_date: 2018-02-18
 version: 5.1.0
 
 ---
