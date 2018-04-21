@@ -179,6 +179,15 @@ class DocumentationDemo {
 
 如果测试构造器或者`@Test`、`@TestFactory`、`@BeforeEach`、`@AfterEach`、`@BeforeAll`或者`@AfterAll`方法接收参数，则必须在运行时通过`ParameterResolver`*解析* 该参数。开发人员可以使用内置的`ParameterResolver`（参考 [`TestInfoParameterResolver`](https://github.com/junit-team/junit5/tree/r5.0.0-RC2/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/TestInfoParameterResolver.java)）或 [自己注册](#52-注册扩展)。一般而言，参数可能被按照其*名称*、*类型*、*注解* 或任何一种上述方式的组合所解析。具体示例可以参照 [`CustomTypeParameterResolver`](https://github.com/junit-team/junit5/tree/r5.0.2/junit-jupiter-engine/src/test/java/org/junit/jupiter/engine/execution/injection/sample/CustomTypeParameterResolver.java) 和 [`CustomAnnotationParameterResolver`](https://github.com/junit-team/junit5/tree/r5.0.2/junit-jupiter-engine/src/test/java/org/junit/jupiter/engine/execution/injection/sample/CustomAnnotationParameterResolver.java) 的源码。
 
+> ⚠️  由于JDK 9之前的JDK版本中，由javac生成的字节代码存在错误，直接通过核心`java.lang.reflect.Parameter` API查找参数上的注解对于内部类构造函数总是会失败（例如，一个在`@Nested`测试类中构造函数）。
+> <br/>    
+> 因此，提供给`ParameterResolver`实现的 [`ParameterContext`](https://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/extension/ParameterContext.html) API包含以下用于正确查找参数注释的便捷方法。强烈建议扩展开发人员使用这些方法，而不去使用`java.lang.reflect.Parameter`中提供的方法，从而避免JDK中的这个错误。
+>
+> - `boolean isAnnotated(Class<? extends Annotation> annotationType)`
+> - `Optional<A> findAnnotation(Class<A> annotationType)`
+> - `List<A> findRepeatableAnnotations(Class<A> annotationType)`
+ 
+
 ### 5.6. 测试生命周期回调
 
 下列接口定义了用于在测试执行生命周期的不同阶段来扩展测试的API。关于每个接口的详细信息，可以参考后续章节的示例，也可以查阅 [`org.junit.jupiter.api.extension`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/package-summary.html) 包中的Javadoc。
