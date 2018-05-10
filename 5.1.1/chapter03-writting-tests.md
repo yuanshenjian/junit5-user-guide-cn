@@ -1153,7 +1153,7 @@ class RepeatedTestsDemo {
 
 ### 3.14. 参数化测试
 
-参数化测试可以用不同的参数多次运行试。除了使用[@ParameterizedTest](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/params/ParameterizedTest.html) 注解，它们的声明跟`@Test`的方法没有区别。此外，你必须声明至少一个参数源来给每次调用提供参数。
+参数化测试可以用不同的参数多次运行测试。除了使用[@ParameterizedTest](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/params/ParameterizedTest.html) 注解，它们的声明跟`@Test`的方法没有区别。此外，你必须声明至少一个参数源来给每次调用提供参数。
 
 > ⚠️ 参数化测试目前是一个试验性功能。详细信息请参阅 [试验性API](#82-试验性api) 中的表格。
 
@@ -1493,7 +1493,7 @@ void afterEach(TestInfo testInfo) {
 
 JUnit Juppiter的 [注解](#31-注解) 章节描述的标准`@Test`注解跟JUnit 4中的`@Test`注解非常类似。两者都描述了实现测试用例的方法。这些测试用例都是静态的，因为它们是在编译时完全指定的，而且它们的行为不能在运行时被改变。*假设提供了一种基本的动态行为形式，但其表达性却被故意地加以限制*。
 
-除了这些标准的测试以外，JUnit Jupiter还引入了一种全新的测试编程模型。这种新的测试是一个*动态测试*，它们由一个使用了`@TestRactory`注解的工厂方法在运行时生成。
+除了这些标准的测试以外，JUnit Jupiter还引入了一种全新的测试编程模型。这种新的测试是一个*动态测试*，它们由一个使用了`@TestFactory`注解的工厂方法在运行时生成。
 
 相比于`@Test`方法，`@TestFactory`方法本身不是测试用例，它是测试用例的工厂。因此，动态测试是工厂的产品。从技术上讲，`@TestFactory`方法必须返回一个`DynamicNode`实例的`Stream`、`Collection`、`Iterable`或`Iterator`。`DynamicNode`的两个可实例化子类是`DynamicContainer`和`DynamicTest`。`DynamicContainer`实例由一个*显示名称* 和一个动态子节点列表组成，它允许创建任意嵌套的动态节点层次结构。而`DynamicTest`实例会被延迟执行，从而生成动态甚至非确定性的测试用例。
 
