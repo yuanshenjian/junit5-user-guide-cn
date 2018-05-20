@@ -6,7 +6,7 @@ title: "JUnit 5 用户指南"
 permalink: /junit5/5.1.0/user-guide-cn/
 summary: "中文版"
 version: 5.1.0
-last_updated_date: 2018-01-22
+last_updated_date: 2018-02-18
 
 ---
 
