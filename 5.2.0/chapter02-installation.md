@@ -97,7 +97,16 @@ JUnit Jupiter测试引擎的实现，仅仅在运行时需要。
 JUnit Vintage测试引擎实现，允许在新的JUnit Platform上运行低版本的JUnit测试，即那些以JUnit 3或JUnit 4风格编写的测试。
 
 
-#### 2.1.4. 依赖
+#### 2.1.4. 物料清单 (BOM)
+当使用 [Maven](https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Importing_Dependencies) 或 [Gradle](https://docs.gradle.org/current/userguide/managing_transitive_dependencies.html#sec:bom_import) 引用多个上述artifacts时，可以使用下面Maven坐标下提供的*物料清单POM* 来缓解依赖管理。
+
+* **Group ID**: `org.junit`
+
+* **Artifact ID**: `junit-bom`
+
+* **Version**: `{{ bom_version }}`
+
+#### 2.1.5. 依赖
 以上所有artifacts在它们已发布的Maven POM中都依赖了下面的*@API Guardian* JAR文件。
 
 * **Group ID**: `org.apiguardian`
@@ -117,12 +126,12 @@ JUnit Vintage测试引擎实现，允许在新的JUnit Platform上运行低版�
 
 ### 2.2. 依赖关系图
 
-![](https://junit.org/junit5/docs/5.1.0/user-guide/images/component-diagram.svg)
+![](https://junit.org/junit5/docs/5.2.0/user-guide/images/component-diagram.svg)
 
 
 ### 2.3 JUnit Jupiter示例工程
 [junit5-samples](https://github.com/junit-team/junit5-samples) 代码库中包含了一系列基于JUnit Jupiter和JUnit Vintage的示例工程。你可以在下面的项目中找到相应的`build.gradle`和`pom.xml`文件：
 
-- Gradle工程：[junit5-gradle-consumer](https://github.com/junit-team/junit5-samples/tree/r5.0.3/junit5-gradle-consumer).
+- Gradle工程：[junit5-jupiter-starter-gradle](https://github.com/junit-team/junit5-samples/tree/r5.2.0/junit5-jupiter-starter-gradle).
 
-- Maven工程：[junit5-maven-consumer](https://github.com/junit-team/junit5-samples/tree/r5.0.3/junit5-maven-consumer).
+- Maven工程：[junit5-jupiter-starter-maven](https://github.com/junit-team/junit5-samples/tree/r5.2.0/junit5-jupiter-starter-maven).
