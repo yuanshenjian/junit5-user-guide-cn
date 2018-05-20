@@ -13,12 +13,12 @@ JUnit Jupiter中的扩展可以通过 [`@ExtenWith`](#extensions-registration-de
 #### 5.2.1. 声明式扩展注册
 开发者可以通过在测试接口、测试类、测试方法或者自定义的 [*组合注解*](#311-元注解和组合注解) 上标注`@ExtendWith(...)`并提供要注册扩展类的引用，从而以*声明式* 的方式注册一个或多个扩展。
 
-例如，要给某个测试方法注册一个自定义的`MockitoExtension`，你可以参照如下的方式标注该方法。
+例如，要给某个测试方法注册一个自定义的`RandomParametersExtension`，你可以参照如下的方式标注该方法。
 
 ```java
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(RandomParametersExtension.class)
 @Test
-void mockTest() {
+void test(@Random int i) {
     // ...
 }
 ```
@@ -26,8 +26,8 @@ void mockTest() {
 若要为某个类或者其子类注册一个自定义的`MockitoExtension`，将注解添加到测试类上即可。
 
 ```java
-@ExtendWith(MockitoExtension.class)
-class MockTests {
+@ExtendWith(RandomParametersExtension.class)
+class MyTests {
     // ...
 }
 ```
@@ -36,7 +36,7 @@ class MockTests {
 
 ```java
 @ExtendWith({ FooExtension.class, BarExtension.class })
-class MyTestsV1 {
+class MyFirstTests {
     // ...
 }
 ```
@@ -46,13 +46,13 @@ class MyTestsV1 {
 ```java
 @ExtendWith(FooExtension.class)
 @ExtendWith(BarExtension.class)
-class MyTestsV2 {
+class MySecondTests {
     // ...
 }
 ```
 
 > 📒 *扩展注册顺序*  
-> 通过`@ExtendWith`以声明方式注册的扩展将按照它们在源代码中声明的顺序执行。例如，`MyTestsV1`和`MyTestsV2`中的测试执行将按照`FooExtension`和`BarExtension`的实际顺序进行扩展。
+> 通过`@ExtendWith`以声明方式注册的扩展将按照它们在源代码中声明的顺序执行。例如，`MyFirstTests`和`MySecondTests`中的测试执行将按照`FooExtension`和`BarExtension`的实际顺序进行扩展。
 
 
 <a id = "extensions-registration-programmatic"></a>
