@@ -1322,7 +1322,7 @@ JUnit Juppiter的 [注解](#31-注解) 章节描述的标准`@Test`注解跟JUni
 
 >译者注：同一个`@TestFactory`所生成的n个动态测试，`@BeforeEach`和`@AfterEach`只会在这n个动态测试开始前和结束后各执行一次，不会为每一个单独的动态测试都执行。
 
-在JUnit Jupiter {{ jupiter_version }}中，动态测试必须始终由工厂方法创建；不过，在后续的发行版中，这可能会得到注册工具的补充。
+在JUnit Jupiter {{ jupiter-version }}中，动态测试必须始终由工厂方法创建；不过，在后续的发行版中，这可能会得到注册工具的补充。
 
 > ⚠️ 动态测试目前是一个试验性功能。详细信息请参阅 [试验性API](#82-试验性api) 中的表格。
 

@@ -9,7 +9,7 @@
 
 * **Group ID**: `org.junit.platform`
 
-* **Version**: `{{ platform_version }}`
+* **Version**: `{{ platform-version }}`
 
 * **Artifact IDs:**
 
@@ -60,7 +60,7 @@ JUnit 内部通用类库/实用工具，它们仅用于JUnit框架本身，*不�
 #### 2.1.2. JUnit Jupiter
 * **Group ID**: `org.junit.jupiter`
 
-* **Version**: `{{ jupiter_version }}`
+* **Version**: `{{ jupiter-version }}`
 
 * **Artifact IDs**:
 
@@ -88,7 +88,7 @@ JUnit Jupiter测试引擎的实现，仅仅在运行时需要。
 
 * **Group ID**: `org.junit.vintage`
 
-* **Version**: `{{ vintage_version }}`
+* **Version**: `{{ vintage-version }}`
 
 * **Artifact ID**:
 
@@ -104,7 +104,7 @@ JUnit Vintage测试引擎实现，允许在新的JUnit Platform上运行低版�
 
 * **Artifact ID**: `apiguardian-api`
 
-* **Version**: `{{ apiguardian_version }}`
+* **Version**: `{{ apiguardian-version }}`
 
 
 ### 2.2. 依赖关系图

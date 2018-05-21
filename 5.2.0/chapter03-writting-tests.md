@@ -65,8 +65,12 @@ public @interface Fast {
 ```
 
 
-### 3.2. 标准测试类
-*一个标准的测试用例*
+### 3.2. 测试类和测试方法
+任何使用元注解`@Test`、`@RepeatedTest`、`@ParameterizedTest`、`@ TestFactory`或`@TestTemplate`标注的实例方法都是一个*测试方法*。任何包含至少一种测试方法的顶级类或静态成员类都是一个*测试类*。
+
+任何一个*测试方法*是
+
+*一个标准的测试类*
 
 ```java
 import static org.junit.jupiter.api.Assertions.fail;
@@ -574,15 +578,15 @@ class TaggingDemo {
 ```
 
 ### 3.9. 测试实例生命周期
-为了隔离地执行单个测试方法，以及避免由于不稳定的测试实例状态引发非预期的副作用，JUnit会在执行每个测试方法执行之前创建一个新的实例（参考下面的注释说明如何定义一个*测试* 方法）。这个"per-method"测试实例生命周期是JUnit Jupiter的默认行为，这点类似于JUnit以前的所有版本。
+为了隔离地执行单个测试方法，以及避免由于不稳定的测试实例状态引发非预期的副作用，JUnit会在执行每个测试方法执行之前创建一个新的实例（参考 [测试类和测试方法](#32-测试类和测试方法)）。这个"per-method"测试实例生命周期是JUnit Jupiter的默认行为，这点类似于JUnit以前的所有版本。
+
+>📒 请注意，即使在`per-class`测试实例生命周期模式处于活动状态时，如果通过 [条件](#37-条件执行测试)（例如`@Disabled`，`@DisabledOnOs`等）*禁用* 给定的*测试方法*，测试类仍将被实例化。
 
 如果你希望JUnit Jupiter在同一个实例上执行所有的测试方法，在你的测试类上加上注解`@TestInstance(Lifecycle.PER_CLASS)`即可。启用了该模式后，每一个测试类只会创建一次实例。因此，如果你的测试方法依赖实例变量存储的状态，你可能需要在`@BeforeEach`或`@AfterEach`方法中重置状态。
 
 `"per-class"`模式相比于默认的`"per-method"`模式有一些额外的好处。具体来说，使用了`"per-class"`模式之后，你就可以在非静态方法和接口的`default`方法上声明`@BeforeAll`和 `@AfterAll`。因此，`"per-class"`模式使得在`@Nested`测试类中使用`@BeforeAll`和`@AfterAll`注解成为了可能。
 
 如果你使用Kotlin编程语言来编写测试，你会发现通过将测试实例的生命周期模式切换到`"per-class"`更容易实现`@BeforeAll`和`@AfterAll`方法。
-
->📒 在测试实例生命周期的上下文中，任何使用了`@Test`、`@RepeatedTest`、`@ParameterizedTest`、`@TestFactory`或者`@TestTemplate`注解的方法都是*测试* 方法。
 
 
 #### 3.9.1. 更改默认的测试实例生命周期
@@ -745,7 +749,7 @@ class TestInfoDemo {
 }
 ```
 
-* `RepetitionInfoParameterResolver`：如果一个位于`@RepeatedTest`、`@BeforeEach`或者`@AfterEach`方法的参数的类型是 [RepetitionInfo](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/RepetitionInfo.html)，`RepetitionInfoParameterResolver`会提供一个`RepetitionInfo`实例。然后，`RepetitionInfo`就可以被用来检索对应`@RepeatedTest`方法的当前重复以及总重复次数等相关信息。但是请注意，`RepetitionInfoParameterResolver`不是在`@RepeatedTest`的上下文之外被注册的。请参阅 [重复测试示例](#3121-重复测试示例)。
+* [`RepetitionInfoParameterResolver`](https://github.com/junit-team/junit5/tree/r5.2.0/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/RepetitionInfoParameterResolver.java)：如果一个位于`@RepeatedTest`、`@BeforeEach`或者`@AfterEach`方法的参数的类型是 [RepetitionInfo](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/RepetitionInfo.html)，`RepetitionInfoParameterResolver`会提供一个`RepetitionInfo`实例。然后，`RepetitionInfo`就可以被用来检索对应`@RepeatedTest`方法的当前重复以及总重复次数等相关信息。但是请注意，`RepetitionInfoParameterResolver`不是在`@RepeatedTest`的上下文之外被注册的。请参阅 [重复测试示例](#3121-重复测试示例)。
 * [TestReporterParameterResolver](https://github.com/junit-team/junit5/tree/r5.0.2/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/TestReporterParameterResolver.java)：如果一个方法参数的类型是 [TestReporter](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/TestReporter.html)，`TestReporterParameterResolver`会提供一个`TestReporter`实例。然后，`TestReporter`就可以被用来发布有关当前测试运行的其他数据。这些数据可以通过  [TestExecutionListener](http://junit.org/junit5/docs/current/api/org/junit/platform/launcher/TestExecutionListener.html) 的`reportingEntryPublished()`方法来消费，因此可以被IDE查看或包含在报告中。
 
  在JUnit Jupiter中，你应该使用`TestReporter`来代替你在JUnit 4中打印信息到`stdout`或`stderr`的习惯。使用`@RunWith(JUnitPlatform.class)`会将报告的所有条目都输出到`stdout`中。
@@ -777,34 +781,27 @@ class TestReporterDemo {
 
 >📒 其他的参数解析器必须通过`@ExtendWith`注册合适的 [扩展](#5-扩展模型) 来明确地开启。
 
-可以查看 [MockitoExtension](https://github.com/junit-team/junit5-samples/tree/r5.0.2/junit5-mockito-extension/src/main/java/com/example/mockito/MockitoExtension.java) 获取自定义 [ParameterResolver](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/ParameterResolver.html) 的示例。虽然并不打算大量使用它，但它演示了扩展模型和参数解决过程中的简单性和表现力。`MyMockitoTest`演示了如何将Mockito mocks注入到`@BeforeEach`和`@Test`方法中。
+可以查看 [RandomParametersExtension](https://github.com/junit-team/junit5-samples/tree/r5.2.0/junit5-jupiter-extensions/src/main/java/com/example/random/RandomParametersExtension.java) 获取自定义 [ParameterResolver](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/ParameterResolver.html) 的示例。虽然并不打算大量使用它，但它演示了扩展模型和参数解决过程中的简单性和表现力。`MyRandomParametersTest`演示了如何将随机值注入到`@Test`方法中。
 
 ```java
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
+@ExtendWith(RandomParametersExtension.class)
+class MyRandomParametersTest {
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import com.example.Person;
-import com.example.mockito.MockitoExtension;
-
-@ExtendWith(MockitoExtension.class)
-class MyMockitoTest {
-
-    @BeforeEach
-    void init(@Mock Person person) {
-        when(person.getName()).thenReturn("Dilbert");
+    @Test
+    void injectsInteger(@Random int i, @Random int j) {
+        assertNotEquals(i, j);
     }
 
     @Test
-    void simpleTestWithInjectedMock(@Mock Person person) {
-        assertEquals("Dilbert", person.getName());
+    void injectsDouble(@Random double d) {
+        assertEquals(0.0, d, 1.0);
     }
 
 }
 ```
+
+对于真实的使用场景，请查看 [`MockitoExtension`](https://github.com/mockito/mockito/blob/release/2.x/subprojects/junit-jupiter/src/main/java/org/mockito/junit/jupiter/MockitoExtension.java) 和 [`SpringExtension`](https://github.com/mockito/mockito/blob/release/2.x/subprojects/junit-jupiter/src/main/java/org/mockito/junit/jupiter/MockitoExtension.java) 的源码。
+
 
 ### 3.12. 测试接口和默认方法
 JUnit Jupiter允许将`@Test`、`@RepeatedTest`、`@ParameterizedTest`、`@TestFactory`、`TestTemplate`、`@BeforeEach`和`@AfterEach`注解声明在接口的`default`方法上。*如果* 测试接口或测试类使用了`@TestInstance(Lifecycle.PER_CLASS)`注解（请参阅 [测试实例生命周期](#38-测试实例生命周期)），则可以在测试接口中的`static`方法或接口的`default`方法上声明`@BeforeAll`和`@AfterAll`。下面来看一些例子。
@@ -1153,9 +1150,9 @@ class RepeatedTestsDemo {
 
 ### 3.14. 参数化测试
 
-参数化测试可以用不同的参数多次运行试。除了使用[@ParameterizedTest](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/params/ParameterizedTest.html) 注解，它们的声明跟`@Test`的方法没有区别。此外，你必须声明至少一个参数源来给每次调用提供参数。
+参数化测试可以用不同的参数多次运行试。除了使用[@ParameterizedTest](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/params/ParameterizedTest.html) 注解，它们的声明跟`@Test`的方法没有区别。此外，你必须声明至少一个参数源来给每次调用提供参数，然后在测试方法中*消费* 这些参数。
 
-> ⚠️ 参数化测试目前是一个试验性功能。详细信息请参阅 [试验性API](#82-试验性api) 中的表格。
+以下示例演示了使用`@ValueSource`注解指定`String`数组作为参数源的参数化测试。
 
 ```java
 @ParameterizedTest
@@ -1165,23 +1162,51 @@ void palindromes(String candidate) {
 }
 ```
 
-上面这个参数化测试使用`@ValueSource`注解来指定一个`String`数组作为参数源。执行上述方法时，每次调用会被分别报告。例如，`ConsoleLauncher`会打印类似下面的信息。
+执行上述方法时，每次调用会被分别报告。例如，`ConsoleLauncher`会打印类似下面的信息。
 
-```java
+```sh
 palindromes(String) ✔
 ├─ [1] racecar ✔
 ├─ [2] radar ✔
 └─ [3] able was I ere I saw elba ✔
 ```
+> ⚠️ 参数化测试目前是一个试验性功能。详细信息请参阅 [试验性API](#82-试验性api) 中的表格。
 
 #### 3.14.1. 必需的设置
 为了使用参数化测试，你必须添加`junit-jupiter-params`依赖。详细信息请参考 [依赖元数据](#21-依赖元数据)。
 
-#### 3.14.2. 参数源
-Junit Jupiter提供一些开箱即用的*源* 注解。接下来每个子章节将提供一个简要的概述和一个示例。更多信息请参阅 [`org.junit.jupiter.params.provider`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/params/provider/package-summary.html) 包中的JavaDoc。
+### 3.15. 消费参数
+参数化测试方法通常会在参数源索引和方法参数索引之间采用一对一关联（请参阅  [@CsvSource](#sample-consume-arguments-csv-source) 中的示例）之后直接从配置的源中消耗参数（请参阅 [参数源](#source-of-arguments)）。但是，参数化测试方法也可以选择将来自源的参数*聚合* 为传递给该方法的单个对象（请参阅 [参数聚合](#argument-aggregation)）。其他参数也可以由ParameterResolver提供（例如，获取`TestInfo`，`TestReporter`等的实例）。具体而言，参数化测试方法必须根据以下规则声明形式参数。
+
+- 首先必须声明零个或多个*索引参数*。
+- 接下来必须声明零个或多个*聚合器*。
+- 由`ParameterResolver`提供的零个或多个参数必须声明为最后一个。
+
+在这种情况下，*索引参数* 是`ArgumentsProvider`提供的`Arguments`中给定索引的参数，该参数作为参数传递给参数化方法的参数，并在方法的形式参数列表中的相同索引处传递。*聚合器* 是类型为`ArgumentsAccessor`的任何参数或任何使用`@AggregateWith`注解的参数。
+
+
+<a id="source-of-arguments"></a>
+
+#### 3.15.1. 参数源
+Junit Jupiter提供一些开箱即用的*源* 注解。接下来每个子章节将提供一个简要的概述和一个示例。更多信息请参阅 {{ params-provider-package }} 包中的JavaDoc。
 
 ##### @ValueSource
-`@ValueSource`是最简单来源之一。它允许你指定一个基本类型的数组（String、int、long或double），并且它只能为每次调用提供一个参数。
+
+`@ValueSource`是最简单的来源之一。它允许你指定单个数组的文字值，并且只能用于为每个参数化的测试调用提供单个参数。
+
+`@ValueSource`支持以下类型的字面值：
+
+- `short`
+- `byte`
+- `int`
+- `long`
+- `float`
+- `double`
+- `char`
+- `java.lang.String`
+- `java.lang.Class`
+
+例如，以下`@ParameterizedTest`方法将被调用三次，分别为值1,2和3。
 
 ```java
 @ParameterizedTest
@@ -1233,7 +1258,7 @@ void testWithEnumSourceRegex(TimeUnit timeUnit) {
 
 ##### @MethodSource
 
-`@MethodSource`允许你引用测试类中的一个或多个工厂方法。这些工厂方法必须返回一个`Stream`、`Iterable`、`Iterator`或者参数数组。另外，它们不能接收任何参数。默认情况下，它们必须是`static`方法，除非测试类使用了`@TestInstance(Lifecycle.PER_CLASS)`注解。
+`@MethodSource`允许你引用测试类或外部类中的一个或多个*工厂* 方法。这些工厂方法必须返回一个`Stream`、`Iterable`、`Iterator`或者参数数组。另外，它们不能接收任何参数。除非测试类用`@TestInstance(Lifecycle.PER_CLASS)`注解，否则测试类中的工厂方法必须是`static`的；而外部类中的工厂方法必须始终是`static`的。
 
 如果你只需要一个参数，你可以返回一个参数类型的实例的`Stream`，如下面示例所示。
 
@@ -1295,6 +1320,35 @@ static Stream<Arguments> stringIntAndListProvider() {
     );
 }
 ```
+
+通过提供其*完全限定方法名称*可以引用外部`static`工厂方法，如以下示例所示。
+
+```java
+package example;
+
+import java.util.stream.Stream;
+
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+class ExternalMethodSourceDemo {
+
+    @ParameterizedTest
+    @MethodSource("example.StringsProviders#blankStrings")
+    void testWithExternalMethodSource(String blankString) {
+        // test with blank string
+    }
+}
+
+class StringsProviders {
+
+    static Stream<String> blankStrings() {
+        return Stream.of("", " ", " \n ");
+    }
+}
+```
+
+<a id="sample-consume-arguments-csv-source"></a>
 
 ##### @CsvSource
 `@CsvSource`允许你将参数列表定义为以逗号分隔的值（即`String`类型的值）。
@@ -1362,7 +1416,11 @@ static class MyArgumentsProvider implements ArgumentsProvider {
 }
 ```
 
-#### 3.14.3. 参数转换
+#### 3.15.2. 参数转换
+
+##### 扩展转换
+
+JUnit Jupiter为提供给`@ParameterizedTest`的参数提供了 [扩展基本类型转换](https://docs.oracle.com/javase/specs/jls/se8/html/jls-5.html#jls-5.1.2)的支持。例如，使用`@ValueSource(ints = {1,2,3})`注解的参数化测试可以声明为不仅接受`int`类型的参数，还接受`long`，`float`或`double`类型的参数。
 
 ##### 隐式转换
 为了支持像`@CsvSource`这样的使用场景，JUnit Jupiter提供了一些内置的隐式类型转换器。转换过程取决于每个方法参数的声明类型。
@@ -1390,16 +1448,25 @@ void testWithImplicitArgumentConversion(TimeUnit argument) {
 |`float/Float` | `"1.0" → 1.0f`|
 |`double/Double` | `"1.0" → 1.0d`|
 |`Enum subclass` | `"SECONDS" → TimeUnit.SECONDS`|
+| `java.io.File` | `"/path/to/file"` → `new File("/path/to/file")`|
+| `java.math.BigDecimal` | `"123.456e789" → new BigDecimal("123.456e789")` |
+| `java.math.BigInteger` | `"1234567890123456789"` → `new BigInteger("1234567890123456789")` |
+| `java.net.URI` | `"http://junit.org/"` → `URI.create("http://junit.org/")` |
+| `java.net.URL` | `"http://junit.org/" → new URL("http://junit.org/")` |
+| `java.nio.charset.Charset` | `"UTF-8"` → `Charset.forName("UTF-8")` |
+| `java.nio.file.Path` | `"/path/to/file"` → `Paths.get("/path/to/file")` |
 |`java.time.Instant` | `"1970-01-01T00:00:00Z" → Instant.ofEpochMilli(0)`|
-|`java.time.LocalDate` | `"2017-03-14" → LocalDate.of(2017, 3, 14)`|
 |`java.time.LocalDateTime` | `"2017-03-14T12:34:56.789" → LocalDateTime.of(2017, 3, 14, 12, 34, 56, 789_000_000)`|
+|`java.time.LocalDate` | `"2017-03-14" → LocalDate.of(2017, 3, 14)`|
 |`java.time.LocalTime` | `"12:34:56.789" → LocalTime.of(12, 34, 56, 789_000_000)`|
 |`java.time.OffsetDateTime` | `"2017-03-14T12:34:56.789Z" → OffsetDateTime.of(2017, 3, 14, 12, 34, 56, 789_000_000, ZoneOffset.UTC)`|
 |`java.time.OffsetTime` | `"12:34:56.789Z" → OffsetTime.of(12, 34, 56, 789_000_000, ZoneOffset.UTC)`|
-|`java.time.Year` | `"2017" → Year.of(2017)`|
 |`java.time.YearMonth` | `"2017-03" → YearMonth.of(2017, 3)`|
+|`java.time.Year` | `"2017" → Year.of(2017)`|
 |`java.time.ZonedDateTime` | `"2017-03-14T12:34:56.789Z" → ZonedDateTime.of(2017, 3, 14, 12, 34, 56, 789_000_000, ZoneOffset.UTC)`|
-
+| `java.util.Currency` | `"JPY"` → `Currency.getInstance("JPY")` |
+| `java.util.Locale` | `"en"` → `new Locale("en")` |
+| `java.util.UUID` | `"d043e930-7b3b-48e3-bdbe-5a3ccfb833db"` → `UUID.fromString("d043e930-7b3b-48e3-bdbe-5a3ccfb833db")`|
 
 ##### 显式转换
 除了使用隐式转换参数，你还可以使用`@ConvertWith`注解来显式指定一个`ArgumentConverter`用于某个参数，例如下面代码所示。
@@ -1430,8 +1497,11 @@ void testWithExplicitJavaTimeConverter(@JavaTimeConversionPattern("dd.MM.yyyy") 
     assertEquals(2017, argument.getYear());
 }
 ```
+<a id = "argument-aggregation"></a>
 
-#### 3.14.4. 自定义显示名称
+#### 3.15.3. 参数聚合
+
+#### 3.15.4. 自定义显示名称
 
 默认情况下，参数化测试调用的显示名称包含了该特定调用的索引和所有参数的`String`表示形式。不过，你可以通过`@ParameterizedTest`注解的`name`属性来自定义调用的显示名称，如下面代码所示。
 
@@ -1461,7 +1531,7 @@ Display name of container ✔
 |`{0}, {1}, …​`| 单个参数|
 
 
-#### 3.14.5. 生命周期和互操作性
+#### 3.15.5. 生命周期和互操作性
 参数化测试的每次调用拥有跟普通`@Test`方法相同的生命周期。例如，`@BeforeEach`方法将在每次调用之前执行。类似于 [动态测试](#315-动态测试)，调用将逐个出现在IDE的测试树中。你可能会在一个测试类中混合常规`@Test`方法和`@ParameterizedTest`方法。
 
 你可以在`@ParameterizedTest`方法上使用`ParameterResolver`扩展。但是，被参数源解析的方法参数必须出现在参数列表的首位。由于测试类可能包含常规测试和具有不同参数列表的参数化测试，因此，参数源的值不会被生命周期方法（例如`@BeforeEach`）和测试类构造函数解析。
@@ -1484,12 +1554,12 @@ void afterEach(TestInfo testInfo) {
 }
 ```
 
-### 3.15. 测试模板
+### 3.16. 测试模板
 
 `@TestTemplate`方法不是一个常规的测试用例，它是测试用例的模板。因此，它的设计初衷是用来被多次调用，而调用次数取决于注册提供者返回的调用上下文数量。所以，它必须结合 [TestTemplateInvocationContextProvider](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestTemplateInvocationContextProvider.html) 扩展一起使用。测试模板方法每一次调用跟执行常规`@Test`方法一样，它也完全支持相同的生命周期回调和扩展。关于它的用例请参阅 [为测试模板提供调用上下文](#58-为测试模板提供调用上下文)。
 
 
-### 3.16. 动态测试
+### 3.17. 动态测试
 
 JUnit Juppiter的 [注解](#31-注解) 章节描述的标准`@Test`注解跟JUnit 4中的`@Test`注解非常类似。两者都描述了实现测试用例的方法。这些测试用例都是静态的，因为它们是在编译时完全指定的，而且它们的行为不能在运行时被改变。*假设提供了一种基本的动态行为形式，但其表达性却被故意地加以限制*。
 
@@ -1514,7 +1584,7 @@ JUnit Juppiter的 [注解](#31-注解) 章节描述的标准`@Test`注解跟JUni
 > ⚠️ 动态测试目前是一个试验性功能。详细信息请参阅 [试验性API](#82-试验性api) 中的表格。
 
 
-#### 3.16.1. 动态测试示例
+#### 3.17.1. 动态测试示例
 
 下面的`DynamicTestsDemo`类演示了测试工厂和动态测试的几个示例。
 

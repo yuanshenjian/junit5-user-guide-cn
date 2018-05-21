@@ -1,7 +1,7 @@
 ## 2. 安装
 最终版本和里程碑版本已经被部署到Maven仓库中心。
 
-快照版本被部署到 [Sonatype 快照库](https://oss.sonatype.org/content/repositories/snapshots) 中的 [/org/junit](https://oss.sonatype.org/content/repositories/snapshots/org/junit/)目录下。
+快照版本被部署到 [Sonatype 仓库]({{ snapshot-repo }}) 中的 [/org/junit]({{ snapshot-repo }}/org/junit/)目录下。
 
 ### 2.1. 依赖元数据
 
@@ -9,7 +9,7 @@
 
 * **Group ID**: `org.junit.platform`
 
-* **Version**: `{{ platform_version }}`
+* **Version**: `{{ platform-version }}`
 
 * **Artifact IDs:**
 
@@ -60,7 +60,7 @@ JUnit 内部通用类库/实用工具，它们仅用于JUnit框架本身，*不�
 #### 2.1.2. JUnit Jupiter
 * **Group ID**: `org.junit.jupiter`
 
-* **Version**: `{{ jupiter_version }}`
+* **Version**: `{{ jupiter-version }}`
 
 * **Artifact IDs**:
 
@@ -88,7 +88,7 @@ JUnit Jupiter测试引擎的实现，仅仅在运行时需要。
 
 * **Group ID**: `org.junit.vintage`
 
-* **Version**: `{{ vintage_version }}`
+* **Version**: `{{ vintage-version }}`
 
 * **Artifact ID**:
 
@@ -104,7 +104,7 @@ JUnit Vintage测试引擎实现，允许在新的JUnit Platform上运行低版�
 
 * **Artifact ID**: `junit-bom`
 
-* **Version**: `{{ bom_version }}`
+* **Version**: `{{ bom-version }}`
 
 #### 2.1.5. 依赖
 以上所有artifacts在它们已发布的Maven POM中都依赖了下面的*@API Guardian* JAR文件。
@@ -113,7 +113,7 @@ JUnit Vintage测试引擎实现，允许在新的JUnit Platform上运行低版�
 
 * **Artifact ID**: `apiguardian-api`
 
-* **Version**: `{{ apiguardian_version }}`
+* **Version**: `{{ apiguardian-version }}`
 
 此外，上面大部分artifacts都对下面的*OpenTest4J* JAR文件有直接或传递的依赖关系。
 
@@ -121,7 +121,7 @@ JUnit Vintage测试引擎实现，允许在新的JUnit Platform上运行低版�
 
 * **Artifact ID**: `opentest4j`
 
-* **Version**: `{{ ota4j_version }}`
+* **Version**: `{{ ota4j-version }}`
 
 
 ### 2.2. 依赖关系图
@@ -130,7 +130,7 @@ JUnit Vintage测试引擎实现，允许在新的JUnit Platform上运行低版�
 
 
 ### 2.3 JUnit Jupiter示例工程
-[junit5-samples](https://github.com/junit-team/junit5-samples) 代码库中包含了一系列基于JUnit Jupiter和JUnit Vintage的示例工程。你可以在下面的项目中找到相应的`build.gradle`和`pom.xml`文件：
+[junit5-samples]({{ junit5-samples-repo }}) 代码库中包含了一系列基于JUnit Jupiter和JUnit Vintage的示例工程。你可以在下面的项目中找到相应的`build.gradle`和`pom.xml`文件：
 
 - Gradle工程：[junit5-jupiter-starter-gradle](https://github.com/junit-team/junit5-samples/tree/r5.2.0/junit5-jupiter-starter-gradle).
 

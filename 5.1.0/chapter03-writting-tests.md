@@ -1178,10 +1178,25 @@ palindromes(String) ✔
 为了使用参数化测试，你必须添加`junit-jupiter-params`依赖。详细信息请参考 [依赖元数据](#21-依赖元数据)。
 
 #### 3.14.2. 参数源
-Junit Jupiter提供一些开箱即用的*源* 注解。接下来每个子章节将提供一个简要的概述和一个示例。更多信息请参阅 [`org.junit.jupiter.params.provider`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/params/provider/package-summary.html) 包中的JavaDoc。
+Junit Jupiter提供一些开箱即用的*源* 注解。接下来每个子章节将提供一个简要的概述和一个示例。更多信息请参阅 {{ params-provider-package }} 包中的JavaDoc。
 
 ##### @ValueSource
-`@ValueSource`是最简单来源之一。它允许你指定一个基本类型的数组（String、int、long或double），并且它只能为每次调用提供一个参数。
+
+`@ValueSource`是最简单的来源之一。它允许你指定单个数组的文字值，并且只能用于为每个参数化的测试调用提供单个参数。
+
+`@ValueSource`支持以下类型的文字值：
+
+- `short`
+- `byte`
+- `int`
+- `long`
+- `float`
+- `double`
+- `char`
+- `java.lang.String`
+- `java.lang.Class`
+
+例如，以下`@ParameterizedTest`方法将被调用三次，分别为值1,2和3。
 
 ```java
 @ParameterizedTest
@@ -1390,16 +1405,25 @@ void testWithImplicitArgumentConversion(TimeUnit argument) {
 |`float/Float` | `"1.0" → 1.0f`|
 |`double/Double` | `"1.0" → 1.0d`|
 |`Enum subclass` | `"SECONDS" → TimeUnit.SECONDS`|
+| `java.io.File` | `"/path/to/file"` → `new File("/path/to/file")`|
+| `java.math.BigDecimal` | `"123.456e789" → new BigDecimal("123.456e789")` |
+| `java.math.BigInteger` | `"1234567890123456789"` → `new BigInteger("1234567890123456789")` |
+| `java.net.URI` | `"http://junit.org/"` → `URI.create("http://junit.org/")` |
+| `java.net.URL` | `"http://junit.org/" → new URL("http://junit.org/")` |
+| `java.nio.charset.Charset` | `"UTF-8"` → `Charset.forName("UTF-8")` |
+| `java.nio.file.Path` | `"/path/to/file"` → `Paths.get("/path/to/file")` |
 |`java.time.Instant` | `"1970-01-01T00:00:00Z" → Instant.ofEpochMilli(0)`|
-|`java.time.LocalDate` | `"2017-03-14" → LocalDate.of(2017, 3, 14)`|
 |`java.time.LocalDateTime` | `"2017-03-14T12:34:56.789" → LocalDateTime.of(2017, 3, 14, 12, 34, 56, 789_000_000)`|
+|`java.time.LocalDate` | `"2017-03-14" → LocalDate.of(2017, 3, 14)`|
 |`java.time.LocalTime` | `"12:34:56.789" → LocalTime.of(12, 34, 56, 789_000_000)`|
 |`java.time.OffsetDateTime` | `"2017-03-14T12:34:56.789Z" → OffsetDateTime.of(2017, 3, 14, 12, 34, 56, 789_000_000, ZoneOffset.UTC)`|
 |`java.time.OffsetTime` | `"12:34:56.789Z" → OffsetTime.of(12, 34, 56, 789_000_000, ZoneOffset.UTC)`|
-|`java.time.Year` | `"2017" → Year.of(2017)`|
 |`java.time.YearMonth` | `"2017-03" → YearMonth.of(2017, 3)`|
+|`java.time.Year` | `"2017" → Year.of(2017)`|
 |`java.time.ZonedDateTime` | `"2017-03-14T12:34:56.789Z" → ZonedDateTime.of(2017, 3, 14, 12, 34, 56, 789_000_000, ZoneOffset.UTC)`|
-
+| `java.util.Currency` | `"JPY"` → `Currency.getInstance("JPY")` |
+| `java.util.Locale` | `"en"` → `new Locale("en")` |
+| `java.util.UUID` | `"d043e930-7b3b-48e3-bdbe-5a3ccfb833db"` → `UUID.fromString("d043e930-7b3b-48e3-bdbe-5a3ccfb833db")`|
 
 ##### 显式转换
 除了使用隐式转换参数，你还可以使用`@ConvertWith`注解来显式指定一个`ArgumentConverter`用于某个参数，例如下面代码所示。
@@ -1509,7 +1533,7 @@ JUnit Juppiter的 [注解](#31-注解) 章节描述的标准`@Test`注解跟JUni
 
 >译者注：同一个`@TestFactory`所生成的n个动态测试，`@BeforeEach`和`@AfterEach`只会在这n个动态测试开始前和结束后各执行一次，不会为每一个单独的动态测试都执行。
 
-在JUnit Jupiter {{ jupiter_version }}中，动态测试必须始终由工厂方法创建；不过，在后续的发行版中，这可能会得到注册工具的补充。
+在JUnit Jupiter {{ jupiter-version }}中，动态测试必须始终由工厂方法创建；不过，在后续的发行版中，这可能会得到注册工具的补充。
 
 > ⚠️ 动态测试目前是一个试验性功能。详细信息请参阅 [试验性API](#82-试验性api) 中的表格。
 
