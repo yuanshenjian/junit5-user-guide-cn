@@ -61,231 +61,84 @@ for JUnit 5* 章节。
 ### 4.2. 构建工具支持
 
 #### 4.2.1. Gradle
-
-JUnit开发团队已经开发了一款非常基础的Gradle插件，它允许你运行被`TestEngine`（例如，JUnit3、JUnit4、JUnit Jupiter以及 [Specsy](http://specsy.org/) 等）支持的任何种类的测试。关于插件的使用示例请参阅 [`junit5-gradle-consumer`](https://github.com/junit-team/junit5-samples/tree/r5.0.2/junit5-gradle-consumer) 项目中的`build.gradle`文件。
-
-> ❗ ️️*本地Gradle支持在这里*  
-从 [版本4.6](https://docs.gradle.org/4.6/release-notes.html) 开始，Gradle为在JUnit平台上执行测试提供 [native support](https://docs
-.gradle.org/current/userguide/java_plugin.html#using_junit5)。因此，`junit-platform-gradle-plugin`将在JUnit Platform 1.2中被弃用，并在版本1.3中停用。请切换到Gradle的标准`test`任务并使用`JUnitPlatform()`。
-
-##### 启用JUnit Gradle插件
- 要使用JUnit Gradle插件，你首先要确保使用了Gradle 2.5或更高的版本，然后你可以按照下面的模板来配置项目中的`build.gradle`文件。
+从 [4.6](https://docs.gradle.org/4.6/release-notes.html) 开始，Gradle对在JUnit Platform执行测试提供了 [本地化支持](https://docs.gradle.org/current/userguide/java_testing.html#using_junit5) 。要启用此功能，你只需要`build.gradle`文件中的`test`任务声明里指定`useJUnitPlatform()`即可：
 
 ```groovy
-buildscript {
-    repositories {
-        mavenCentral()
-        // The following is only necessary if you want to use SNAPSHOT releases.
-        // maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
-    }
-    dependencies {
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.2'
-    }
-}
-
-apply plugin: 'org.junit.platform.gradle.plugin'
-```
-
-##### 配置JUnit Gradle插件
-
-一旦应用了JUnit Gradle插件，你就可以按照下面的方式进行配置。
-
-```groovy
-junitPlatform {
-    platformVersion '{{ platform_version }}' // optional, defaults to plugin version
-    reportsDir file('build/test-results/junit-platform') // this is the default
-    // enableStandardTestTask true
-    // selectors (optional)
-    // filters (optional)
-    // logManager (optional)
+test {
+    useJUnitPlatform()
 }
 ```
 
-JUnit Gradle插件在默认情况下会禁用标准的Gradle `test`任务，但可以通过`enableStandardTestTask`标志来启用。
-
-##### 配置选择器
-默认情况下，插件会扫描项目中所有测试的输出目录。不过，你可以使用一个叫`selectors`的扩展元素来显式指定要执行哪些测试。
+同样支持通过tag和引擎过滤：
 
 ```groovy
-junitPlatform {
-    // ...
-    selectors {
-        uris 'file:///foo.txt', 'http://example.com/'
-        uri 'foo:resource'  ①
-        files 'foo.txt', 'bar.csv'
-        file 'qux.json'  ②
-        directories 'foo/bar', 'bar/qux'
-        directory 'qux/bar'  ③
-        packages 'com.acme.foo', 'com.acme.bar'
-        aPackage 'com.example.app'  ④
-        classes 'com.acme.Foo', 'com.acme.Bar'
-        aClass 'com.example.app.Application' ⑤ 
-        methods 'com.acme.Foo#a', 'com.acme.Foo#b'
-        method 'com.example.app.Application#run(java.lang.String[])'  ⑥
-        resources '/bar.csv', '/foo/input.json'
-        resource '/com/acme/my.properties'  ⑦
+test {
+    useJUnitPlatform {
+        includeTags 'fast', 'smoke & feature-a'
+        // excludeTags 'slow', 'ci'
+        includeEngines 'junit-jupiter'
+        // excludeEngines 'junit-vintage'
     }
-    // ...
-}
-
-```
-
-① URIs  
-② 本地文件  
-③ 本地目录  
-④ 包  
-⑤ 类，全类名  
-⑥ 方法，全方法名（请参阅 [DiscoverySelectors中的selectMethod(String)方法](http://junit.org/junit5/docs/current/api/org/junit/platform/engine/discovery/DiscoverySelectors.html#selectMethod-java.lang.String-)）  
-⑦ 类路径资源
-
-##### 配置过滤器
-你可以使用`filters`扩展来配置测试计划的过滤器。默认情况下，所有的引擎和标记都会被包含在测试计划中。但只有默认的`includeClassNamePattern`(`^.*Tests?$`)会被应用。你可以重写默认的匹配模式，例如下面示例。当你使用了多种匹配模式时，JUnit Platform会使用逻辑 或 将它们合并起来使用。
-
-```groovy
-junitPlatform {
-    // ...
-    filters {
-        engines {
-            include 'junit-jupiter'
-            // exclude 'junit-vintage'
-        }
-        tags {
-            include 'fast', 'smoke & feature-a'
-            // exclude 'slow', 'ci'
-        }
-        packages {
-            include 'com.sample.included1', 'com.sample.included2'
-            // exclude 'com.sample.excluded1', 'com.sample.excluded2'
-        }
-        includeClassNamePattern '.*Spec'
-        includeClassNamePatterns '.*Test', '.*Tests'
-    }
-    // ...
 }
 ```
 
-如果你通过`engines {include …​}`或`engines {exclude …​}`来提供一个*测试引擎ID*，那么JUnit Gradle插件将只运行你希望运行的那个测试引擎。同样，如果你通过`tags {include …​}`或者`tags {exclude …​}`提供一个*标记* 或 [标记表达式](#46-标记表达式)，JUnit Gradle插件将只运行相应标记的测试（例如，通过JUnit Jupiter测试的`@Tag`注解来过滤）。同理，关于包名，可以通过`packages {include …​}`或者`packages {exclude …​}`配置要包含或排除的包名。
+有关详细的配置选项，请参考 [官方Gradle文档](https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_test)。
 
-<a id="配置参数-gradle"></a>
+> ⚠️ JUnit Platform Gradle 插件被弃用了
+> 
+> 有JUnit team开发的基础`junit-platform-gradle-plugin`在 JUnit Platform 1.2 中被弃用，并且在1.3中不再支持。请使用标准的Gradle `test`任务代替。
 
 ##### 配置参数
-你可以使用`configurationParameter`或者`configurationParameters` DSL来设置配置参数，从而影响测试发现和执行。前者可以配置单独的配置参数，后者可以使用一个配置参数的map来一次性配置多个键-值对。所有的key和value都必须是`String`类型。
-
+标准的Gradle `test` 任务当前没有提供一个专用的DSL用来设置JUnit Platform [配置参数](#45-配置参数)来影响测试发现和执行。不过，你可以通过系统属性（如下所示）或通过`junit-platform.properties`文件在构建脚本中提供配置参数。
 
 ```groovy
-junitPlatform {
+test {
     // ...
-    configurationParameter 'junit.jupiter.conditions.deactivate', '*'
-    configurationParameters([
+    systemProperty 'junit.jupiter.conditions.deactivate', '*'
+    systemProperties = [
         'junit.jupiter.extensions.autodetection.enabled': 'true',
         'junit.jupiter.testinstance.lifecycle.default': 'per_class'
-    ])
+    ]
     // ...
 }
 ```
 
 ##### 配置测试引擎
-为了让JUnit Gradle插件运行所有测试，类路径中必须存在一个`TestEngine`的实现。
+为了运行任何测试，在类路径中必须存在一个`TestEngine`的实现。
 
-要支持基于JUnit Jupiter的测试，你需要配置一个JUnit Jupiter API的 `testCompile`依赖以及JUnit Jupiter `TestEngine`实现的`testRuntime`依赖，具体配置如下。
-
-```groovy
-dependencies {
-    testCompile("org.junit.jupiter:junit-jupiter-api:{{ jupiter_version }}")
-    testRuntime("org.junit.jupiter:junit-jupiter-engine:{{ jupiter_version }}")
-}
-```
-
-只要你配置了一个JUnit 4的`testCompile`依赖以及JUnit Vintage `TestEngine`实现的`testRuntime`依赖，JUnit Gradle插件就可以运行基于JUnit 4的测试，具体配置如下。
+要支持基于JUnit Jupiter的测试，配置一个JUnit Jupiter API的`testCompile`依赖以及JUnit Jupiter `TestEngine`的`testComiple`依赖，类似如下配置：
 
 ```groovy
 dependencies {
-    testCompile("junit:junit:{{ junit4_version }}")
-    testRuntime("org.junit.vintage:junit-vintage-engine:{{ vintage_version }}")
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.2.0")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.2.0")
 }
 ```
 
-##### 配置日志（可选）
-JUnit使用`java.util.logging`包（a.k.a *JUL*）中的Java Logging API发出警告和调试信息。请参阅 [LogManager](https://docs.oracle.com/javase/8/docs/api/java/util/logging/LogManager.html) 的官方文档以获取配置选项。
-
-或者，可以将日志消息重定向到其他日志框架，例如 [Log4j](https://logging.apache.org/log4j/2.x/) 或 [Logback](https://logback.qos.ch/)。要使用提供 [LogManager](https://docs.oracle.com/javase/8/docs/api/java/util/logging/LogManager.html) 自定义实现的日志框架，请配置JUnit Gradle插件的`logManager`扩展属性。这会将`java.util.logging.manager`系统属性设置为要使用的 [LogManager](https://docs.oracle.com/javase/8/docs/api/java/util/logging/LogManager.html) 实现提供的*全限定类名称*。下面的示例演示了如何配置Log4j 2.x（有关详细信息，请参阅 [Log4j JDK Logging Adapter](https://logging.apache.org/log4j/2.x/log4j-jul/index.html)）。
+只要你配置了一个JUnit 4的`testCompile`依赖和一个JUnit Vintage `TestEngine`的`testRuntime`依赖，JUnit Platform就可以运行基于JUnit 4的测试，类似如下配置：
 
 ```groovy
-junitPlatform {
-    logManager 'org.apache.logging.log4j.jul.LogManager'
+dependencies {
+    testCompile("junit:junit:4.12")
+    testRuntime("org.junit.vintage:junit-vintage-engine:5.2.0")
 }
 ```
 
-其他日志框架提供了不同的方式来重定向使用`java.util.logging`记录的消息。例如，对于 [Logback](https://logback.qos.ch/)，你可以通过向运行时类路径添加附加依赖项来使用 [JUL to SLF4J Bridge](https://www.slf4j.org/legacy.html#jul-to-slf4j)
+##### 配置日志记录（可选）
+JUnit 使用了位于`java.util.logging`包（a.k.a.*JUL*）下的Java Logging API来发布警告和调式信息。关于配置选项，请参阅官方文档的 [LogManager](https://docs.oracle.com/javase/8/docs/api/java/util/logging/LogManager.html) 章节。
 
-##### 使用JUnit Gradle插件
-一旦应用并配置了JUnit Gradle插件，你就可以使用新的`junitPlatformTest`任务（在可用的Gralde task中会多出一个名为`junitPlatformTest`的Task）。
+或者，你也可以将日志信息重定向到其他的日志框架，比如 [Log4j](https://logging.apache.org/log4j/2.x/) 或者 [Logback](https://logback.qos.ch/)。要使用提供了自定义的 [LogManager](https://docs.oracle.com/javase/8/docs/api/java/util/logging/LogManager.html)实现的日志框架，将`java.util.loggin.manager`系统属性设置为 [LogManager](https://docs.oracle.com/javase/8/docs/api/java/util/logging/LogManager.html) *全类名* 即可。下面的例子演示了如何配置Log4j 2.x（有关详细信息，请参阅 [Log4j JDK Logging Adapter](https://logging.apache.org/log4j/2.x/log4j-jul/index.html)）。
 
-在命令行中调用`gradlew junitPlatformTest`（或者`gradlew test`）指令，项目中所有满足当前`includeClassNamePattern`（默认匹配`^.*Tests?$`）配置的测试会被执行。
-
-在 [`junit5-gradle-consumer`](https://github.com/junit-team/junit5-samples/tree/r5.0.2/junit5-gradle-consumer) 项目中执行 `junitPlatformTest`任务会看到类似下面的输出。
-
-```sh
-:junitPlatformTest
-
-Test run finished after 93 ms
-[         3 containers found      ]
-[         0 containers skipped    ]
-[         3 containers started    ]
-[         0 containers aborted    ]
-[         3 containers successful ]
-[         0 containers failed     ]
-[         3 tests found           ]
-[         1 tests skipped         ]
-[         2 tests started         ]
-[         0 tests aborted         ]
-[         2 tests successful      ]
-[         0 tests failed          ]
-
-BUILD SUCCESSFUL
+```groovy
+test {
+    systemProperty 'java.util.logging.manager', 'org.apache.logging.log4j.jul.LogManager'
+}
 ```
 
-如果测试失败，build会失败，并且会输出类似下面的信息。
-
-```sh
-:junitPlatformTest
-
-Test failures (1):
-  JUnit Jupiter:SecondTest:mySecondTest()
-    MethodSource [className = 'com.example.project.SecondTest', methodName = 'mySecondTest', methodParameterTypes = '']
-    => Exception: 2 is not equal to 1 ==> expected: <2> but was: <1>
-
-Test run finished after 99 ms
-[         3 containers found      ]
-[         0 containers skipped    ]
-[         3 containers started    ]
-[         0 containers aborted    ]
-[         3 containers successful ]
-[         0 containers failed     ]
-[         3 tests found           ]
-[         0 tests skipped         ]
-[         3 tests started         ]
-[         0 tests aborted         ]
-[         2 tests successful      ]
-[         1 tests failed          ]
-
-:junitPlatformTest FAILED
-
-FAILURE: Build failed with an exception.
-
-* What went wrong:
-Execution failed for task ':junitPlatformTest'.
-> Process 'command '/Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home/bin/java'' finished with non-zero exit value 1
-```
-
-> 📒 当任何一个容器或测试失败时，退出值为1；否则，退出值为0.
-
-> ⚠️ **当前JUnit Gradle插件的限制**  
-> 任何通过JUnit Gradle插件运行的测试结果都不会包含在Gradle生成的标准测试报告中；但通常可以在持续集成服务器上汇总测试结果。详情请参阅插件的`reportsDir`属性。
-
+其他的日志框架提供了不同的方式来重定向`java.util.logging`记录的信息。例如，对于 [Logback](https://logback.qos.ch/)，你可以通过向runtime类路径添加一个额外的依赖来启用[JUL to SLF4J Bridge](https://www.slf4j.org/legacy.html#jul-to-slf4j)。
 
 #### 4.2.2. Maven
-JUnit团队已经为Maven Surefire开发了一个非常基础的provider，它允许你使用`mvn test`运行JUnit 4和JUnit Jupiter测试。[`junit5-maven-consumer`](https://github.com/junit-team/junit5-samples/tree/r5.0.2/junit5-maven-consumer) 项目中的`pom.xml`文件演示了如何使用它，你可以以它作为一个起点。
+JUnit团队已经为Maven Surefire开发了一个基础的provider，它允许你使用`mvn test`运行JUnit 4和JUnit Jupiter测试。[`junit5-jupiter-starter-maven`](https://github.com/junit-team/junit5-samples/tree/r5.2.0/junit5-jupiter-starter-maven) 项目中的`pom.xml`文件演示了如何使用它，你可以以它作为一个起点。
 
 > 📒 请在Surefire {{ surefire_version }}中使用`junit-platform-surefire-provider`。
 
@@ -351,7 +204,7 @@ JUnit团队已经为Maven Surefire开发了一个非常基础的provider，它�
 ...
 ```
 
-只要你配置了JUnit 4的`test`依赖，并将JUnit Vintage `TestEngine`的实现添加到`maven-surefire-plugin`的依赖项中，JUnit Platform Surefire Provider 就可以运行基于JUnit 4的测试。具体配置如下。
+只要你配置了JUnit 4的`test`依赖，并将JUnit Vintage `TestEngine`的实现添加到`maven-surefire-plugin`的依赖项中，JUnit Platform Surefire Provider 就可以运行基于JUnit 4的测试。具体配置如下：
 
 ```xml
 ...
@@ -400,9 +253,36 @@ Maven Surefire插件将扫描全类名与以下模式匹配的测试类。
 
 - `**/*Test.java`
 
+- `**/*Tests.java`
+
 - `**/*TestCase.java`
 
-但是请注意，你可以通过在`pom.xml`文件中配置显式`include`和`exclude`规则来覆盖其默认行为。有关详细信息，请参阅 [Inclusions and Exclusions of Tests](https://maven.apache.org/surefire/maven-surefire-plugin/examples/inclusion-exclusion.html) 的文档。
+此外，它默认会排除所有内嵌类（包括静态成员类）。
+
+但是请注意，你可以通过在`pom.xml`文件中配置显式`include`和`exclude`规则来覆盖其默认行为。例如，要阻止Maven Surefire排除静态成员类，你可以覆盖它的排除规则。
+
+*覆盖Maven Surefire的排除规则*
+```xml
+...
+<build>
+    <plugins>
+        ...
+        <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>{{ surefire_version }}</version>
+            <configuration>
+                <excludes>
+                    <exclude/>
+                </excludes>
+            </configuration>
+            ...
+        </plugin>
+    </plugins>
+</build>
+...
+```
+
+有关详细信息，请参阅 [Inclusions and Exclusions of Tests](https://maven.apache.org/surefire/maven-surefire-plugin/examples/inclusion-exclusion.html) 的文档。
 
 ##### 按Tag过滤
 使用以下配置属性，你可以通过Tag来过滤测试。
@@ -464,14 +344,65 @@ Maven Surefire插件将扫描全类名与以下模式匹配的测试类。
 ...
 ```
 
+#### 4.2.3. Ant
+[Ant](https://ant.apache.org/) 从`1.10.3`开始，引入了一个新的 [`junitlauncher`](https://ant.apache.org/manual/Tasks/junitlauncher.html) 任务来提供在JUnit Platform上加载测试的本地化支持。`junitlauncher`任务单独负责加载JUnit Platform并将选定的测试集合传递给它。然后，JUnit Platform委托已注册的测试引擎来发现和执行测试。
+
+`junitlauncher`任务尝试尽可能地与本地Ant构造（如 [资源集合](https://ant.apache.org/manual/Types/resources.html#collection)）保持一致，以便用户选择他们想要由测试引擎执行的测试。与许多其他核心Ant任务相比，这赋予了该任务一致且自然的感觉。
+
+>📒 Ant 1.10.3中提供的`junitlauncher`任务版本为启动JUnit平台提供了基本的最小支持。其他增强功能（包括支持在单独的JVM中分支测试）将在随后的Ant版本中提供。
+
+[`junit5-jupiter-starter-ant`](https://github.com/junit-team/junit5-samples/tree/r5.2.0/junit5-jupiter-starter-ant) 项目中的`build.xml`文件演示了如何使用它，你可以以它作为一个起点。
+
+##### 基本用法
+以下示例演示了如何配置`junitlauncher`任务以选择一个单独的测试类（即：`org.myapp.test.MyFirstJUnit5Test`）：
+
+```xml
+<path id="test.classpath">
+    <!-- The location where you have your compiled classes -->
+    <pathelement location="${build.classes.dir}" />
+</path>
+
+<!-- ... -->
+
+<junitlauncher>
+    <classpath refid="test.classpath" />
+    <test name="org.myapp.test.MyFirstJUnit5Test" />
+</junitlauncher>
+```
+`test` 元素允许你指定你想要选择和执行的单个测试类。`classpath`元素允许你指定用于启动JUnit平台的类路径。这个类路径也将用于定位属于执行部分的测试类。
+
+以下示例演示如何配置`junitlauncher`任务以从多个位置选择测试类：
+
+```xml
+<path id="test.classpath">
+    <!-- The location where you have your compiled classes -->
+    <pathelement location="${build.classes.dir}" />
+</path>
+....
+<junitlauncher>
+    <classpath refid="test.classpath" />
+    <testclasses outputdir="${output.dir}">
+        <fileset dir="${build.classes.dir}">
+            <include name="org/example/**/demo/**/" />
+        </fileset>
+        <fileset dir="${some.other.dir}">
+            <include name="org/myapp/**/" />
+        </fileset>
+    </testclasses>
+</junitlauncher>
+```
+
+在上面的示例中，`testclasses`元素允许你选择位于不同位置的多个测试类。
+
+有关使用和配置选项的更多详细信息，请参阅 [`junitlauncher`任务](https://ant.apache.org/manual/Tasks/junitlauncher.html) 的官方Ant文档。
+
 ### 4.3. 控制台启动器
 [`ConsoleLauncher`](http://junit.org/junit5/docs/current/api/org/junit/platform/console/ConsoleLauncher.html) 是一个Java的命令行应用程序，它允许你通过命令行来启动JUnit Platform。例如，它可以用来运行JUnit Vintage和JUnit Jupiter测试，并在控制台中打印测试结果。
 
-`junit-platform-console-standalone-1.0.2.jar`这个包含了所有依赖的可执行的jar包已经被发布在Maven仓库中，它位于 [junit-platform-console-standalone](https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone)目录下，你可以 [运行](https://docs.oracle.com/javase/tutorial/deployment/jar/run.html) 独立的ConsoleLauncher，如下所示。
+`junit-platform-console-standalone-{{platform_version}}.jar`这个包含了所有依赖的可执行的jar包已经被发布在Maven仓库中，它位于 [junit-platform-console-standalone](https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone)目录下，你可以 [运行](https://docs.oracle.com/javase/tutorial/deployment/jar/run.html) 独立的ConsoleLauncher，如下所示。
 
 
-
-java -jar junit-platform-console-standalone-1.0.2.jar<[Options](#431-options)>
+java -jar junit-platform-console-standalone-{{platform_version}}.jar<[Options](#431-options)>
 
 如下所示为一个输出的例子。
 
@@ -649,7 +580,8 @@ public class JUnit4SuiteDemo {
 }
 ```
 
-`JUnit4SuiteDemo`类会发现并运行所有位于`example`包及其子包下的测试。默认情况下，它只包含类名符合正则表达式`^.*Tests?$`的测试类。
+`JUnit4SuiteDemo`类会发现并运行所有位于`example`包及其子包下的测试。默认情况下，它只包含类名以`Test`开始或者以`Test`或`Tests结束的测试类。
+
 
 >📒 ***附加配置选项***  
 > 除了`@SelectPackages`之外，还有很多配置选项可以用来发现和过滤测试。详细内容请参考 [Javadoc](http://junit.org/junit5/docs/current/api/org/junit/platform/suite/api/package-summary.html).

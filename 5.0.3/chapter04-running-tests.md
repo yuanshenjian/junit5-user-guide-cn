@@ -459,11 +459,11 @@ Maven Surefire插件将扫描全类名与以下模式匹配的测试类。
 ### 4.3. 控制台启动器
 [`ConsoleLauncher`](http://junit.org/junit5/docs/current/api/org/junit/platform/console/ConsoleLauncher.html) 是一个Java的命令行应用程序，它允许你通过命令行来启动JUnit Platform。例如，它可以用来运行JUnit Vintage和JUnit Jupiter测试，并在控制台中打印测试结果。
 
-`junit-platform-console-standalone-1.0.2.jar`这个包含了所有依赖的可执行的jar包已经被发布在Maven仓库中，它位于 [junit-platform-console-standalone](https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone)目录下，你可以 [运行](https://docs.oracle.com/javase/tutorial/deployment/jar/run.html) 独立的ConsoleLauncher，如下所示。
+`junit-platform-console-standalone-{{platform_version}}.jar`这个包含了所有依赖的可执行的jar包已经被发布在Maven仓库中，它位于 [junit-platform-console-standalone](https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone)目录下，你可以 [运行](https://docs.oracle.com/javase/tutorial/deployment/jar/run.html) 独立的ConsoleLauncher，如下所示。
 
 
 
-java -jar junit-platform-console-standalone-1.0.2.jar<[Options](#431-options)>
+java -jar junit-platform-console-standalone-{{platform_version}}.jar<[Options](#431-options)>
 
 如下所示为一个输出的例子。
 
