@@ -5,17 +5,32 @@
 
 {% assign snapshot-repo = 'https://oss.sonatype.org/content/repositories/snapshots' %}
 
-
+{% assign extension-api-package = '[org.junit.jupiter.api.extension](' | append: javadoc-root | append: '/org/junit/jupiter/api/extension/package-summary.html)' %}
 {% assign params-provider-package = '[org.junit.jupiter.params.provider](' | append: javadoc-root | append: '/org/junit/jupiter/params/provider/package-summary.html)' %}
+{% assign api-package = '[org.junit.jupiter.api](' | append: javadoc-root | append: '/org/junit/jupiter/api/package-summary.html)' %}
+
+
 {% assign StackOverflow = '[Stack Overflow](https://stackoverflow.com/questions/tagged/junit5)' %}
 {% assign Gitter = '[Gitter](https://gitter.im/junit-team/junit5)' %}                     
+{% assign API = '[@API](https://apiguardian-team.github.io/apiguardian/docs/current/api/)' %}
+{% assign API_Guardian = '[@API Guardian](https://github.com/apiguardian-team/apiguardian)' %}
+{% assign AssertJ = '[AssertJ](http://joel-costigliola.github.io/assertj/)' %}
+{% assign Hamcrest = '[Hamcrest](http://hamcrest.org/JavaHamcrest/)' %}
+{% assign Log4j = '[Log4j](https://logging.apache.org/log4j/2.x/)' %}
+{% assign Log4j_JDK_Logging_Adapter = '[Log4j JDK Logging Adapter](https://logging.apache.org/log4j/2.x/log4j-jul/index.html)' %}
+{% assign Logback = '[Logback](https://logback.qos.ch/)' %}
+{% assign LogManager = '[LogManager](https://docs.oracle.com/javase/8/docs/api/java/util/logging/LogManager.html)' %}
+{% assign MockitoExtension = '[MockitoExtension](https://github.com/mockito/mockito/blob/release/2.x/subprojects/junit-jupiter/src/main/java/org/mockito/junit/jupiter/MockitoExtension.java)' %}
+{% assign SpringExtension = '[SpringExtension](https://github.com/spring-projects/spring-framework/tree/master/spring-test/src/main/java/org/springframework/test/context/junit/jupiter/SpringExtension.java)' %}
+{% assign Specsy = '[Specsy](http://specsy.org/)' %}
+{% assign Truth = '[Truth](http://google.github.io/truth/)' %}
 
 
 {% assign TestEngine = '[TestEngine](' | append: javadoc-root | append: '/org/junit/platform/engine/TestEngine.html)' %}
 {% assign ArgumentsAccessor = '[ArgumentsAccessor](' | append: javadoc-root | append: '/org/junit/jupiter/params/aggregator/ArgumentsAccessor.html)' %}
 {% assign ArgumentsAggregator = '[ArgumentsAggregator](' | append: javadoc-root | append: '/org/junit/jupiter/params/aggregator/ArgumentsAggregator.html)' %}
-{% assign Assertions = '[Assertions](' | append: javadoc-root | append: '/org/junit/jupiter/api/Assertions.html)' %}
-{% assign Assumptions = '[Assertions](' | append: javadoc-root | append: '/org/junit/jupiter/api/Assumptions.html)' %}
+{% assign Assertions = '[org.junit.jupiter.api.Assertions](' | append: javadoc-root | append: '/org/junit/jupiter/api/Assertions.html)' %}
+{% assign Assumptions = '[org.junit.jupiter.api.Assumptions](' | append: javadoc-root | append: '/org/junit/jupiter/api/Assumptions.html)' %}
 {% assign BeforeAllCallback = '[BeforeAllCallback](' | append: javadoc-root | append: '/org/junit/jupiter/api/extension/BeforeAllCallback.html)' %}
 {% assign BeforeEachCallback = '[BeforeEachCallback](' | append: javadoc-root | append: '/org/junit/jupiter/api/extension/BeforeEachCallback.html)' %}
 {% assign BeforeTestExecutionCallback = '[BeforeTestExecutionCallback](' | append: javadoc-root | append: '/org/junit/jupiter/api/extension/BeforeTestExecutionCallback.html)' %}

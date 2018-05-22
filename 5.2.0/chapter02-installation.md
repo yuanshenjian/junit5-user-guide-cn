@@ -98,7 +98,7 @@ JUnit Vintage测试引擎实现，允许在新的JUnit Platform上运行低版�
 
 
 #### 2.1.4. 物料清单 (BOM)
-当使用 [Maven](https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Importing_Dependencies) 或 [Gradle](https://docs.gradle.org/current/userguide/managing_transitive_dependencies.html#sec:bom_import) 引用多个上述artifacts时，可以使用下面Maven坐标下提供的*物料清单POM* 来缓解依赖管理。
+当使用 [Maven](https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Importing_Dependencies) 或 [Gradle](https://docs.gradle.org/5.2.0/userguide/managing_transitive_dependencies.html#sec:bom_import) 引用多个上述artifacts时，可以使用下面Maven坐标下提供的*物料清单POM* 来缓解依赖管理。
 
 * **Group ID**: `org.junit`
 

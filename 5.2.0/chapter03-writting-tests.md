@@ -20,7 +20,7 @@ class FirstJUnit5Tests {
 ### 3.1. 注解
 JUnit Jupiter支持使用下面表格中的注解来配置测试和扩展框架。
 
-所有的核心注解都位于`junit-jupiter-api`模块的 [org.junit.jupiter.api ](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/package-summary.html) 包中。
+所有的核心注解都位于`junit-jupiter-api`模块的 {{ api-package }} 包中。
 
 | 注解          | 描述 |
 |:--------------|:------------|
@@ -150,7 +150,7 @@ class DisplayNameDemo {
 ```
 
 ### 3.4. 断言
-JUnit Jupiter附带了很多JUnit 4就已经存在的断言方法，并增加了一些适合与Java8 Lambda一起使用的断言。所有的JUnit Jupiter断言都是 [org.junit.jupiter.Assertions](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Assertions.html) 类中`static`方法。
+JUnit Jupiter附带了很多JUnit 4就已经存在的断言方法，并增加了一些适合与Java8 Lambda一起使用的断言。所有的JUnit Jupiter断言都是 {{ Assertions }} 类中`static`方法。
 
 ```java
 import static java.time.Duration.ofMillis;
@@ -275,9 +275,9 @@ class AssertionsDemo {
 ```
 
 #### 3.4.1. 第三方断言类库
-虽然JUnit Jupiter提供的断言工具包已经满足了许多测试场景，但有时我们会遇到需要更加强大且具备例如*匹配器* 功能的场景。在这些场景中，JUnit团队推荐使用第三方断言类库，例如：[AssertJ](http://joel-costigliola.github.io/assertj/)、[Hamcrest](http://hamcrest.org/JavaHamcrest/)、[Truth](http://google.github.io/truth/) 等等。因此，开发人员可以自由使用他们选择的断言类库。
+虽然JUnit Jupiter提供的断言工具包已经满足了许多测试场景，但有时我们会遇到需要更加强大且具备例如*匹配器* 功能的场景。在这些场景中，JUnit团队推荐使用第三方断言类库，例如：{{ AssertJ }}、{{ Hamcrest }}、{{ Truth }} 等等。因此，开发人员可以自由使用他们选择的断言类库。
 
-举个例子，*匹配器* 和流式调用的API组合起来使用可以让断言更加具有描述性和可读性。然而，JUnit Jupiter的 [org.junit.jupiter.Assertions](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Assertions.html) 类没有提供一个类似于JUnit 4的`org.junit.Assert`类中 [assertThat()](http://junit.org/junit4/javadoc/latest/org/junit/Assert.html#assertThat) 方法，该方法接受一个Hamcrest [Matcher](http://junit.org/junit4/javadoc/latest/org/hamcrest/Matcher.html)。所以，我们鼓励开发人员使用由第三方断言库提供的匹配器的内置支持。
+举个例子，*匹配器* 和流式调用的API组合起来使用可以让断言更加具有描述性和可读性。然而，JUnit Jupiter的 {{ Assertions }} 类没有提供一个类似于JUnit 4的`org.junit.Assert`类中 [assertThat()](http://junit.org/junit4/javadoc/latest/org/junit/Assert.html#assertThat) 方法，该方法接受一个Hamcrest [Matcher](http://junit.org/junit4/javadoc/latest/org/hamcrest/Matcher.html)。所以，我们鼓励开发人员使用由第三方断言库提供的匹配器的内置支持。
 
 下面的例子演示如何在JUnit Jupiter中使用Hamcrest提供的`assertThat()`。只要Hamcrest库已经被添加到classpath中，你就可以静态导入诸如`assertThat()`、`is()`以及`equalTo()`方法，然后在测试方法中使用它们，如下面代码所示的`assertWithHamcrestMatcher()`方法。
 
@@ -302,7 +302,7 @@ class HamcrestAssertionDemo {
 
 
 ### 3.5. 假设
-JUnit Jupiter附带了JUnit 4中所提供的假设方法的一个子集，并增加了一些适合与Java 8 lambda一起使用的假设方法。所有的JUnit Jupiter假设都是 [org.junit.jupiter.Assumptions](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Assumptions.html) 类中的静态方法。
+JUnit Jupiter附带了JUnit 4中所提供的假设方法的一个子集，并增加了一些适合与Java 8 lambda一起使用的假设方法。所有的JUnit Jupiter假设都是 {{ Assumptions }} 类中的静态方法。
 
 ```java
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -342,7 +342,7 @@ class AssumptionsDemo {
 ```
 
 ### 3.6. 禁用测试
-可以通过 [@Disable](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/Disabled.html) 注解，或者通过 [条件测试执行](#37-条件执行测试)中讨论的注解之一，再或者通过自定义的 [ExecutionCondition](#53-条件测试执行) 来*禁用* 整个测试类或单个测试方法。
+可以通过 {{ Disabled }} 注解，或者通过 [条件测试执行](#37-条件执行测试)中讨论的注解之一，再或者通过自定义的 [ExecutionCondition](#53-条件测试执行) 来*禁用* 整个测试类或单个测试方法。
 
 下面是一个 `@Disable` 的测试用例。
 
@@ -703,13 +703,13 @@ class TestingAStackDemo {
 ### 3.11. 构造函数和方法的依赖注入
 在之前的所有JUnit版本中，测试构造函数和方法是不允许传入参数的（至少不能使用标准的`Runner`实现）。JUnit Jupiter一个主要的改变是：允许给测试类的构造函数和方法传入参数。这带来了更大的灵活性，并且可以在构造函数和方法上使用*依赖注入*。
 
-[ParameterResolver](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/ParameterResolver.html) 为测试扩展定义了API，它可以在运行时*动态* 解析参数。如果一个测试的构造函数或者`@Test`、`@TestFactory`、`@BeforeEach`、`@AfterEach`、`@BeforeAll`或者 `@AfterAll`方法接收一个参数，这个参数就必须在运行时被一个已注册的`ParameterResolver`解析。
+[ParameterResolver](http://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/ParameterResolver.html) 为测试扩展定义了API，它可以在运行时*动态* 解析参数。如果一个测试的构造函数或者`@Test`、`@TestFactory`、`@BeforeEach`、`@AfterEach`、`@BeforeAll`或者 `@AfterAll`方法接收一个参数，这个参数就必须在运行时被一个已注册的`ParameterResolver`解析。
 
 目前有三种被自动注册的内置解析器。
 
-* [TestInfoParameterResolver](https://github.com/junit-team/junit5/tree/r5.0.2/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/TestInfoParameterResolver.java)：如果一个方法参数的类型是 [TestInfo](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/TestInfo.html)，`TestInfoParameterResolver`将根据当前的测试提供一个`TestInfo`的实例用于填充参数的值。然后，`TestInfo`就可以被用来检索关于当前测试的信息，例如：显示名称、测试类、测试方法或相关的Tag。显示名称要么是一个类似于测试类或测试方法的技术名称，要么是一个通过`@DisplayName`配置的自定义名称。
+* [TestInfoParameterResolver](https://github.com/junit-team/junit5/tree/r5.0.2/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/TestInfoParameterResolver.java)：如果一个方法参数的类型是 [TestInfo](http://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/TestInfo.html)，`TestInfoParameterResolver`将根据当前的测试提供一个`TestInfo`的实例用于填充参数的值。然后，`TestInfo`就可以被用来检索关于当前测试的信息，例如：显示名称、测试类、测试方法或相关的Tag。显示名称要么是一个类似于测试类或测试方法的技术名称，要么是一个通过`@DisplayName`配置的自定义名称。
 
- [TestInfo](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/TestInfo.html) 就像JUnit 4规则中`TestName`规则的代替者。以下演示如何将`TestInfo`注入到测试构造函数、`@BeforeEach`方法和`@Test`方法中。
+ [TestInfo](http://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/TestInfo.html) 就像JUnit 4规则中`TestName`规则的代替者。以下演示如何将`TestInfo`注入到测试构造函数、`@BeforeEach`方法和`@Test`方法中。
 
 ```java
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -749,8 +749,8 @@ class TestInfoDemo {
 }
 ```
 
-* [`RepetitionInfoParameterResolver`](https://github.com/junit-team/junit5/tree/r5.2.0/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/RepetitionInfoParameterResolver.java)：如果一个位于`@RepeatedTest`、`@BeforeEach`或者`@AfterEach`方法的参数的类型是 [RepetitionInfo](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/RepetitionInfo.html)，`RepetitionInfoParameterResolver`会提供一个`RepetitionInfo`实例。然后，`RepetitionInfo`就可以被用来检索对应`@RepeatedTest`方法的当前重复以及总重复次数等相关信息。但是请注意，`RepetitionInfoParameterResolver`不是在`@RepeatedTest`的上下文之外被注册的。请参阅 [重复测试示例](#3121-重复测试示例)。
-* [TestReporterParameterResolver](https://github.com/junit-team/junit5/tree/r5.0.2/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/TestReporterParameterResolver.java)：如果一个方法参数的类型是 [TestReporter](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/TestReporter.html)，`TestReporterParameterResolver`会提供一个`TestReporter`实例。然后，`TestReporter`就可以被用来发布有关当前测试运行的其他数据。这些数据可以通过  [TestExecutionListener](http://junit.org/junit5/docs/current/api/org/junit/platform/launcher/TestExecutionListener.html) 的`reportingEntryPublished()`方法来消费，因此可以被IDE查看或包含在报告中。
+* [`RepetitionInfoParameterResolver`](https://github.com/junit-team/junit5/tree/r5.2.0/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/RepetitionInfoParameterResolver.java)：如果一个位于`@RepeatedTest`、`@BeforeEach`或者`@AfterEach`方法的参数的类型是 [RepetitionInfo](http://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/RepetitionInfo.html)，`RepetitionInfoParameterResolver`会提供一个`RepetitionInfo`实例。然后，`RepetitionInfo`就可以被用来检索对应`@RepeatedTest`方法的当前重复以及总重复次数等相关信息。但是请注意，`RepetitionInfoParameterResolver`不是在`@RepeatedTest`的上下文之外被注册的。请参阅 [重复测试示例](#3121-重复测试示例)。
+* [TestReporterParameterResolver](https://github.com/junit-team/junit5/tree/r5.0.2/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/TestReporterParameterResolver.java)：如果一个方法参数的类型是 [TestReporter](http://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/TestReporter.html)，`TestReporterParameterResolver`会提供一个`TestReporter`实例。然后，`TestReporter`就可以被用来发布有关当前测试运行的其他数据。这些数据可以通过  [TestExecutionListener](http://junit.org/junit5/docs/5.2.0/api/org/junit/platform/launcher/TestExecutionListener.html) 的`reportingEntryPublished()`方法来消费，因此可以被IDE查看或包含在报告中。
 
  在JUnit Jupiter中，你应该使用`TestReporter`来代替你在JUnit 4中打印信息到`stdout`或`stderr`的习惯。使用`@RunWith(JUnitPlatform.class)`会将报告的所有条目都输出到`stdout`中。
  
@@ -781,7 +781,7 @@ class TestReporterDemo {
 
 >📒 其他的参数解析器必须通过`@ExtendWith`注册合适的 [扩展](#5-扩展模型) 来明确地开启。
 
-可以查看 [RandomParametersExtension](https://github.com/junit-team/junit5-samples/tree/r5.2.0/junit5-jupiter-extensions/src/main/java/com/example/random/RandomParametersExtension.java) 获取自定义 [ParameterResolver](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/ParameterResolver.html) 的示例。虽然并不打算大量使用它，但它演示了扩展模型和参数解决过程中的简单性和表现力。`MyRandomParametersTest`演示了如何将随机值注入到`@Test`方法中。
+可以查看 [RandomParametersExtension](https://github.com/junit-team/junit5-samples/tree/r5.2.0/junit5-jupiter-extensions/src/main/java/com/example/random/RandomParametersExtension.java) 获取自定义 [ParameterResolver](http://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/ParameterResolver.html) 的示例。虽然并不打算大量使用它，但它演示了扩展模型和参数解决过程中的简单性和表现力。`MyRandomParametersTest`演示了如何将随机值注入到`@Test`方法中。
 
 ```java
 @ExtendWith(RandomParametersExtension.class)

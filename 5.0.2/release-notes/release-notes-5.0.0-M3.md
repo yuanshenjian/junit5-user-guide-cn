@@ -39,7 +39,7 @@
 * 现在，`DiscoverySelectors`中的`selectMethod(String)`方法支持*完全限定的方法名*作为参数的选择方法（例如`"org.example.TestClass＃testMethod(org.junit.jupiter.api.TestInfo)"`）。
 * 现在，`ConsoleLauncher`和`JUnit Platform Gradle`插件使用的`TestExecutionSummary`除了包含测试事件外，还包含所有容器事件的统计信息。
 * 现在，`TestExecutionSummary`可以用来获取所有失败的测试用例列表。
-* 现在，[`ConsoleLauncher`](http://junit.org/junit5/docs/current/api/org/junit/platform/console/ConsoleLauncher.html)、Gradle插件和[`JUnitPlatform`](http://junit.org/junit5/docs/current/api/org/junit/platform/runner/JUnitPlatform.html) 运行器使用`^.* Tests？$`正则表达式作为测试运行中所包含的类名的默认匹配模式。
+* 现在，[`ConsoleLauncher`](http://junit.org/junit5/docs/5.0.2/api/org/junit/platform/console/ConsoleLauncher.html)、Gradle插件和[`JUnitPlatform`](http://junit.org/junit5/docs/5.0.2/api/org/junit/platform/runner/JUnitPlatform.html) 运行器使用`^.* Tests？$`正则表达式作为测试运行中所包含的类名的默认匹配模式。
 * Gradle插件现在允许明确地选择应该执行哪些测试（请参阅 [配置选择器](#配置选择器)）。
 * 新的`@Testable`注解可以用来向IDE和开发工具供应商传递信息，用以说明被此注解所标注的元素是可测试的（即，它可以在JUnit Platform上作为测试被执行）。
 * 现在，在使用`ClassNameFilter.includeClassNamePatterns`时，可以传递多个正则表达式，它们之间通过`"或"`语义组合。
@@ -48,7 +48,7 @@
 * 现在，可以通过使用`PackageNameFilter.includePackageNames`来指定被包含的包名或使用`PackageNameFilter.excludePackageNames`来指定被排除的包名。
 * 现在，`JUnitPlatform`运行器可以结合`@IncludePackages`注解指定希望包含的包名，也可以结合`@ExcludePackages`来指定希望排除在外的包名。
 * 现在，对于使用JUnit Platform Gradle插件和`ConsoleLauncher`的用户，可应通过配置过滤器完成包名的添加与排除。
-* 包名现在可以通过JUnit Platform Gradle插件（请参阅 [配置过滤器](#配置过滤器)）和[`ConsoleLauncher`](http://junit.org/junit5/docs/current/api/org/junit/platform/console/ConsoleLauncher.html)（请参阅 [Options](#431-options)）的过滤器配置来包含或排除。
+* 包名现在可以通过JUnit Platform Gradle插件（请参阅 [配置过滤器](#配置过滤器)）和[`ConsoleLauncher`](http://junit.org/junit5/docs/5.0.2/api/org/junit/platform/console/ConsoleLauncher.html)（请参阅 [Options](#431-options)）的过滤器配置来包含或排除。
 * 现在，`junit-platform-console`不再强依赖于[JOptSimple](https://pholser.github.io/jopt-simple/)。因此，现在可以测试那些使用该库的不同版本的自定义代码。
 * 现在，包选择器的解析会扫描JAR文件。
 * Surefire provider现在支持forking。
@@ -75,7 +75,7 @@
 
 ###### 新特性与改进
 
-* 支持`Assertions`中的lambda表达式的延迟和抢占超时。请参阅 [`AssertionsDemo`](#34-断言) 中的示例，更多详细信息请参阅 [org.junit.jupiter.Assertions](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Assertions.html) JavaDoc。
+* 支持`Assertions`中的lambda表达式的延迟和抢占超时。请参阅 [`AssertionsDemo`](#34-断言) 中的示例，更多详细信息请参阅 [org.junit.jupiter.Assertions](http://junit.org/junit5/docs/5.0.2/api/org/junit/jupiter/api/Assertions.html) JavaDoc。
 * 新的`assertIterableEquals()`断言会校验两个可迭代对象是否深度一致（查阅Java文档获取细节）。
 * `Assertions.assertAll()`的新变体接收可执行流（即，`Stream<Executable>`）。
 * 现在，`Assertions.assertThrows()`方法将返回抛出的异常。

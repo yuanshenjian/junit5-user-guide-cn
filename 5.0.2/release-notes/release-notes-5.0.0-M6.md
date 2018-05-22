@@ -8,7 +8,7 @@
 关于此版本所有已关闭的问题和pull request的完整列表，请参阅GitHub上JUnit仓库中的  [5.0 M6](https://github.com/junit-team/junit5/milestone/11?closed=1) 里程碑页面。
  
 #### 兼容Java 9
-JUnit 5的运行时环境的主要目标是Java 8，因此，JUnit 5的发布版本不能描述Java 9的编译模块。然而，由于 [第5次发布](http://junit.org/junit5/docs/current/user-guide/release-notes-5.0.0-RC3.md#release-notes-5.0.0-m5) 的每个发布包在其JAR清单中声明了稳定的`Automatic-Module-Name`，这使得可以在测试模块中包含著名的JUnit模块名称，如下所示。
+JUnit 5的运行时环境的主要目标是Java 8，因此，JUnit 5的发布版本不能描述Java 9的编译模块。然而，由于 [第5次发布](http://junit.org/junit5/docs/5.0.2/user-guide/release-notes-5.0.0-RC3.md#release-notes-5.0.0-m5) 的每个发布包在其JAR清单中声明了稳定的`Automatic-Module-Name`，这使得可以在测试模块中包含著名的JUnit模块名称，如下所示。
 
 ```java
 module foo.bar {

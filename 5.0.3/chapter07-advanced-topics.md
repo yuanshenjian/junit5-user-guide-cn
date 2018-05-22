@@ -3,11 +3,11 @@
 ### 7.1 JUnit Platform启动器API
 JUnit 5的主要目标之一是让JUnit与其编程客户端（构建工具和IDE）之间的接口更加强大和稳定。目的是将发现和执行测试的内部构件和外部必需的所有过滤和配置分离开来。
 
-JUnit 5引入了`Launcher`的概念，它可以被用来发现、过滤和执行测试。此外，诸如 Spock、Cucumber和FitNesse等第三方测试库都可以通过提供自定义的 [`TestEngine`](http://junit.org/junit5/docs/current/api/org/junit/platform/engine/TestEngine.html) 来集成到JUnit 5平台的启动基础设施中。
+JUnit 5引入了`Launcher`的概念，它可以被用来发现、过滤和执行测试。此外，诸如 Spock、Cucumber和FitNesse等第三方测试库都可以通过提供自定义的 [`TestEngine`](http://junit.org/junit5/docs/5.0.3/api/org/junit/platform/engine/TestEngine.html) 来集成到JUnit 5平台的启动基础设施中。
 
-启动API在 [`junit-platform-launcher`](http://junit.org/junit5/docs/current/api/org/junit/platform/launcher/package-summary.html) 模块中。 
+启动API在 [`junit-platform-launcher`](http://junit.org/junit5/docs/5.0.3/api/org/junit/platform/launcher/package-summary.html) 模块中。 
 
-[`junit-platform-console`](http://junit.org/junit5/docs/current/api/org/junit/platform/console/package-summary.html)项目中的[`ConsoleLauncher`](http://junit.org/junit5/docs/current/api/org/junit/platform/console/ConsoleLauncher.html)就是一个具体的使用例示。
+[`junit-platform-console`](http://junit.org/junit5/docs/5.0.3/api/org/junit/platform/console/package-summary.html)项目中的[`ConsoleLauncher`](http://junit.org/junit5/docs/5.0.3/api/org/junit/platform/console/ConsoleLauncher.html)就是一个具体的使用例示。
 
 
 #### 7.1.1 发现测试
@@ -53,7 +53,7 @@ TestPlan testPlan = launcher.discover(request);
 
 
 #### 7.1.2 执行测试
-要执行测试，客户端可以使用与发现阶段相同的`LauncherDiscoveryRequest`，或者创建一个新的请求。测试进度和报告可以通过使用`Launcher`注册一个或多个[`TestExecutionListener`](http://junit.org/junit5/docs/current/api/org/junit/platform/launcher/TestExecutionListener.html)实现来获取，如下面例子所示。
+要执行测试，客户端可以使用与发现阶段相同的`LauncherDiscoveryRequest`，或者创建一个新的请求。测试进度和报告可以通过使用`Launcher`注册一个或多个[`TestExecutionListener`](http://junit.org/junit5/docs/5.0.3/api/org/junit/platform/launcher/TestExecutionListener.html)实现来获取，如下面例子所示。
 
 
 ```java
@@ -76,20 +76,20 @@ launcher.registerTestExecutionListeners(listener);
 launcher.execute(request);
 ```
 
-`execute()`方法没有返回值，但你可以轻松地使用监听器将最终结果聚合到你自己的对象中。相关示例请参阅 [`SummaryGeneratingListener`](http://junit.org/junit5/docs/current/api/org/junit/platform/launcher/listeners/SummaryGeneratingListener.html)。
+`execute()`方法没有返回值，但你可以轻松地使用监听器将最终结果聚合到你自己的对象中。相关示例请参阅 [`SummaryGeneratingListener`](http://junit.org/junit5/docs/5.0.3/api/org/junit/platform/launcher/listeners/SummaryGeneratingListener.html)。
 
 
 #### 7.1.3 插入你自己的测试引擎
 
-Junit 目前提供了两种开箱即用的 [`TestEngine`](http://junit.org/junit5/docs/current/api/org/junit/platform/engine/TestEngine.html) ：
+Junit 目前提供了两种开箱即用的 [`TestEngine`](http://junit.org/junit5/docs/5.0.3/api/org/junit/platform/engine/TestEngine.html) ：
 
-- [`junit-jupiter-engine`](http://junit.org/junit5/docs/current/api/org/junit/jupiter/engine/package-summary.html): JUnit Jupiter的核心。
+- [`junit-jupiter-engine`](http://junit.org/junit5/docs/5.0.3/api/org/junit/jupiter/engine/package-summary.html): JUnit Jupiter的核心。
 
-- [`junit-vintage-engine`](http://junit.org/junit5/docs/current/api/org/junit/vintage/engine/package-summary.html): JUnit 4之上的一个薄层，它允许使用启动器基础设施来运行`老版本`的测试。
+- [`junit-vintage-engine`](http://junit.org/junit5/docs/5.0.3/api/org/junit/vintage/engine/package-summary.html): JUnit 4之上的一个薄层，它允许使用启动器基础设施来运行`老版本`的测试。
 
 
-第三方也可以通过在 [`junit-platform-engine`](http://junit.org/junit5/docs/current/api/org/junit/platform/engine/package-summary.html) 模块中实现接口并*注册* 引擎来提供他们自己的`TestEngine`。 目前Java的`java.util.ServiceLoader`机制支持引擎注册。 例如，`junit-jupiter-engine`模块将其`org.junit.jupiter.engine.JupiterTestEngine`注册到一个名为`org.junit.platform.engine.TestEngine`的文件中，该文件位于`junit-jupiter-engine`JAR包中的`/META-INF/services`目录。
+第三方也可以通过在 [`junit-platform-engine`](http://junit.org/junit5/docs/5.0.3/api/org/junit/platform/engine/package-summary.html) 模块中实现接口并*注册* 引擎来提供他们自己的`TestEngine`。 目前Java的`java.util.ServiceLoader`机制支持引擎注册。 例如，`junit-jupiter-engine`模块将其`org.junit.jupiter.engine.JupiterTestEngine`注册到一个名为`org.junit.platform.engine.TestEngine`的文件中，该文件位于`junit-jupiter-engine`JAR包中的`/META-INF/services`目录。
 
 
 #### 7.1.4 插入你自己的测试执行监听器
-除了以编程方式来注册测试执行监听器的公共 [`Launcher`](http://junit.org/junit5/docs/current/api/org/junit/platform/launcher/Launcher.html)  API方法之外，在运行时由Java的`java.util.ServiceLoader`发现的自定义 [`TestExecutionListener`](http://junit.org/junit5/docs/current/api/org/junit/platform/launcher/TestExecutionListener.html) 实现会被自动注册到`DefaultLauncher`。 例如，一个实现了 [`TestExecutionListener`](http://junit.org/junit5/docs/current/api/org/junit/platform/launcher/TestExecutionListener.html) 并声明在`/META-INF/services/org.junit.platform.launcher.TestExecutionListener`文件中的`example.TestInfoPrinter`类会被自动加载和注册。
+除了以编程方式来注册测试执行监听器的公共 [`Launcher`](http://junit.org/junit5/docs/5.0.3/api/org/junit/platform/launcher/Launcher.html)  API方法之外，在运行时由Java的`java.util.ServiceLoader`发现的自定义 [`TestExecutionListener`](http://junit.org/junit5/docs/5.0.3/api/org/junit/platform/launcher/TestExecutionListener.html) 实现会被自动注册到`DefaultLauncher`。 例如，一个实现了 [`TestExecutionListener`](http://junit.org/junit5/docs/5.0.3/api/org/junit/platform/launcher/TestExecutionListener.html) 并声明在`/META-INF/services/org.junit.platform.launcher.TestExecutionListener`文件中的`example.TestInfoPrinter`类会被自动加载和注册。

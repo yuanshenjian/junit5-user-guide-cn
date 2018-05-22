@@ -61,7 +61,7 @@ for JUnit 5* 章节。
 ### 4.2. 构建工具支持
 
 #### 4.2.1. Gradle
-从 [4.6](https://docs.gradle.org/4.6/release-notes.html) 开始，Gradle对在JUnit Platform执行测试提供了 [本地化支持](https://docs.gradle.org/current/userguide/java_testing.html#using_junit5) 。要启用此功能，你只需要`build.gradle`文件中的`test`任务声明里指定`useJUnitPlatform()`即可：
+从 [4.6](https://docs.gradle.org/4.6/release-notes.html) 开始，Gradle对在JUnit Platform执行测试提供了 [本地化支持](https://docs.gradle.org/5.2.0/userguide/java_testing.html#using_junit5) 。要启用此功能，你只需要`build.gradle`文件中的`test`任务声明里指定`useJUnitPlatform()`即可：
 
 ```groovy
 test {
@@ -82,7 +82,7 @@ test {
 }
 ```
 
-有关详细的配置选项，请参考 [官方Gradle文档](https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_test)。
+有关详细的配置选项，请参考 [官方Gradle文档](https://docs.gradle.org/5.2.0/userguide/java_plugin.html#sec:java_test)。
 
 > ⚠️ JUnit Platform Gradle 插件被弃用了
 > 
@@ -397,7 +397,7 @@ Maven Surefire插件将扫描全类名与以下模式匹配的测试类。
 有关使用和配置选项的更多详细信息，请参阅 [`junitlauncher`任务](https://ant.apache.org/manual/Tasks/junitlauncher.html) 的官方Ant文档。
 
 ### 4.3. 控制台启动器
-[`ConsoleLauncher`](http://junit.org/junit5/docs/current/api/org/junit/platform/console/ConsoleLauncher.html) 是一个Java的命令行应用程序，它允许你通过命令行来启动JUnit Platform。例如，它可以用来运行JUnit Vintage和JUnit Jupiter测试，并在控制台中打印测试结果。
+[`ConsoleLauncher`](http://junit.org/junit5/docs/5.2.0/api/org/junit/platform/console/ConsoleLauncher.html) 是一个Java的命令行应用程序，它允许你通过命令行来启动JUnit Platform。例如，它可以用来运行JUnit Vintage和JUnit Jupiter测试，并在控制台中打印测试结果。
 
 `junit-platform-console-standalone-{{platform-version}}.jar`这个包含了所有依赖的可执行的jar包已经被发布在Maven仓库中，它位于 [junit-platform-console-standalone](https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone)目录下，你可以 [运行](https://docs.oracle.com/javase/tutorial/deployment/jar/run.html) 独立的ConsoleLauncher，如下所示。
 
@@ -434,7 +434,7 @@ Test run finished after 64 ms
 ```
 
 >📒 ***退出码***  
-> 如果任何容器或测试失败，[ConsoleLauncher](http://junit.org/junit5/docs/current/api/org/junit/platform/console/ConsoleLauncher.html) 就会以状态码1退出，否则退出码为0.
+> 如果任何容器或测试失败，[ConsoleLauncher](http://junit.org/junit5/docs/5.2.0/api/org/junit/platform/console/ConsoleLauncher.html) 就会以状态码1退出，否则退出码为0.
 
 #### 4.3.1. Options
 
@@ -583,7 +583,7 @@ public class JUnit4SuiteDemo {
 
 
 >📒 ***附加配置选项***  
-> 除了`@SelectPackages`之外，还有很多配置选项可以用来发现和过滤测试。详细内容请参考 [Javadoc](http://junit.org/junit5/docs/current/api/org/junit/platform/suite/api/package-summary.html).
+> 除了`@SelectPackages`之外，还有很多配置选项可以用来发现和过滤测试。详细内容请参考 [Javadoc](http://junit.org/junit5/docs/5.2.0/api/org/junit/platform/suite/api/package-summary.html).
 
 ### 4.5. 配置参数
 除了告诉平台要包含哪些测试类、测试引擎以及要扫描哪些包等之外，有时还需要提供额外的自定义配置参数，该参数特定于特定的测试引擎。例如，JUnit Jupiter `TestEngine`支持以下用例中的*配置参数*。
