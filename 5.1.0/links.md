@@ -1,9 +1,17 @@
 {% assign junit-team = 'https://github.com/junit-team' %}
 {% assign junit5-samples-repo = junit-team | append: '/junit5-samples' %}
+{% assign junit5-repo = junit-team | append: '/junit5' %}
+{% assign current-branch = junit5-repo | append: '/tree/' | append: release-branch %}
 
 {% assign javadoc-root = 'https://junit.org/junit5/docs/' | append: docs-version | append: '/api' %}                
 
 {% assign snapshot-repo = 'https://oss.sonatype.org/content/repositories/snapshots' %}
+
+{% assign DisabledCondition = '[DisabledCondition](' | append: current-branch | append: '/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/DisabledCondition.java)' %}
+{% assign RepetitionInfoParameterResolver = '[RepetitionInfoParameterResolver](' | append: current-branch | append: '/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/RepetitionInfoParameterResolver.java)' %}
+{% assign TestInfoParameterResolver = '[TestInfoParameterResolver](' | append: current-branch | append: '/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/TestInfoParameterResolver.java)' %}
+{% assign TestReporterParameterResolver = '[TestInfoParameterResolver](' | append: current-branch | append: '/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/TestReporterParameterResolver.java)' %}
+{% assign MockitoExtension = '[MockitoExtension]('| append: junit5-samples-repo | append: '/tree/' | append: release-branch | append: '/junit5-mockito-extension/src/main/java/com/example/mockito/MockitoExtension.java)' %}
 
 {% assign extension-api-package = '[org.junit.jupiter.api.extension](' | append: javadoc-root | append: '/org/junit/jupiter/api/extension/package-summary.html)' %}
 {% assign params-provider-package = '[org.junit.jupiter.params.provider](' | append: javadoc-root | append: '/org/junit/jupiter/params/provider/package-summary.html)' %}
@@ -20,7 +28,6 @@
 {% assign Log4j_JDK_Logging_Adapter = '[Log4j JDK Logging Adapter](https://logging.apache.org/log4j/2.x/log4j-jul/index.html)' %}
 {% assign Logback = '[Logback](https://logback.qos.ch/)' %}
 {% assign LogManager = '[LogManager](https://docs.oracle.com/javase/8/docs/api/java/util/logging/LogManager.html)' %}
-{% assign MockitoExtension = '[MockitoExtension](https://github.com/mockito/mockito/blob/release/2.x/subprojects/junit-jupiter/src/main/java/org/mockito/junit/jupiter/MockitoExtension.java)' %}
 {% assign SpringExtension = '[SpringExtension](https://github.com/spring-projects/spring-framework/tree/master/spring-test/src/main/java/org/springframework/test/context/junit/jupiter/SpringExtension.java)' %}
 {% assign Specsy = '[Specsy](http://specsy.org/)' %}
 {% assign Truth = '[Truth](http://google.github.io/truth/)' %}
@@ -42,6 +49,9 @@
 {% assign DisabledOnOs = '[@DisabledOnOs](' | append: javadoc-root | append: '/org/junit/jupiter/api/condition/DisabledOnOs.html)' %}
 {% assign EnabledIf = '[@EnabledIf](' | append: javadoc-root | append: '/org/junit/jupiter/api/condition/EnabledIf.html)' %}
 {% assign EnabledIfEnvironmentVariable = '[@EnabledIfEnvironmentVariable](' | append: javadoc-root | append: '/org/junit/jupiter/api/condition/EnabledIfEnvironmentVariable.html)' %}
+{% assign SummaryGeneratingListener = '[SummaryGeneratingListener](' | append: javadoc-root | append: '/org/junit/platform/launcher/listeners/SummaryGeneratingListener.html)' %}
+{% assign TestExecutionListener = '[TestExecutionListener](' | append: javadoc-root | append: '/org/junit/platform/launcher/TestExecutionListener.html)' %}
+{% assign JUnitPlatform-Runner = '[JUnitPlatform](' | append: javadoc-root | append: '/org/junit/platform/runner/JUnitPlatform.html)' %}
 
 
 {% assign EnabledIfSystemProperty = '[@EnabledIfSystemProperty](' | append: javadoc-root | append: '/org/junit/jupiter/api/condition/EnabledIfSystemProperty.html)' %}

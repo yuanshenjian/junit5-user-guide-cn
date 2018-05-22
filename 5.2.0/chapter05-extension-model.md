@@ -58,7 +58,7 @@ class MySecondTests {
 <a id = "extensions-registration-programmatic"></a>
 
 #### 5.2.2. 编程式扩展注册
-开发人员可以通过*编程的* 方式来注册扩展，只需要将测试类中的属性字段使用 [`@RegisterExtension`](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/extension/RegisterExtension.html) 注解标注即可。
+开发人员可以通过*编程的* 方式来注册扩展，只需要将测试类中的属性字段使用 [`@RegisterExtension`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/RegisterExtension.html) 注解标注即可。
 
 当一个扩展通过 [`@ExtenWith`](#extensions-registration-declarative) 声明式注册后，它就只能通过注解配置。相比之下，当通过`@RegisterExtension`注册扩展时，我们可以通过*编程* 的方式来配置扩展 - 例如，将参数传递给扩展的构造函数、静态工厂方法或构建器API。
 
@@ -181,7 +181,7 @@ class DocumentationDemo {
 
 > ⚠️  由于JDK 9之前的JDK版本中，由javac生成的字节代码存在错误，直接通过核心`java.lang.reflect.Parameter` API查找参数上的注解对于内部类构造函数总是会失败（例如，一个在`@Nested`测试类中构造函数）。
 > <br/>    
-> 因此，提供给`ParameterResolver`实现的 [`ParameterContext`](https://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/extension/ParameterContext.html) API包含以下用于正确查找参数注释的便捷方法。强烈建议扩展开发人员使用这些方法，而不去使用`java.lang.reflect.Parameter`中提供的方法，从而避免JDK中的这个错误。
+> 因此，提供给`ParameterResolver`实现的 [`ParameterContext`](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/ParameterContext.html) API包含以下用于正确查找参数注释的便捷方法。强烈建议扩展开发人员使用这些方法，而不去使用`java.lang.reflect.Parameter`中提供的方法，从而避免JDK中的这个错误。
 >
 > - `boolean isAnnotated(Class<? extends Annotation> annotationType)`
 > - `Optional<A> findAnnotation(Class<A> annotationType)`

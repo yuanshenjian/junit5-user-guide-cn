@@ -1,4 +1,5 @@
 {% assign docs-version = '5.1.1' %}
+{% assign release-branch = 'r5.1.1' %}
 
 {% assign jupiter-version = '5.1.1' %}
 {% assign platform-version = '1.1.1' %}

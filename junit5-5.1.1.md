@@ -18,7 +18,7 @@ last_updated_date: 2018-04-08
 ---
 
 {% include_relative {{ page.version }}/chapter00-constants.md %}
-{% include_relative links.md %}
+{% include_relative {{ page.version }}/links.md %}
 
 {% include_relative {{ page.version }}/chapter01-overview.md %}
 

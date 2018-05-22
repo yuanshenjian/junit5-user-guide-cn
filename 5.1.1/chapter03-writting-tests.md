@@ -374,7 +374,7 @@ class DisabledTestsDemo {
 ```
 
 ### 3.7. 条件测试执行
-JUnit Jupiter中的 [ExecutionCondition](#53-条件测试执行) 扩展API允许开发人员以编程的方式基于某些条件启用或禁用容器或测试。这种情况的最简单示例是内置的 [DisabledCondition](https://github.com/junit-team/junit5/blob/r5.1.0/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/DisabledCondition.java)，它支持 [@Disabled](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/Disabled.html)注释（请参阅 [禁用测试](#36-禁用测试)）。除了`@Disabled`之外，JUnit Jupiter还支持 `org.junit.jupiter.api.condition`包中的其他几个基于注解的条件，允许开发人员以 *声明* 的方式启用或禁用容器和测试。详情请参阅一下章节。
+JUnit Jupiter中的 [ExecutionCondition](#53-条件测试执行) 扩展API允许开发人员以编程的方式基于某些条件启用或禁用容器或测试。这种情况的最简单示例是内置的 {{ DisabledCondition }}，它支持 {{ Disabled }} 注解（请参阅 [禁用测试](#36-禁用测试)）。除了`@Disabled`之外，JUnit Jupiter还支持 `org.junit.jupiter.api.condition`包中的其他几个基于注解的条件，允许开发人员以 *声明* 的方式启用或禁用容器和测试。详情请参阅一下章节。
 
 > 💡 组合注解  
 请注意，以下部分中列出的任何 *条件注解* 也可用作元注解，以创建自定义 *组合注解*。例如，[@EnabledOnOs Demo](#writing-tests-conditional-execution-os-demo) 中的`@TestOnMac`注解显示了如何将`@Test`和`@EnabledOnOs`合并到一个可重用的注解中。
@@ -382,7 +382,7 @@ JUnit Jupiter中的 [ExecutionCondition](#53-条件测试执行) 扩展API允许
 > ⚠️ 以下各节中列出的每个条件注解只能在给定的测试接口，测试类或测试方法上声明一次。如果条件注解在给定元素上直接存在，间接存在或元存在多次，则仅使用由JUnit发现的第一个此类注解；任何其他声明都将被默默忽略。但是请注意，每个条件注解可以与`org.junit.jupiter.api.condition`包中的其他条件一起使用。
 
 #### 3.7.1 操作系统条件
-可以通过 [@EnabledOnOs](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/EnabledOnOs.html) 和 [@DisabledOnOs](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/DisabledOnOs.html) 注释在特定操作系统上启用或禁用容器或测试。
+可以通过 {{ EnabledOnOs }} 和 {{ DisabledOnOs }} 注解在特定操作系统上启用或禁用容器或测试。
 
 <a id = "writing-tests-conditional-execution-os-demo"></a>
 
@@ -419,7 +419,7 @@ void notOnWindows() {
 ```
 
 #### 3.7.2 Java运行时环境条件
-可以通过 [@EnabledOnJre](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/EnabledOnJre.html) 和 [@DisabledOnJre](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/DisabledOnJre.html) 注解在特定版本的Java运行时环境（JRE）上启用或禁用容器或测试。
+可以通过 {{ EnabledOnJre }} 和 {{ DisabledOnJre }} 注解在特定版本的Java运行时环境（JRE）上启用或禁用容器或测试。
 
 ```java
 @Test
@@ -442,7 +442,7 @@ void notOnJava9() {
 ```
 
 #### 3.7.3. 系统属性条件
-可以通过 [@EnabledIfSystemProperty](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/EnabledIfSystemProperty.html) 和 [@DisabledIfSystemProperty](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/DisabledIfSystemProperty.html) 注解根据指定的JVM系统属性的值启用或禁用容器或测试。通过`matches`属性提供的值将被解释为正则表达式。
+可以通过 {{ EnabledIfSystemProperty }} 和 {{ DisabledIfSystemProperty }} 注解根据指定的JVM系统属性的值启用或禁用容器或测试。通过`matches`属性提供的值将被解释为正则表达式。
 
 ```java
 @Test
@@ -459,7 +459,7 @@ void notOnCiServer() {
 ```
 
 #### 3.7.4. 环境变量条件
-通过 [@EnabledIfEnvironmentVariable](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/EnabledIfEnvironmentVariable.html) 和 [@DisabledIfEnvironmentVariable](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/DisabledIfEnvironmentVariable.html) 注解，可以根据来自底层操作系统的命名环境变量的值启用或禁用容器或测试。通过`matches`属性提供的值将被解释为正则表达式。
+通过 {{ EnabledIfEnvironmentVariable }} 和 {{ DisabledIfEnvironmentVariable }} 注解，可以根据来自底层操作系统的命名环境变量的值启用或禁用容器或测试。通过`matches`属性提供的值将被解释为正则表达式。
 
 ```java
 @Test
@@ -476,9 +476,9 @@ void notOnDeveloperWorkstation() {
 ```
 
 #### 3.7.5 基于脚本的条件
-根据对通过 [@EnabledIf](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/EnabledIf.html) 或 [@DisabledIf](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/DisabledIf.html) 注解配置的脚本的评估，JUnit Jupiter提供了 *启用或禁用* 容器或测试的功能。脚本可以用JavaScript，Groovy或任何其他支持Java脚本API的脚本语言编写，由JSR 223定义。
+根据对通过 {{ EnabledIf }} 或 {{ DisabledIf }} 注解配置的脚本的评估，JUnit Jupiter提供了 *启用或禁用* 容器或测试的功能。脚本可以用JavaScript，Groovy或任何其他支持Java脚本API的脚本语言编写，由JSR 223定义。
 
-> ⚠️ 通过 [@EnabledIf](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/EnabledIf.html) 或 [@DisabledIf](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/condition/DisabledIf.html)执行条件测试目前是一项试验性功能。有关详细信息，请参阅 [实验性API](#82-试验性api) 中的表格。
+> ⚠️ 通过 {{ EnabledIf }} 或 {{ DisabledIf }} 执行条件测试目前是一项试验性功能。有关详细信息，请参阅 [实验性API](#82-试验性api) 中的表格。
 
 > 💡 如果脚本的逻辑仅依赖于当前的操作系统，当前的Java运行时环境版本，特定的JVM系统属性或特定的环境变量，则应考虑使用专用于此目的的内置注释之一。有关更多详细信息，请参阅本章的前几节。
 
@@ -699,13 +699,13 @@ class TestingAStackDemo {
 ### 3.11. 构造函数和方法的依赖注入
 在之前的所有JUnit版本中，测试构造函数和方法是不允许传入参数的（至少不能使用标准的`Runner`实现）。JUnit Jupiter一个主要的改变是：允许给测试类的构造函数和方法传入参数。这带来了更大的灵活性，并且可以在构造函数和方法上使用*依赖注入*。
 
-[ParameterResolver](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/extension/ParameterResolver.html) 为测试扩展定义了API，它可以在运行时*动态* 解析参数。如果一个测试的构造函数或者`@Test`、`@TestFactory`、`@BeforeEach`、`@AfterEach`、`@BeforeAll`或者 `@AfterAll`方法接收一个参数，这个参数就必须在运行时被一个已注册的`ParameterResolver`解析。
+{{ ParameterResolver }} 为测试扩展定义了API，它可以在运行时*动态* 解析参数。如果一个测试的构造函数或者`@Test`、`@TestFactory`、`@BeforeEach`、`@AfterEach`、`@BeforeAll`或者 `@AfterAll`方法接收一个参数，这个参数就必须在运行时被一个已注册的`ParameterResolver`解析。
 
 目前有三种被自动注册的内置解析器。
 
-* [TestInfoParameterResolver](https://github.com/junit-team/junit5/tree/r5.0.2/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/TestInfoParameterResolver.java)：如果一个方法参数的类型是 [TestInfo](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/TestInfo.html)，`TestInfoParameterResolver`将根据当前的测试提供一个`TestInfo`的实例用于填充参数的值。然后，`TestInfo`就可以被用来检索关于当前测试的信息，例如：显示名称、测试类、测试方法或相关的Tag。显示名称要么是一个类似于测试类或测试方法的技术名称，要么是一个通过`@DisplayName`配置的自定义名称。
+* {{ TestInfoParameterResolver }}：如果一个方法参数的类型是 {{ TestInfo }}，`TestInfoParameterResolver`将根据当前的测试提供一个`TestInfo`的实例用于填充参数的值。然后，`TestInfo`就可以被用来检索关于当前测试的信息，例如：显示名称、测试类、测试方法或相关的Tag。显示名称要么是一个类似于测试类或测试方法的技术名称，要么是一个通过`@DisplayName`配置的自定义名称。
 
- [TestInfo](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/TestInfo.html) 就像JUnit 4规则中`TestName`规则的代替者。以下演示如何将`TestInfo`注入到测试构造函数、`@BeforeEach`方法和`@Test`方法中。
+{{ TestInfo }} 就像JUnit 4规则中`TestName`规则的代替者。以下演示如何将`TestInfo`注入到测试构造函数、`@BeforeEach`方法和`@Test`方法中。
 
 ```java
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -745,8 +745,8 @@ class TestInfoDemo {
 }
 ```
 
-* `RepetitionInfoParameterResolver`：如果一个位于`@RepeatedTest`、`@BeforeEach`或者`@AfterEach`方法的参数的类型是 [RepetitionInfo](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/RepetitionInfo.html)，`RepetitionInfoParameterResolver`会提供一个`RepetitionInfo`实例。然后，`RepetitionInfo`就可以被用来检索对应`@RepeatedTest`方法的当前重复以及总重复次数等相关信息。但是请注意，`RepetitionInfoParameterResolver`不是在`@RepeatedTest`的上下文之外被注册的。请参阅 [重复测试示例](#3121-重复测试示例)。
-* [TestReporterParameterResolver](https://github.com/junit-team/junit5/tree/r5.0.2/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/TestReporterParameterResolver.java)：如果一个方法参数的类型是 [TestReporter](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/TestReporter.html)，`TestReporterParameterResolver`会提供一个`TestReporter`实例。然后，`TestReporter`就可以被用来发布有关当前测试运行的其他数据。这些数据可以通过  [TestExecutionListener](http://junit.org/junit5/docs/5.1.1/api/org/junit/platform/launcher/TestExecutionListener.html) 的`reportingEntryPublished()`方法来消费，因此可以被IDE查看或包含在报告中。
+* `RepetitionInfoParameterResolver`：如果一个位于`@RepeatedTest`、`@BeforeEach`或者`@AfterEach`方法的参数的类型是 {{ RepetitionInfo }}，`RepetitionInfoParameterResolver`会提供一个`RepetitionInfo`实例。然后，`RepetitionInfo`就可以被用来检索对应`@RepeatedTest`方法的当前重复以及总重复次数等相关信息。但是请注意，`RepetitionInfoParameterResolver`不是在`@RepeatedTest`的上下文之外被注册的。请参阅 [重复测试示例](#3121-重复测试示例)。
+* {{ TestReporterParameterResolver }}：如果一个方法参数的类型是 {{ TestReporter }}，`TestReporterParameterResolver`会提供一个`TestReporter`实例。然后，`TestReporter`就可以被用来发布有关当前测试运行的其他数据。这些数据可以通过 {{ TestExecutionListener }} 的`reportingEntryPublished()`方法来消费，因此可以被IDE查看或包含在报告中。
 
  在JUnit Jupiter中，你应该使用`TestReporter`来代替你在JUnit 4中打印信息到`stdout`或`stderr`的习惯。使用`@RunWith(JUnitPlatform.class)`会将报告的所有条目都输出到`stdout`中。
  
@@ -777,7 +777,7 @@ class TestReporterDemo {
 
 >📒 其他的参数解析器必须通过`@ExtendWith`注册合适的 [扩展](#5-扩展模型) 来明确地开启。
 
-可以查看 [MockitoExtension](https://github.com/junit-team/junit5-samples/tree/r5.0.2/junit5-mockito-extension/src/main/java/com/example/mockito/MockitoExtension.java) 获取自定义 [ParameterResolver](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/extension/ParameterResolver.html) 的示例。虽然并不打算大量使用它，但它演示了扩展模型和参数解决过程中的简单性和表现力。`MyMockitoTest`演示了如何将Mockito mocks注入到`@BeforeEach`和`@Test`方法中。
+可以查看 {{ MockitoExtension }} 获取自定义 {{ ParameterResolver }} 的示例。虽然并不打算大量使用它，但它演示了扩展模型和参数解决过程中的简单性和表现力。`MyMockitoTest`演示了如何将Mockito mocks注入到`@BeforeEach`和`@Test`方法中。
 
 ```java
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -1153,7 +1153,7 @@ class RepeatedTestsDemo {
 
 ### 3.14. 参数化测试
 
-参数化测试可以用不同的参数多次运行试。除了使用[@ParameterizedTest](https://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/params/ParameterizedTest.html) 注解，它们的声明跟`@Test`的方法没有区别。此外，你必须声明至少一个参数源来给每次调用提供参数。
+参数化测试可以用不同的参数多次运行试。除了使用 {{ ParameterizedTest }} 注解，它们的声明跟`@Test`的方法没有区别。此外，你必须声明至少一个参数源来给每次调用提供参数。
 
 > ⚠️ 参数化测试目前是一个试验性功能。详细信息请参阅 [试验性API](#82-试验性api) 中的表格。
 

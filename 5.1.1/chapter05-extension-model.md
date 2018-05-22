@@ -58,7 +58,7 @@ class MyTestsV2 {
 <a id = "extensions-registration-programmatic"></a>
 
 #### 5.2.2. 编程式扩展注册
-开发人员可以通过*编程的* 方式来注册扩展，只需要将测试类中的属性字段使用 [`@RegisterExtension`](https://junit.org/junit5/docs/5.1.0/api/org/junit/jupiter/api/extension/RegisterExtension.html) 注解标注即可。
+开发人员可以通过*编程的* 方式来注册扩展，只需要将测试类中的属性字段使用 [`@RegisterExtension`](https://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/extension/RegisterExtension.html) 注解标注即可。
 
 当一个扩展通过 [`@ExtenWith`](#extensions-registration-declarative) 声明式注册后，它就只能通过注解配置。相比之下，当通过`@RegisterExtension`注册扩展时，我们可以通过*编程* 的方式来配置扩展 - 例如，将参数传递给扩展的构造函数、静态工厂方法或构建器API。
 
