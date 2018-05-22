@@ -1425,6 +1425,40 @@ void testWithImplicitArgumentConversion(TimeUnit argument) {
 | `java.util.Locale` | `"en"` → `new Locale("en")` |
 | `java.util.UUID` | `"d043e930-7b3b-48e3-bdbe-5a3ccfb833db"` → `UUID.fromString("d043e930-7b3b-48e3-bdbe-5a3ccfb833db")`|
 
+##### 回退String-to-Object转换
+除了从字符串到上表中列出的目标类型的隐式转换之外，如果目标类型只声明一个合适的*工厂方法* 或*工厂构造函数*，则JUnit Jupiter还提供了一个从`String`自动转换为给定目标类型的回退机制，工厂方法和工厂构造函数定义如下：
+
+- *工厂方法*：在目标类型中声明的非私有静态方法，它接受单个`String`参数并返回目标类型的实例。该方法的名称可以是任意的，不需要遵循任何特定的约定。
+- *工厂构造函数*：目标类型中的一个非私有构造函数，它接受一个`String`参数。
+
+> 📒 如果发现多个*工厂方法*，它们将被忽略。如果同时发现了*工厂方法* 和*工厂构造函数*，则将使用*工厂方法* 而不使用构造函数。
+
+例如，在下面的`@ParameterizedTest`方法中，将通过调用`Book.fromTitle(String)`工厂方法并传递`"42 Cats"`作为书的标题来创建Book参数。
+
+```java
+@ParameterizedTest
+@ValueSource(strings = "42 Cats")
+void testWithImplicitFallbackArgumentConversion(Book book) {
+    assertEquals("42 Cats", book.getTitle());
+}
+
+public class Book {
+
+    private final String title;
+
+    private Book(String title) {
+        this.title = title;
+    }
+
+    public static Book fromTitle(String title) {
+        return new Book(title);
+    }
+
+    public String getTitle() {
+        return this.title;
+    }
+}
+```
 
 ##### 显式转换
 除了使用隐式转换参数，你还可以使用`@ConvertWith`注解来显式指定一个`ArgumentConverter`用于某个参数，例如下面代码所示。
@@ -1511,7 +1545,7 @@ void afterEach(TestInfo testInfo) {
 
 ### 3.15. 测试模板
 
-`@TestTemplate`方法不是一个常规的测试用例，它是测试用例的模板。因此，它的设计初衷是用来被多次调用，而调用次数取决于注册提供者返回的调用上下文数量。所以，它必须结合 [TestTemplateInvocationContextProvider](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/extension/TestTemplateInvocationContextProvider.html) 扩展一起使用。测试模板方法每一次调用跟执行常规`@Test`方法一样，它也完全支持相同的生命周期回调和扩展。关于它的用例请参阅 [为测试模板提供调用上下文](#58-为测试模板提供调用上下文)。
+{{ TestTemplate }} 方法不是一个常规的测试用例，它是测试用例的模板。因此，它的设计初衷是用来被多次调用，而调用次数取决于注册提供者返回的调用上下文数量。所以，它必须结合 {{ TestTemplateInvocationContextProvider }} 扩展一起使用。测试模板方法每一次调用跟执行常规`@Test`方法一样，它也完全支持相同的生命周期回调和扩展。关于它的用例请参阅 [为测试模板提供调用上下文](#58-为测试模板提供调用上下文)。
 
 
 ### 3.16. 动态测试
