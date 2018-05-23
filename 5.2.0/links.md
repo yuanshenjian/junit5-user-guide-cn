@@ -14,6 +14,7 @@
 {% assign CustomTypeParameterResolver = '[CustomTypeParameterResolver](' | append: current-branch | append: '/junit-jupiter-engine/src/test/java/org/junit/jupiter/engine/execution/injection/sample/CustomTypeParameterResolver.java)' %}
 {% assign CustomAnnotationParameterResolver = '[CustomAnnotationParameterResolver](' | append: current-branch | append: '/junit-jupiter-engine/src/test/java/org/junit/jupiter/engine/execution/injection/sample/CustomAnnotationParameterResolver.java)' %}
 {% assign RandomParametersExtension = '[RandomParametersExtension]('| append: junit5-samples-repo | append: '/tree/' | append: release-branch | append: '/junit5-jupiter-extensions/src/main/java/com/example/random/RandomParametersExtension.java)' %}
+{% assign junit5-jupiter-starter-gradle = '[junit5-jupiter-starter-gradle]('| append: junit5-samples-repo | append: '/tree/' | append: release-branch | append: '/junit5-jupiter-starter-gradle)' %}
 {% assign junit5-jupiter-starter-maven = '[junit5-jupiter-starter-maven]('| append: junit5-samples-repo | append: '/tree/' | append: release-branch | append: '/junit5-jupiter-starter-maven)' %}
 {% assign junit5-jupiter-starter-ant = '[junit5-jupiter-starter-ant]('| append: junit5-samples-repo | append: '/tree/' | append: release-branch | append: '/junit5-jupiter-starter-ant)' %}
 {% assign api-package = '[org.junit.jupiter.api](' | append: javadoc-root | append: '/org/junit/jupiter/api/package-summary.html)' %}
