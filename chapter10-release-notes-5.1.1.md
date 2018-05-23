@@ -1,7 +1,7 @@
 ---
 
 bg: "junit5.png"
-layout: junit5
+layout: junit5-release-note
 title: "JUnit 5 发布记录"
 permalink: /junit5/5.1.1/release-notes/
 summary: "5.1.1"
