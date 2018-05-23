@@ -6,7 +6,7 @@
 ### 6.1. 在 JUnit Platform 上运行JUnit4 测试
 只要确保`junit-vintage-engine`包存在于你的测试运行时路径下，基于JUnit 3和 JUnit 4的测试将自动被JUnit Platform启动器拾取。
 
-要想了解如何使用Gradle和Maven完成此操作，请参阅示例工程 [junit5-samples](https://github.com/junit-team/junit5-samples) 。
+要想了解如何使用Gradle和Maven完成此操作，请参阅示例工程 [junit5-samples]({{junit5-samples-repo}})。
 
 #### 6.1.1. 类别支持
 对于使用`@Category`注解的测试类或方法，*JUnit Vintage* 测试引擎将该类别的完全限定类名作为相应测试标识符的标记。例如，如果一个测试方法使用了`@Category(Example.class)`注解，它将被标记为`"com.acme.Example"`。与JUnit 4中的`Categories` runner类似，我们可以使用该信息在执行发现的测试之前对其进行过滤（详细信息请参阅 [运行测试](#4-运行测试)）。

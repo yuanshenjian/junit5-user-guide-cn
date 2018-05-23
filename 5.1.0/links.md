@@ -17,12 +17,6 @@
 {% assign junit5-gradle-consumer = '[junit5-gradle-consumer]('| append: junit5-samples-repo | append: '/tree/' | append: release-branch | append: '/junit5-gradle-consumer)' %}
 {% assign junit5-maven-consumer = '[junit5-maven-consumer]('| append: junit5-samples-repo | append: '/tree/' | append: release-branch | append: '/junit5-maven-consumer)' %}
 
-
-{% assign extension-api-package = '[org.junit.jupiter.api.extension](' | append: javadoc-root | append: '/org/junit/jupiter/api/extension/package-summary.html)' %}
-{% assign params-provider-package = '[org.junit.jupiter.params.provider](' | append: javadoc-root | append: '/org/junit/jupiter/params/provider/package-summary.html)' %}
-{% assign api-package = '[org.junit.jupiter.api](' | append: javadoc-root | append: '/org/junit/jupiter/api/package-summary.html)' %}
-
-
 {% assign StackOverflow = '[Stack Overflow](https://stackoverflow.com/questions/tagged/junit5)' %}
 {% assign Gitter = '[Gitter](https://gitter.im/junit-team/junit5)' %}                     
 {% assign API = '[@API](https://apiguardian-team.github.io/apiguardian/docs/current/api/)' %}
@@ -37,6 +31,15 @@
 {% assign Specsy = '[Specsy](http://specsy.org/)' %}
 {% assign Truth = '[Truth](http://google.github.io/truth/)' %}
 {% assign JUL_to_SLF4J_Bridge = '[JUL to SLF4J Bridge](https://www.slf4j.org/legacy.html#jul-to-slf4j)' %}
+
+{% assign extension-api-package = '[org.junit.jupiter.api.extension](' | append: javadoc-root | append: '/org/junit/jupiter/api/extension/package-summary.html)' %}
+{% assign params-provider-package = '[org.junit.jupiter.params.provider](' | append: javadoc-root | append: '/org/junit/jupiter/params/provider/package-summary.html)' %}
+{% assign api-package = '[org.junit.jupiter.api](' | append: javadoc-root | append: '/org/junit/jupiter/api/package-summary.html)' %}
+{% assign junit-platform-console = '[junit-platform-console](' | append: javadoc-root | append: '/org/junit/platform/console/package-summary.html)' %}
+{% assign junit-platform-launcher = '[junit-platform-launcher](' | append: javadoc-root | append: '/org/junit/platform/launcher/package-summary.html)' %}
+{% assign junit-platform-engine = '[junit-platform-engine](' | append: javadoc-root | append: '/org/junit/platform/engine/package-summary.html)' %}
+{% assign junit-vintage-engine = '[junit-vintage-engine](' | append: javadoc-root | append: '/org/junit/vintage/engine/package-summary.html)' %}
+{% assign junit-jupiter-engine = '[junit-jupiter-engine](' | append: javadoc-root | append: '/org/junit/jupiter/engine/package-summary.html)' %}
 
 {% assign TestEngine = '[TestEngine](' | append: javadoc-root | append: '/org/junit/platform/engine/TestEngine.html)' %}
 {% assign ArgumentsAccessor = '[ArgumentsAccessor](' | append: javadoc-root | append: '/org/junit/jupiter/params/aggregator/ArgumentsAccessor.html)' %}
@@ -76,7 +79,7 @@
 {% assign ParameterizedTest = '[@ParameterizedTest](' | append: javadoc-root | append: '/org/junit/jupiter/params/ParameterizedTest.html)' %}
 {% assign ParameterResolver = '[ParameterResolver](' | append: javadoc-root | append: '/org/junit/jupiter/api/extension/ParameterResolver.html)' %}
 {% assign RegisterExtension = '[@RegisterExtension](' | append: javadoc-root | append: '/org/junit/jupiter/api/extension/RegisterExtension.html)' %}
-
+{% assign Launcher = '[Launcher](' | append: javadoc-root | append: '/org/junit/platform/launcher/Launcher.html)' %}
 {% assign RepetitionInfo = '[RepetitionInfo](' | append: javadoc-root | append: '/org/junit/jupiter/api/RepetitionInfo.html)' %}
 {% assign TestExecutionExceptionHandler = '[TestExecutionExceptionHandler](' | append: javadoc-root | append: '/org/junit/jupiter/api/extension/TestExecutionExceptionHandler.html)' %}
 {% assign TestInfo = '[TestInfo](' | append: javadoc-root | append: '/org/junit/jupiter/api/TestInfo.html)' %}

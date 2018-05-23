@@ -36,9 +36,16 @@
 {% assign JUL_to_SLF4J_Bridge = '[JUL to SLF4J Bridge](https://www.slf4j.org/legacy.html#jul-to-slf4j)' %}
 
 
+{% assign junit-platform-console = '[junit-platform-console](' | append: javadoc-root | append: '/org/junit/platform/console/package-summary.html)' %}
+{% assign junit-platform-launcher = '[junit-platform-launcher](' | append: javadoc-root | append: '/org/junit/platform/launcher/package-summary.html)' %}
+{% assign junit-platform-engine = '[junit-platform-engine](' | append: javadoc-root | append: '/org/junit/platform/engine/package-summary.html)' %}
+{% assign junit-vintage-engine = '[junit-vintage-engine](' | append: javadoc-root | append: '/org/junit/vintage/engine/package-summary.html)' %}
+{% assign junit-jupiter-engine = '[junit-jupiter-engine](' | append: javadoc-root | append: '/org/junit/jupiter/engine/package-summary.html)' %}
+
 {% assign extension-api-package = '[org.junit.jupiter.api.extension](' | append: javadoc-root | append: '/org/junit/jupiter/api/extension/package-summary.html)' %}
 {% assign junit-platform-support-package = '[org.junit.platform.commons.support](' | append: javadoc-root | append: '/org/junit/platform/commons/support/package-summary.html)' %}
 {% assign params-provider-package = '[org.junit.jupiter.params.provider](' | append: javadoc-root | append: '/org/junit/jupiter/params/provider/package-summary.html)' %}
+{% assign Launcher = '[Launcher](' | append: javadoc-root | append: '/org/junit/platform/launcher/Launcher.html)' %}
 {% assign TestEngine = '[TestEngine](' | append: javadoc-root | append: '/org/junit/platform/engine/TestEngine.html)' %}
 {% assign ArgumentsAccessor = '[ArgumentsAccessor](' | append: javadoc-root | append: '/org/junit/jupiter/params/aggregator/ArgumentsAccessor.html)' %}
 {% assign ArgumentsAggregator = '[ArgumentsAggregator](' | append: javadoc-root | append: '/org/junit/jupiter/params/aggregator/ArgumentsAggregator.html)' %}

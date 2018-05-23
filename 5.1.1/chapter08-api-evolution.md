@@ -5,7 +5,7 @@ JUnit 5的主要目标之一是提高维护者发展演进JUnit的能力，尽�
 
 
 ### 8.1. API 版本和状态
-每个已发布的artifact都有一个版本号`<major>.<minor>.<patch>`，所有公开的接口、类和方法都使用 [@API Guardian](https://github.com/apiguardian-team/apiguardian) 项目中的 [@API](https://apiguardian-team.github.io/apiguardian/docs/5.1.1/api/) 进行标注。`@API`注解的`status`属性可以被赋予下面表格中的值。
+每个已发布的artifact都有一个版本号`<major>.<minor>.<patch>`，所有公开的接口、类和方法都使用了 {{API_Guardian}}项目中的 {{API}} 注解进行标注。`@API`注解的`status`属性可以被赋予下面表格中的值。
 
 | 状态 | 描述 |
 |:---|:---|
@@ -63,4 +63,4 @@ JUnit 5的主要目标之一是提高维护者发展演进JUnit的能力，尽�
 
 ### 8.3. @API工具支持
 
-[@API Guardian](https://github.com/apiguardian-team/apiguardian) 项目计划为使用 [@API](https://apiguardian-team.github.io/apiguardian/docs/5.1.1/api/) 注解的API的发布者和消费者提供工具支持。例如，工具支持可能会提供一种方法来检查是否按照`@API`注解声明来使用JUnit API。
+{{API_Guardian}} 项目计划为使用 {{API}} 注解的API的发布者和消费者提供工具支持。例如，工具支持可能会提供一种方法来检查是否按照`@API`注解声明来使用JUnit API。
