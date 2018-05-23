@@ -62,7 +62,7 @@ for JUnit 5* 章节。
 
 #### 4.2.1. Gradle
 
-JUnit开发团队已经开发了一款非常基础的Gradle插件，它允许你运行被`TestEngine`（例如，JUnit3、JUnit4、JUnit Jupiter以及 [Specsy](http://specsy.org/) 等）支持的任何种类的测试。关于插件的使用示例请参阅 [`junit5-gradle-consumer`](https://github.com/junit-team/junit5-samples/tree/r5.0.2/junit5-gradle-consumer) 项目中的`build.gradle`文件。
+JUnit开发团队已经开发了一款非常基础的Gradle插件，它允许你运行被`TestEngine`（例如，JUnit3、JUnit4、JUnit Jupiter以及 {{Specsy}} 等）支持的任何种类的测试。关于插件的使用示例请参阅 {{junit5-gradle-consumer}}项目中的`build.gradle`文件。
 
 > ❗ ️️*本地Gradle支持在这里*  
 从 [版本4.6](https://docs.gradle.org/4.6/release-notes.html) 开始，Gradle为在JUnit平台上执行测试提供 [native support](https://docs
@@ -206,9 +206,9 @@ dependencies {
 ```
 
 ##### 配置日志（可选）
-JUnit使用`java.util.logging`包（a.k.a *JUL*）中的Java Logging API发出警告和调试信息。请参阅 [LogManager](https://docs.oracle.com/javase/8/docs/api/java/util/logging/LogManager.html) 的官方文档以获取配置选项。
+JUnit使用`java.util.logging`包（a.k.a *JUL*）中的Java Logging API发出警告和调试信息。请参阅 {{ LogManager }} 的官方文档以获取配置选项。
 
-或者，可以将日志消息重定向到其他日志框架，例如 [Log4j](https://logging.apache.org/log4j/2.x/) 或 [Logback](https://logback.qos.ch/)。要使用提供 [LogManager](https://docs.oracle.com/javase/8/docs/api/java/util/logging/LogManager.html) 自定义实现的日志框架，请配置JUnit Gradle插件的`logManager`扩展属性。这会将`java.util.logging.manager`系统属性设置为要使用的 [LogManager](https://docs.oracle.com/javase/8/docs/api/java/util/logging/LogManager.html) 实现提供的*全限定类名称*。下面的示例演示了如何配置Log4j 2.x（有关详细信息，请参阅 [Log4j JDK Logging Adapter](https://logging.apache.org/log4j/2.x/log4j-jul/index.html)）。
+或者，可以将日志消息重定向到其他日志框架，例如 {{ Log4j }} 或 {{ Logback }}。要使用提供 {{ LogManager }} 自定义实现的日志框架，请配置JUnit Gradle插件的`logManager`扩展属性。这会将`java.util.logging.manager`系统属性设置为要使用的 {{ LogManager }} 实现提供的*全限定类名称*。下面的示例演示了如何配置Log4j 2.x（有关详细信息，请参阅 {{ Log4j_JDK_Logging_Adapter }}）。
 
 ```groovy
 junitPlatform {
@@ -216,14 +216,14 @@ junitPlatform {
 }
 ```
 
-其他日志框架提供了不同的方式来重定向使用`java.util.logging`记录的消息。例如，对于 [Logback](https://logback.qos.ch/)，你可以通过向运行时类路径添加附加依赖项来使用 [JUL to SLF4J Bridge](https://www.slf4j.org/legacy.html#jul-to-slf4j)
+其他日志框架提供了不同的方式来重定向使用`java.util.logging`记录的消息。例如，对于{{Logback}}，你可以通过向运行时类路径添加附加依赖项来使用 {{JUL_to_SLF4J_Bridge}}
 
 ##### 使用JUnit Gradle插件
 一旦应用并配置了JUnit Gradle插件，你就可以使用新的`junitPlatformTest`任务（在可用的Gralde task中会多出一个名为`junitPlatformTest`的Task）。
 
 在命令行中调用`gradlew junitPlatformTest`（或者`gradlew test`）指令，项目中所有满足当前`includeClassNamePattern`（默认匹配`^.*Tests?$`）配置的测试会被执行。
 
-在 [`junit5-gradle-consumer`](https://github.com/junit-team/junit5-samples/tree/r5.0.2/junit5-gradle-consumer) 项目中执行 `junitPlatformTest`任务会看到类似下面的输出。
+在 {{junit5-gradle-consumer}} 项目中执行 `junitPlatformTest`任务会看到类似下面的输出。
 
 ```sh
 :junitPlatformTest
@@ -285,7 +285,7 @@ Execution failed for task ':junitPlatformTest'.
 
 
 #### 4.2.2. Maven
-JUnit团队已经为Maven Surefire开发了一个非常基础的provider，它允许你使用`mvn test`运行JUnit 4和JUnit Jupiter测试。[`junit5-maven-consumer`](https://github.com/junit-team/junit5-samples/tree/r5.0.2/junit5-maven-consumer) 项目中的`pom.xml`文件演示了如何使用它，你可以以它作为一个起点。
+JUnit团队已经为Maven Surefire开发了一个非常基础的provider，它允许你使用`mvn test`运行JUnit 4和JUnit Jupiter测试。{{junit5-maven-consumer}} 项目中的`pom.xml`文件演示了如何使用它，你可以以它作为一个起点。
 
 > ⚠️ 由于Surefire2.20存在内存泄漏的漏洞，`junit-platform-surefire-provider`目前仅适用于Surefire 2.19.1。
 
@@ -465,7 +465,7 @@ Maven Surefire插件将扫描全类名与以下模式匹配的测试类。
 ```
 
 ### 4.3. 控制台启动器
-[`ConsoleLauncher`](http://junit.org/junit5/docs/5.1.1/api/org/junit/platform/console/ConsoleLauncher.html) 是一个Java的命令行应用程序，它允许你通过命令行来启动JUnit Platform。例如，它可以用来运行JUnit Vintage和JUnit Jupiter测试，并在控制台中打印测试结果。
+{{ConsoleLauncher}} 是一个Java的命令行应用程序，它允许你通过命令行来启动JUnit Platform。例如，它可以用来运行JUnit Vintage和JUnit Jupiter测试，并在控制台中打印测试结果。
 
 `junit-platform-console-standalone-{{platform-version}}.jar`这个包含了所有依赖的可执行的jar包已经被发布在Maven仓库中，它位于 [junit-platform-console-standalone](https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone)目录下，你可以 [运行](https://docs.oracle.com/javase/tutorial/deployment/jar/run.html) 独立的ConsoleLauncher，如下所示。
 
@@ -504,7 +504,7 @@ Test run finished after 64 ms
 ```
 
 >📒 ***退出码***  
-> 如果任何容器或测试失败，[ConsoleLauncher](http://junit.org/junit5/docs/5.1.1/api/org/junit/platform/console/ConsoleLauncher.html) 就会以状态码1退出，否则退出码为0.
+> 如果任何容器或测试失败，{{ConsoleLauncher}} 就会以状态码1退出，否则退出码为0.
 
 #### 4.3.1. Options
 

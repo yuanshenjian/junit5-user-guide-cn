@@ -11,10 +11,11 @@
 {% assign RepetitionInfoParameterResolver = '[RepetitionInfoParameterResolver](' | append: current-branch | append: '/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/RepetitionInfoParameterResolver.java)' %}
 {% assign TestInfoParameterResolver = '[TestInfoParameterResolver](' | append: current-branch | append: '/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/TestInfoParameterResolver.java)' %}
 {% assign TestReporterParameterResolver = '[TestInfoParameterResolver](' | append: current-branch | append: '/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/TestReporterParameterResolver.java)' %}
+{% assign CustomTypeParameterResolver = '[CustomTypeParameterResolver](' | append: current-branch | append: '/junit-jupiter-engine/src/test/java/org/junit/jupiter/engine/execution/injection/sample/CustomTypeParameterResolver.java)' %}
+{% assign CustomAnnotationParameterResolver = '[CustomAnnotationParameterResolver](' | append: current-branch | append: '/junit-jupiter-engine/src/test/java/org/junit/jupiter/engine/execution/injection/sample/CustomAnnotationParameterResolver.java)' %}
 {% assign RandomParametersExtension = '[RandomParametersExtension]('| append: junit5-samples-repo | append: '/tree/' | append: release-branch | append: '/junit5-jupiter-extensions/src/main/java/com/example/random/RandomParametersExtension.java)' %}
-
-{% assign extension-api-package = '[org.junit.jupiter.api.extension](' | append: javadoc-root | append: '/org/junit/jupiter/api/extension/package-summary.html)' %}
-{% assign params-provider-package = '[org.junit.jupiter.params.provider](' | append: javadoc-root | append: '/org/junit/jupiter/params/provider/package-summary.html)' %}
+{% assign junit5-jupiter-starter-maven = '[junit5-jupiter-starter-maven]('| append: junit5-samples-repo | append: '/tree/' | append: release-branch | append: '/junit5-jupiter-starter-maven)' %}
+{% assign junit5-jupiter-starter-ant = '[junit5-jupiter-starter-ant]('| append: junit5-samples-repo | append: '/tree/' | append: release-branch | append: '/junit5-jupiter-starter-ant)' %}
 {% assign api-package = '[org.junit.jupiter.api](' | append: javadoc-root | append: '/org/junit/jupiter/api/package-summary.html)' %}
 
 
@@ -32,8 +33,12 @@
 {% assign SpringExtension = '[SpringExtension](https://github.com/spring-projects/spring-framework/tree/master/spring-test/src/main/java/org/springframework/test/context/junit/jupiter/SpringExtension.java)' %}
 {% assign Specsy = '[Specsy](http://specsy.org/)' %}
 {% assign Truth = '[Truth](http://google.github.io/truth/)' %}
+{% assign JUL_to_SLF4J_Bridge = '[JUL to SLF4J Bridge](https://www.slf4j.org/legacy.html#jul-to-slf4j)' %}
 
 
+{% assign extension-api-package = '[org.junit.jupiter.api.extension](' | append: javadoc-root | append: '/org/junit/jupiter/api/extension/package-summary.html)' %}
+{% assign junit-platform-support-package = '[org.junit.platform.commons.support](' | append: javadoc-root | append: '/org/junit/platform/commons/support/package-summary.html)' %}
+{% assign params-provider-package = '[org.junit.jupiter.params.provider](' | append: javadoc-root | append: '/org/junit/jupiter/params/provider/package-summary.html)' %}
 {% assign TestEngine = '[TestEngine](' | append: javadoc-root | append: '/org/junit/platform/engine/TestEngine.html)' %}
 {% assign ArgumentsAccessor = '[ArgumentsAccessor](' | append: javadoc-root | append: '/org/junit/jupiter/params/aggregator/ArgumentsAccessor.html)' %}
 {% assign ArgumentsAggregator = '[ArgumentsAggregator](' | append: javadoc-root | append: '/org/junit/jupiter/params/aggregator/ArgumentsAggregator.html)' %}
@@ -42,6 +47,13 @@
 {% assign BeforeAllCallback = '[BeforeAllCallback](' | append: javadoc-root | append: '/org/junit/jupiter/api/extension/BeforeAllCallback.html)' %}
 {% assign BeforeEachCallback = '[BeforeEachCallback](' | append: javadoc-root | append: '/org/junit/jupiter/api/extension/BeforeEachCallback.html)' %}
 {% assign BeforeTestExecutionCallback = '[BeforeTestExecutionCallback](' | append: javadoc-root | append: '/org/junit/jupiter/api/extension/BeforeTestExecutionCallback.html)' %}
+{% assign AfterAllCallback = '[AfterAllCallback](' | append: javadoc-root | append: '/org/junit/jupiter/api/extension/AfterAllCallback.html)' %}
+{% assign AfterEachCallback = '[AfterEachCallback](' | append: javadoc-root | append: '/org/junit/jupiter/api/extension/AfterEachCallback.html)' %}
+{% assign AfterTestExecutionCallback = '[AfterTestExecutionCallback](' | append: javadoc-root | append: '/org/junit/jupiter/api/extension/AfterTestExecutionCallback.html)' %}
+{% assign AnnotationSupport = '[AnnotationSupport](' | append: javadoc-root | append: '/org/junit/platform/commons/support/AnnotationSupport.html)' %}
+{% assign ClassSupport = '[ClassSupport](' | append: javadoc-root | append: '/org/junit/platform/commons/support/ClassSupport.html)' %}
+{% assign ReflectionSupport = '[ReflectionSupport](' | append: javadoc-root | append: '/org/junit/platform/commons/support/ReflectionSupport.html)' %}
+
 {% assign Disabled = '[@Disabled](' | append: javadoc-root | append: '/org/junit/jupiter/api/Disabled.html)' %}
 {% assign DisabledIf = '[@DisabledIf](' | append: javadoc-root | append: '/org/junit/jupiter/api/condition/DisabledIf.html'%}
 {% assign DisabledIfEnvironmentVariable = '[@DisabledIfEnvironmentVariable](' | append: javadoc-root | append: '/org/junit/jupiter/api/condition/DisabledIfEnvironmentVariable.html)' %}
@@ -53,7 +65,7 @@
 {% assign SummaryGeneratingListener = '[SummaryGeneratingListener](' | append: javadoc-root | append: '/org/junit/platform/launcher/listeners/SummaryGeneratingListener.html)' %}
 {% assign TestExecutionListener = '[TestExecutionListener](' | append: javadoc-root | append: '/org/junit/platform/launcher/TestExecutionListener.html)' %}
 {% assign JUnitPlatform-Runner = '[JUnitPlatform](' | append: javadoc-root | append: '/org/junit/platform/runner/JUnitPlatform.html)' %}
-
+{% assign ConsoleLauncher = '[ConsoleLauncher](' | append: javadoc-root | append: '/org/junit/platform/console/ConsoleLauncher.html)' %}
 
 {% assign EnabledIfSystemProperty = '[@EnabledIfSystemProperty](' | append: javadoc-root | append: '/org/junit/jupiter/api/condition/EnabledIfSystemProperty.html)' %}
 {% assign EnabledOnJre = '[@EnabledOnJre](' | append: javadoc-root | append: '/org/junit/jupiter/api/condition/EnabledOnJre.html)' %}

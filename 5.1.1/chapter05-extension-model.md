@@ -58,7 +58,7 @@ class MyTestsV2 {
 <a id = "extensions-registration-programmatic"></a>
 
 #### 5.2.2. 编程式扩展注册
-开发人员可以通过*编程的* 方式来注册扩展，只需要将测试类中的属性字段使用 [`@RegisterExtension`](https://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/extension/RegisterExtension.html) 注解标注即可。
+开发人员可以通过*编程的* 方式来注册扩展，只需要将测试类中的属性字段使用 {{RegisterExtension}} 注解标注即可。
 
 当一个扩展通过 [`@ExtenWith`](#extensions-registration-declarative) 声明式注册后，它就只能通过注解配置。相比之下，当通过`@RegisterExtension`注册扩展时，我们可以通过*编程* 的方式来配置扩展 - 例如，将参数传递给扩展的构造函数、静态工厂方法或构建器API。
 
@@ -139,13 +139,13 @@ class DocumentationDemo {
 扩展在测试类层次结构中以自顶向下的语义被继承。同样，在类级别注册的扩展会被方法级的扩展继承。此外，特定的扩展实现只能针对给定的扩展上下文及其父上下文进行一次注册。因此，任何尝试注册重复的扩展实现都将被忽略。
 
 ### 5.3. 条件测试执行
-[`ExecutionCondition`](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/extension/ExecutionCondition.html) 定为程序化的条件测试执行定义了`Extension`API。
+{{ExecutionCondition}} 定为程序化的条件测试执行定义了`Extension`API。
 
 每个容器（例如测试类）都会对`ExecutionCondition`进行解析，从而确定是否应该根据提供的`ExtensionContext`执行其包含的所有测试。类似地，`ExecutionCondition`会被每个测试解析，从而确定是否应该根据提供的`ExtensionContext`执行给定的测试方法。
 
 当多个`ExecutionCondition`扩展被注册时，只要有一个条件*被禁用*，容器或测试就会被禁用。所以，不能保证每个条件都会被解析，因为其中某个扩展可能已经导致容器或测试被禁用了。也就是说，条件的解析机制类似于短路 或(符号为`||`)操作。
 
-有关具体示例，请参阅 [`DisabledCondition`](https://github.com/junit-team/junit5/tree/r5.0.2/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/DisabledCondition.java) 和 [`@Disable`](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/Disabled.html) 的源码。
+有关具体示例，请参阅 {{DisabledCondition}} 和 {{Disabled}} 的源码。
 
 #### 5.3.1. 禁用条件
 有时候，在没有明确的条件被激活的情况下运行测试套件可能更有用。例如，你可能想要运行某些即便被标注了`@Disable`的测试，从而观察这些测试是否一直是*失败的*。此时只需为`junit.jupiter.conditions.deactivate`配置参数提供一个匹配模式，以指定当前测试运行应停用哪些条件（即不被解析）。该匹配模式可以作为JVM系统属性、或作为一个传递给`Launcher`的`LauncherDiscoveryRequest`中的配置参数、再或者通过JUnit Platform配置文件（详情请参阅 [配置参数](#45-配置参数)）来提供。
@@ -168,20 +168,20 @@ class DocumentationDemo {
 - `org.example.MyCondition`: 禁用FQCN为`org.example.MyCondition`的条件。
 
 ### 5.4. 测试实例后处理
-[`TestInstancePostProcessor`](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/extension/TestInstancePostProcessor.html) 为希望发布流程测试实例的`Extensions`定义了API。
+{{TestInstancePostProcessor}} 为希望发布流程测试实例的`Extensions`定义了API。
 
 常见的用法涵盖了诸如将依赖注入到测试实例中，在测试实例中调用自定义的初始化方法等。
 
-关于具体示例，请查阅 [`MockitoExtension`](https://github.com/junit-team/junit5-samples/tree/r5.0.0-RC2/junit5-mockito-extension/src/main/java/com/example/mockito/MockitoExtension.java) 和 [`SpringExtension`](https://github.com/spring-projects/spring-framework/tree/master/spring-test/src/main/java/org/springframework/test/context/junit/jupiter/SpringExtension.java) 的源代码。
+关于具体示例，请查阅 {{MockitoExtension}} 和 {{SpringExtension}} 的源代码。
 
 ### 5.5. 参数解析
-[`ParameterResolver`](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/extension/ParameterResolver.html) 定义了用于在运行时动态解析参数的`Extension`API。
+{{ParameterResolver}} 定义了用于在运行时动态解析参数的`Extension`API。
 
-如果测试构造器或者`@Test`、`@TestFactory`、`@BeforeEach`、`@AfterEach`、`@BeforeAll`或者`@AfterAll`方法接收参数，则必须在运行时通过`ParameterResolver`*解析* 该参数。开发人员可以使用内置的`ParameterResolver`（参考 [`TestInfoParameterResolver`](https://github.com/junit-team/junit5/tree/r5.0.0-RC2/junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/extension/TestInfoParameterResolver.java)）或 [自己注册](#52-注册扩展)。一般而言，参数可能被按照其*名称*、*类型*、*注解* 或任何一种上述方式的组合所解析。具体示例可以参照 [`CustomTypeParameterResolver`](https://github.com/junit-team/junit5/tree/r5.0.2/junit-jupiter-engine/src/test/java/org/junit/jupiter/engine/execution/injection/sample/CustomTypeParameterResolver.java) 和 [`CustomAnnotationParameterResolver`](https://github.com/junit-team/junit5/tree/r5.0.2/junit-jupiter-engine/src/test/java/org/junit/jupiter/engine/execution/injection/sample/CustomAnnotationParameterResolver.java) 的源码。
+如果测试构造器或者`@Test`、`@TestFactory`、`@BeforeEach`、`@AfterEach`、`@BeforeAll`或者`@AfterAll`方法接收参数，则必须在运行时通过`ParameterResolver`*解析* 该参数。开发人员可以使用内置的`ParameterResolver`（参考 {{TestInfoParameterResolver}}）或 [自己注册](#52-注册扩展)。一般而言，参数可能被按照其*名称*、*类型*、*注解* 或任何一种上述方式的组合所解析。具体示例可以参照 {{CustomTypeParameterResolver}} 和 {{CustomAnnotationParameterResolver}} 的源码。
 
 > ⚠️  由于JDK 9之前的JDK版本中，由javac生成的字节代码存在错误，直接通过核心`java.lang.reflect.Parameter` API查找参数上的注解对于内部类构造函数总是会失败（例如，一个在`@Nested`测试类中构造函数）。
 > <br/>    
-> 因此，提供给`ParameterResolver`实现的 [`ParameterContext`](https://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/extension/ParameterContext.html) API包含以下用于正确查找参数注释的便捷方法。强烈建议扩展开发人员使用这些方法，而不去使用`java.lang.reflect.Parameter`中提供的方法，从而避免JDK中的这个错误。
+> 因此，提供给`ParameterResolver`实现的 {{ParameterContext}} API包含以下用于正确查找参数注释的便捷方法。强烈建议扩展开发人员使用这些方法，而不去使用`java.lang.reflect.Parameter`中提供的方法，从而避免JDK中的这个错误。
 >
 > - `boolean isAnnotated(Class<? extends Annotation> annotationType)`
 > - `Optional<A> findAnnotation(Class<A> annotationType)`
@@ -190,22 +190,21 @@ class DocumentationDemo {
 
 ### 5.6. 测试生命周期回调
 
-下列接口定义了用于在测试执行生命周期的不同阶段来扩展测试的API。关于每个接口的详细信息，可以参考后续章节的示例，也可以查阅 [`org.junit.jupiter.api.extension`](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/extension/package-summary.html) 包中的Javadoc。
+下列接口定义了用于在测试执行生命周期的不同阶段来扩展测试的API。关于每个接口的详细信息，可以参考后续章节的示例，也可以查阅 {{extension-api-package}} 包中的Javadoc。
 
-- [`BeforeAllCallback`](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/extension/BeforeAllCallback.html)
-	- [`BeforeEachCallback`](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/extension/BeforeEachCallback.html)
-		- [`BeforeTestExecutionCallback`](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/extension/BeforeTestExecutionCallback.html)
-		- [`AfterTestExecutionCallback
-`](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/extension/AfterTestExecutionCallback.html)
-	- [`AfterEachCallback`](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/extension/AfterEachCallback.html)
-- [`AfterAllCallback`](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/extension/AfterAllCallback.html) 
+- {{BeforeAllCallback}}
+	- {{BeforeEachCallback}}
+		- {{BeforeTestExecutionCallback}}
+		- {{AfterTestExecutionCallback}}
+	- {{AfterEachCallback}}
+- {{AfterAllCallback}} 
 
 > 📒 ***实现多个扩展API***  
-> 扩展开发人员可以选择在单个扩展中实现任意数量的上述接口。具体示例请参阅 [`SpringExtension`](https://github.com/spring-projects/spring-framework/tree/master/spring-test/src/main/java/org/springframework/test/context/junit/jupiter/SpringExtension.java) 的源代码。
+> 扩展开发人员可以选择在单个扩展中实现任意数量的上述接口。具体示例请参阅 {{SpringExtension}} 的源代码。
 
 
 #### 5.6.1. 测试执行之前和之后的回调
-[`BeforeTestExecutionCallback`](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/extension/BeforeTestExecutionCallback.html) 和 [`AfterTestExecutionCallback`](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/extension/AfterTestExecutionCallback.html) 分别为`Extensions`定义了添加行为的API，这些行为将在执行测试方法*之前* 和*之后立即执行*。因此，这些回调非常适合于定时器、跟踪器以及其他类似的场景。如果你需要实现围绕`@BeforeEach`和`@AfterEach`方法调用的回调，实现`BeforeEachCallback`和`AfterEachCallback`即可。
+{{BeforeTestExecutionCallback}} 和 {{AfterTestExecutionCallback}} 分别为`Extensions`定义了添加行为的API，这些行为将在执行测试方法*之前* 和*之后立即执行*。因此，这些回调非常适合于定时器、跟踪器以及其他类似的场景。如果你需要实现围绕`@BeforeEach`和`@AfterEach`方法调用的回调，实现`BeforeEachCallback`和`AfterEachCallback`即可。
 
 以下示例展示了如何使用这些回调来统计和记录测试方法的执行时间。`TimingExtension`同时实现了`BeforeTestExecutionCallback`和`AfterTestExecutionCallback`接口，从而给测试执行进行计时和记录。
 	
@@ -275,8 +274,7 @@ INFO: Method [sleep50ms] took 53 ms.
 ```
 
 ### 5.7. 异常处理
-
-[`TestExecutionExceptionHandler`](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/extension/TestExecutionExceptionHandler.html) 为`Extensions`定义了异常处理的API，从而可以处理在执行测试时抛出的异常。
+{{TestExecutionExceptionHandler}} 为`Extensions`定义了异常处理的API，从而可以处理在执行测试时抛出的异常。
 
 下面的例子展示了一个扩展，它将吃掉所有的`IOException`，但会重新抛出任何其他类型的异常。
 
@@ -299,9 +297,9 @@ public class IgnoreIOExceptionExtension implements TestExecutionExceptionHandler
 
 ### 5.8. 为测试模板提供调用上下文
 
-当至少有一个 [`TestTemplateInvocationContextProvider`](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/extension/TestTemplateInvocationContextProvider.html) 被注册时，标注了 [`@TestTemplate`](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/TestTemplate.html) 的方法才能被执行。每个这样的provider负责提供一个 [`TestTemplateInvocationContext`](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/extension/TestTemplateInvocationContext.html) 实例的`Stream`。每个上下文都可以指定一个自定义的显示名称和一个额外的扩展名列表，这些扩展名仅用于下一次调用 [`@TestTemplate`](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/TestTemplate.html) 方法。
+当至少有一个 {{TestTemplateInvocationContextProvider}} 被注册时，标注了 {{TestTemplate}} 的方法才能被执行。每个这样的provider负责提供一个 {{TestTemplateInvocationContext}} 实例的`Stream`。每个上下文都可以指定一个自定义的显示名称和一个额外的扩展名列表，这些扩展名仅用于下一次调用 {{TestTemplate}} 方法。
 
-以下示例展示了如何编写测试模板以及如何注册和实现一个 [`TestTemplateInvocationContextProvider`](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/extension/TestTemplateInvocationContextProvider.html).
+以下示例展示了如何编写测试模板以及如何注册和实现一个 {{TestTemplateInvocationContextProvider}}。
 
 ###### 一个附带扩展名的测试模板
 
@@ -351,7 +349,7 @@ static class MyTestTemplateInvocationContextProvider implements TestTemplateInvo
 }
 ```
 
-在这个例子中，测试模板将被调用两次。调用的显示名称是调用上下文指定的"foo"和"bar"。每个调用都会注册一个自定义的 [`ParameterResolver`](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/extension/ParameterResolver.html) 用于解析方法参数。下面是使用`ConsoleLauncher`时产生的输出信息。
+在这个例子中，测试模板将被调用两次。调用的显示名称是调用上下文指定的"foo"和"bar"。每个调用都会注册一个自定义的 {{ParameterResolver}} 用于解析方法参数。下面是使用`ConsoleLauncher`时产生的输出信息。
 
 ```sh
 └─ testTemplate(String) ✔
@@ -359,16 +357,26 @@ static class MyTestTemplateInvocationContextProvider implements TestTemplateInvo
    └─ bar ✔
 ```
 
-[`TestTemplateInvocationContextProvider`](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/extension/TestTemplateInvocationContextProvider.html) 扩展API主要用于实现不同类型的测试，这些测试依赖于某个类似于测试的方法的重复调用（尽管它们不在同一个上下文中）。 例如，使用不同的参数，以不同的方式准备测试类实例，或多次调用而不修改上下文。请参阅 [重复测试](#312-重复测试) 或 [参数化测试](#313-参数化测试) 的实现，它们都使用了该扩展点来提供其相关的功能。
+{{TestTemplateInvocationContextProvider}} 扩展API主要用于实现不同类型的测试，这些测试依赖于某个类似于测试的方法的重复调用（尽管它们不在同一个上下文中）。 例如，使用不同的参数，以不同的方式准备测试类实例，或多次调用而不修改上下文。请参阅 [重复测试](#312-重复测试) 或 [参数化测试](#313-参数化测试) 的实现，它们都使用了该扩展点来提供其相关的功能。
 
 ### 5.9. 在扩展中保持状态
 
-通常，扩展只实例化一次。随之而来的相关问题是：开发者如何能够在两次调用之间保持扩展的状态？`ExtensionContext` API提供了一个`Store`用来解决这一问题。扩展可以将值放入Store中供以后检索。请参阅 [`TimingExtension`](#一个为测试方法执行计时和记录的扩展) 了解如何使用具有方法级作用域的`Store`。要注意，在测试执行期间，被存储在一个`ExtensionContext`中的值在周围其他的`ExtensionContext`中是不可用的。由于`ExtensionContexts`可能是嵌套的，因此内部上下文的范围也可能受到限制。请参阅相应的Javadoc来了解有关通过 [Store](http://junit.org/junit5/docs/5.1.1/api/org/junit/jupiter/api/extension/ExtensionContext.Store.html) 存储和检索值的方法的详细信息。
+通常，扩展只实例化一次。随之而来的相关问题是：开发者如何能够在两次调用之间保持扩展的状态？`ExtensionContext` API提供了一个`Store`用来解决这一问题。扩展可以将值放入Store中供以后检索。请参阅 [`TimingExtension`](#一个为测试方法执行计时和记录的扩展) 了解如何使用具有方法级作用域的`Store`。要注意，在测试执行期间，被存储在一个`ExtensionContext`中的值在周围其他的`ExtensionContext`中是不可用的。由于`ExtensionContexts`可能是嵌套的，因此内部上下文的范围也可能受到限制。请参阅相应的Javadoc来了解有关通过 {{ExtensionContext_Store}} 存储和检索值的方法的详细信息。
 
 ### 5.10. 在扩展中支持的实用程序
-
- JUnit Platform Commons公开了一个名为 [`org.junit.platform.commons.support`](http://junit.org/junit5/docs/5.1.1/api/org/junit/platform/commons/support/package-summary.html) 的包，它包含了用于处理注解、反射和类路径扫描任务且正在维护中的实用工具方法。`TestEngine`和`Extension`开发人员（authors）应该被鼓励去使用这些方法，以便与JUnit Platform的行为保持一致。
+`junit-platform-commons`公开了一个名为 {{org.junit.platform.commons.support}} 的包，它包含了用于处理注解、类、反射和类路径扫描任务且正在维护中的实用工具方法。`TestEngine`和`Extension`开发人员（authors）应该被鼓励去使用这些方法，以便与JUnit Platform的行为保持一致。
  
+####  5.10.1. 注解支持
+`AnnotationSupport`提供对注解元素（例如包、注解、类、接口、构造函数、方法和字段）进行操作的静态实用工具方法。这些方法包括检查元素是否使用特定注释进行注解或元注解，搜索特定注解以及如何在类或界面中查找注解的方法和字段。其中一些方法搜索已实现的接口和类层次结构以查找注解。有关更多详细信息，请参阅JavaDoc的 {{AnnotationSupport}}。
+
+####  5.10.2. 类支持
+`ClassSupport`提供静态工具方法来处理类（即`java.lang.Class`的实例）。有关详细信息，请参阅JavaDoc的 {{ClassSupport}}。
+
+
+####  5.10.3. 反射支持
+`ReflectionSupport`提供了静态实用工具方法，以增强标准的JDK反射和类加载机制。这些方法包括扫描类路径以搜索匹配了指定谓词的类，加载和创建类的新实例以及查找和调用方法。其中一些方法可以遍历类层次结构以找到匹配的方法。有关更多详细信息，请参阅JavaDoc的 {{ReflectionSupport}}。
+
+
 ### 5.11. 用户代码和扩展的相对执行顺序
 
 当执行包含一个或多个测试方法的测试类时，除了用户提供的测试和生命周期方法外，还会调用大量的回调函数。 下图说明了用户提供的代码和扩展代码的相对顺序。

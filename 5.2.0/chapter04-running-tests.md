@@ -125,9 +125,9 @@ dependencies {
 ```
 
 ##### 配置日志记录（可选）
-JUnit 使用了位于`java.util.logging`包（a.k.a.*JUL*）下的Java Logging API来发布警告和调式信息。关于配置选项，请参阅官方文档的 [LogManager](https://docs.oracle.com/javase/8/docs/api/java/util/logging/LogManager.html) 章节。
+JUnit 使用了位于`java.util.logging`包（a.k.a.*JUL*）下的Java Logging API来发布警告和调式信息。关于配置选项，请参阅官方文档的 {{ LogManager }} 章节。
 
-或者，你也可以将日志信息重定向到其他的日志框架，比如 [Log4j](https://logging.apache.org/log4j/2.x/) 或者 [Logback](https://logback.qos.ch/)。要使用提供了自定义的 [LogManager](https://docs.oracle.com/javase/8/docs/api/java/util/logging/LogManager.html)实现的日志框架，将`java.util.loggin.manager`系统属性设置为 [LogManager](https://docs.oracle.com/javase/8/docs/api/java/util/logging/LogManager.html) *全类名* 即可。下面的例子演示了如何配置Log4j 2.x（有关详细信息，请参阅 [Log4j JDK Logging Adapter](https://logging.apache.org/log4j/2.x/log4j-jul/index.html)）。
+或者，你也可以将日志信息重定向到其他的日志框架，比如 {{Log4j}} 或者 {{Logback}}。要使用提供了自定义的 {{LogManager}}实现的日志框架，将`java.util.loggin.manager`系统属性设置为 {{LogManager}} *全类名* 即可。下面的例子演示了如何配置Log4j 2.x（有关详细信息，请参阅 {{ Log4j_JDK_Logging_Adapter }}）。
 
 ```groovy
 test {
@@ -135,10 +135,10 @@ test {
 }
 ```
 
-其他的日志框架提供了不同的方式来重定向`java.util.logging`记录的信息。例如，对于 [Logback](https://logback.qos.ch/)，你可以通过向runtime类路径添加一个额外的依赖来启用[JUL to SLF4J Bridge](https://www.slf4j.org/legacy.html#jul-to-slf4j)。
+其他的日志框架提供了不同的方式来重定向`java.util.logging`记录的信息。例如，对于 {{Logback}}，你可以通过向runtime类路径添加一个额外的依赖来启用{{JUL_to_SLF4J_Bridge}}。
 
 #### 4.2.2. Maven
-JUnit团队已经为Maven Surefire开发了一个基础的provider，它允许你使用`mvn test`运行JUnit 4和JUnit Jupiter测试。[`junit5-jupiter-starter-maven`](https://github.com/junit-team/junit5-samples/tree/r5.2.0/junit5-jupiter-starter-maven) 项目中的`pom.xml`文件演示了如何使用它，你可以以它作为一个起点。
+JUnit团队已经为Maven Surefire开发了一个基础的provider，它允许你使用`mvn test`运行JUnit 4和JUnit Jupiter测试。{{junit5-jupiter-starter-maven}} 项目中的`pom.xml`文件演示了如何使用它，你可以以它作为一个起点。
 
 > 📒 请在Surefire {{ surefire-version }}中使用`junit-platform-surefire-provider`。
 
@@ -351,7 +351,7 @@ Maven Surefire插件将扫描全类名与以下模式匹配的测试类。
 
 >📒 Ant 1.10.3中提供的`junitlauncher`任务版本为启动JUnit平台提供了基本的最小支持。其他增强功能（包括支持在单独的JVM中分支测试）将在随后的Ant版本中提供。
 
-[`junit5-jupiter-starter-ant`](https://github.com/junit-team/junit5-samples/tree/r5.2.0/junit5-jupiter-starter-ant) 项目中的`build.xml`文件演示了如何使用它，你可以以它作为一个起点。
+{{junit5-jupiter-starter-ant}} 项目中的`build.xml`文件演示了如何使用它，你可以以它作为一个起点。
 
 ##### 基本用法
 以下示例演示了如何配置`junitlauncher`任务以选择一个单独的测试类（即：`org.myapp.test.MyFirstJUnit5Test`）：
@@ -397,7 +397,7 @@ Maven Surefire插件将扫描全类名与以下模式匹配的测试类。
 有关使用和配置选项的更多详细信息，请参阅 [`junitlauncher`任务](https://ant.apache.org/manual/Tasks/junitlauncher.html) 的官方Ant文档。
 
 ### 4.3. 控制台启动器
-[`ConsoleLauncher`](http://junit.org/junit5/docs/5.2.0/api/org/junit/platform/console/ConsoleLauncher.html) 是一个Java的命令行应用程序，它允许你通过命令行来启动JUnit Platform。例如，它可以用来运行JUnit Vintage和JUnit Jupiter测试，并在控制台中打印测试结果。
+{{ConsoleLauncher}} 是一个Java的命令行应用程序，它允许你通过命令行来启动JUnit Platform。例如，它可以用来运行JUnit Vintage和JUnit Jupiter测试，并在控制台中打印测试结果。
 
 `junit-platform-console-standalone-{{platform-version}}.jar`这个包含了所有依赖的可执行的jar包已经被发布在Maven仓库中，它位于 [junit-platform-console-standalone](https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone)目录下，你可以 [运行](https://docs.oracle.com/javase/tutorial/deployment/jar/run.html) 独立的ConsoleLauncher，如下所示。
 
@@ -434,7 +434,7 @@ Test run finished after 64 ms
 ```
 
 >📒 ***退出码***  
-> 如果任何容器或测试失败，[ConsoleLauncher](http://junit.org/junit5/docs/5.2.0/api/org/junit/platform/console/ConsoleLauncher.html) 就会以状态码1退出，否则退出码为0.
+> 如果任何容器或测试失败，{{ConsoleLauncher}} 就会以状态码1退出，否则退出码为0.
 
 #### 4.3.1. Options
 
