@@ -1419,8 +1419,9 @@ static class MyArgumentsProvider implements ArgumentsProvider {
 #### 3.15.2. 参数转换
 
 ##### 扩展转换
+JUnit Jupiter为提供给`@ParameterizedTest`的参数提供了 [扩展基本类型转换](https://docs.oracle.com/javase/specs/jls/se8/html/jls-5.html#jls-5.1.2) 的支持。例如，使用`@ValueSource(ints = {1,2,3})`注解的参数化测试可以声明为不仅接受`int`类型的参数，还接受`long`，`float`或`double`类型的参数。
 
-JUnit Jupiter为提供给`@ParameterizedTest`的参数提供了 [扩展基本类型转换](https://docs.oracle.com/javase/specs/jls/se8/html/jls-5.html#jls-5.1.2)的支持。例如，使用`@ValueSource(ints = {1,2,3})`注解的参数化测试可以声明为不仅接受`int`类型的参数，还接受`long`，`float`或`double`类型的参数。
+<a id="implicit-conversion"></a>
 
 ##### 隐式转换
 为了支持像`@CsvSource`这样的使用场景，JUnit Jupiter提供了一些内置的隐式类型转换器。转换过程取决于每个方法参数的声明类型。
@@ -1535,9 +1536,79 @@ void testWithExplicitJavaTimeConverter(@JavaTimeConversionPattern("dd.MM.yyyy") 
 <a id = "argument-aggregation"></a>
 
 #### 3.15.3. 参数聚合
+默认情况下，提供给`@ParameterizedTest`方法的每个参数对应于单个方法参数。因此，期望提供大量参数的参数源可能导致大的方法签名。
+
+在这种情况下，可以使用{{ArgumentsAccessor}}而不是多个参数。使用此API，你可以通过传递给你的测试方法的单个参数去访问提供的参数。另外，它还支持类型转换，如 [隐式转换](#implicit-conversion) 中所述。
+
+```java
+@ParameterizedTest
+@CsvSource({
+    "Jane, Doe, F, 1990-05-20",
+    "John, Doe, M, 1990-10-22"
+})
+void testWithArgumentsAccessor(ArgumentsAccessor arguments) {
+    Person person = new Person(arguments.getString(0),
+                               arguments.getString(1),
+                               arguments.get(2, Gender.class),
+                               arguments.get(3, LocalDate.class));
+
+    if (person.getFirstName().equals("Jane")) {
+        assertEquals(Gender.F, person.getGender());
+    }
+    else {
+        assertEquals(Gender.M, person.getGender());
+    }
+    assertEquals("Doe", person.getLastName());
+    assertEquals(1990, person.getDateOfBirth().getYear());
+}
+```
+`ArgumentsAccessor`*的一个实例被自动注入到* `ArgumentsAccessor` *类型的任何参数中*。
+
+##### 自定义聚合器
+除了使用`ArgumentsAccessor`直接访问`@ParameterizedTest`方法的参数外，JUnit Jupiter还支持使用自定义的可重用聚合器。
+
+要使用自定义聚合器，只需实现`ArgumentsAggregator`接口并通过`@AggregateWith`注释将其注册到`@ParameterizedTest`方法的兼容参数中。当调用参数化测试时，聚合结果将作为相应参数的参数提供。
+
+```java
+@ParameterizedTest
+@CsvSource({
+    "Jane, Doe, F, 1990-05-20",
+    "John, Doe, M, 1990-10-22"
+})
+void testWithArgumentsAggregator(@AggregateWith(PersonAggregator.class) Person person) {
+    // perform assertions against person
+}
+
+public class PersonAggregator implements ArgumentsAggregator {
+    @Override
+    public Person aggregateArguments(ArgumentsAccessor arguments, ParameterContext context) {
+        return new Person(arguments.getString(0),
+                          arguments.getString(1),
+                          arguments.get(2, Gender.class),
+                          arguments.get(3, LocalDate.class));
+    }
+}
+```
+如果你发现自己在代码库中为多个参数化测试方法重复声明`@AggregateWith(MyTypeAggregator.class)`，此时你可能希望创建一个自定义组合注解，比如`@CsvToMyType`，它使用`@AggregateWith(MyTypeAggregator.class)`进行元注解。以下示例通过自定义`@CsvToPerson`注解演示了这一点。
+
+```java
+@ParameterizedTest
+@CsvSource({
+    "Jane, Doe, F, 1990-05-20",
+    "John, Doe, M, 1990-10-22"
+})
+void testWithCustomAggregatorAnnotation(@CsvToPerson Person person) {
+    // perform assertions against person
+}
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.PARAMETER)
+@AggregateWith(PersonAggregator.class)
+public @interface CsvToPerson {
+}
+```
 
 #### 3.15.4. 自定义显示名称
-
 默认情况下，参数化测试调用的显示名称包含了该特定调用的索引和所有参数的`String`表示形式。不过，你可以通过`@ParameterizedTest`注解的`name`属性来自定义调用的显示名称，如下面代码所示。
 
 ```java
