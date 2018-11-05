@@ -22,7 +22,16 @@ version: 5.3.0
 
 
 {% include_relative release-notes-5.3/release-notes-5.3.0.md %}
-{% include_relative release-notes-5.3/release-notes-5.2.0.md %}
+
+
+## 5.2.0
+**发布时间**： 2018.04.29
+
+**范围**：JUnit BOM，支持Maven Surefire 2.21.0，允许使用Java 9和Java 10进行构建，参数聚合和扩展参数化测试中参数的原始转换，`@MethodSource`的外部工厂方法，以及各种小改进和错误修复。
+
+有关完整的详细信息，请查阅 [5.2.0]({{ site.url }}{{ '/junit5/5.2.0/release-notes' }}) 发布记录。
+
+
 
 
 
