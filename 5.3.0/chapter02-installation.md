@@ -130,8 +130,10 @@ JUnit Vintage测试引擎实现，允许在新的JUnit Platform上运行低版�
 
 
 ### 2.3 JUnit Jupiter示例工程
-[junit5-samples]({{ junit5-samples-repo }}) 代码库中包含了一系列基于JUnit Jupiter和JUnit Vintage的示例工程。你可以在下面的项目中找到相应的`build.gradle`和`pom.xml`文件：
+[junit5-samples]({{ junit5-samples-repo }}) 代码库中包含了一系列基于JUnit Jupiter和JUnit Vintage的示例工程。你可以在下面的项目中找到相应的各自的构建脚本（例如：`build.gradle`和`pom.xml`文件）
 
-- Gradle工程：{{junit5-jupiter-starter-gradle}}
-
+- Gradle Java工程：{{junit5-jupiter-starter-gradle}}
+- Gradle Kotlin工程：{{junit5-jupiter-starter-gradle-kotlin}}
+- Gradle Groovy工程：{{junit5-jupiter-starter-gradle-groovy}}
 - Maven工程：{{junit5-jupiter-starter-maven}}
+- Ant 工程：{{junit5-jupiter-starter-ant}}
