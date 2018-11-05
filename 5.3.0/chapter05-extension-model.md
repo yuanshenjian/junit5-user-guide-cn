@@ -60,7 +60,7 @@ class MySecondTests {
 #### 5.2.2. 编程式扩展注册
 开发人员可以通过*编程的* 方式来注册扩展，只需要将测试类中的属性字段使用 {{RegisterExtension}} 注解标注即可。
 
-当一个扩展通过 [`@ExtenWith`](#extensions-registration-declarative) 声明式注册后，它就只能通过注解配置。相比之下，当通过`@RegisterExtension`注册扩展时，我们可以通过*编程* 的方式来配置扩展 - 例如，将参数传递给扩展的构造函数、静态工厂方法或构建器API。
+当一个扩展通过 [`@ExtenWith`](#extensions-registration-declarative) 声明式注册后，它就只能通过注解配置。相比之下，当通过`@RegisterExtension`注册扩展时，我们可以通过*编程* 的方式来配置扩展 -- 例如，将参数传递给扩展的构造函数、静态工厂方法或构建器API。
 
 > 📒 `@RegisterExtension` 字段不能为`private`或`null` (在评估阶段) ，但可以是`static`或非静态。
 
@@ -88,6 +88,33 @@ class WebServerDemo {
     }
 }
 ```
+
+##### Kotlin中的静态字段
+Kotlin编程语言没有`static`字段的概念。但我们可以使用注解来让编译器生成静态字段。如前文说述，`@RegisterExtension`标注的字段不能为`private`或`null`，因此我们不能在Kotlin中使用会生成`private`字段`@JvmStatic`注解，所以我们就只能使用`@JvmField`注解了。
+
+以下示例是上一节中已移植到Kotlin的`WebServerDemo`的一个版本。
+
+```java
+class KotlinWebServerDemo {
+
+    companion object {
+        @JvmField
+        @RegisterExtension
+        val server = WebServerExtension.builder()
+                .enableSecurity(false)
+                .build()
+    }
+
+    @Test
+    fun getProductList() {
+        // Use WebClient to connect to web server using serverUrl and verify response
+        val webClient = WebClient()
+        val serverUrl = server.serverUrl
+        assertEquals(200, webClient.get("$serverUrl/products").responseStatus)
+    }
+}
+```
+
 
 #####  实例字段
 如果`@RegisterExtension`字段是非静态的（例如，一个实例字段），那么该扩展将在测试类实例化之后被注册，并且在每个已注册的`TestInstancePostProcessor`被赋予后处理测试实例的机会之后（可能给被标注的字段注入要使用的扩展实例）。因此，如果这样的*实例扩展* 实现了诸如`BeforeAllCallback`、`AfterAllCallback`或`TestInstancePostProcessor`这些类级别或实例级别的扩展API，那么这些API将不会正常执行。默认情况下，实例扩展将在那些通过`@ExtendWith`在方法级别注册的扩展之后被注册。但是，如果测试类是使用了`@TestInstance(Lifecycle.PER_CLASS)`配置，实例扩展将在它们之前被注册。
@@ -167,14 +194,25 @@ class DocumentationDemo {
 - `*System*`: 禁用其简单类名包含`System`的类中的每个条件。
 - `org.example.MyCondition`: 禁用FQCN为`org.example.MyCondition`的条件。
 
-### 5.4. 测试实例后处理
+### 5.4. 测试实例工厂
+{{TestInstanceFactory}} 为希望创建测试类实例的`Extensions`定义了API。
+
+常见用例包括从依赖注入框架获取测试实例或调用静态工厂方法来创建测试类实例。
+
+如果没有注册任何`TestInstanceFactory`，框架将只调用测试类的`唯一`构造方法来初始化它，并可能通过已注册的`ParameterResolver`来解析构造方法参数。
+
+实现了`TestInstanceFactory`的扩展可以在测试接口、顶级测试类或者`@Nested`测试类上被注册。
+
+> ⚠️ 在一个特定测试类中注册多个实现了`TestInstanceFactory`的扩展将会在该类、它的子类以及它的内嵌类的所有测试方法中引发异常。请注意，在超类或者封闭类中（即，在`@Nested`测试类的情况下）注册的任何`TestInstanceFactory`也都会被继承。所以，开发者有责任去确保在一个特定的测试类中只注册一个`TestInstanceFactory`。
+
+### 5.5. 测试实例后处理
 {{TestInstancePostProcessor}} 为希望发布流程测试实例的`Extensions`定义了API。
 
 常见的用法涵盖了诸如将依赖注入到测试实例中，在测试实例中调用自定义的初始化方法等。
 
 关于具体示例，请查阅 {{MockitoExtension}} 和 {{SpringExtension}} 的源代码。
 
-### 5.5. 参数解析
+### 5.6. 参数解析
 {{ParameterResolver}} 定义了用于在运行时动态解析参数的`Extension`API。
 
 如果测试构造器或者`@Test`、`@TestFactory`、`@BeforeEach`、`@AfterEach`、`@BeforeAll`或者`@AfterAll`方法接收参数，则必须在运行时通过`ParameterResolver`*解析* 该参数。开发人员可以使用内置的`ParameterResolver`（参考 {{TestInfoParameterResolver}}）或 [自己注册](#52-注册扩展)。一般而言，参数可能被按照其*名称*、*类型*、*注解* 或任何一种上述方式的组合所解析。具体示例可以参照 {{CustomTypeParameterResolver}} 和 {{CustomAnnotationParameterResolver}} 的源码。
@@ -188,7 +226,7 @@ class DocumentationDemo {
 > - `List<A> findRepeatableAnnotations(Class<A> annotationType)`
  
 
-### 5.6. 测试生命周期回调
+### 5.7. 测试生命周期回调
 
 下列接口定义了用于在测试执行生命周期的不同阶段来扩展测试的API。关于每个接口的详细信息，可以参考后续章节的示例，也可以查阅 {{extension-api-package}} 包中的Javadoc。
 
@@ -203,7 +241,7 @@ class DocumentationDemo {
 > 扩展开发人员可以选择在单个扩展中实现任意数量的上述接口。具体示例请参阅 {{SpringExtension}} 的源代码。
 
 
-#### 5.6.1. 测试执行之前和之后的回调
+#### 5.7.1. 测试执行之前和之后的回调
 {{BeforeTestExecutionCallback}} 和 {{AfterTestExecutionCallback}} 分别为`Extensions`定义了添加行为的API，这些行为将在执行测试方法*之前* 和*之后立即执行*。因此，这些回调非常适合于定时器、跟踪器以及其他类似的场景。如果你需要实现围绕`@BeforeEach`和`@AfterEach`方法调用的回调，实现`BeforeEachCallback`和`AfterEachCallback`即可。
 
 以下示例展示了如何使用这些回调来统计和记录测试方法的执行时间。`TimingExtension`同时实现了`BeforeTestExecutionCallback`和`AfterTestExecutionCallback`接口，从而给测试执行进行计时和记录。
@@ -273,7 +311,7 @@ INFO: Method [sleep20ms] took 24 ms.
 INFO: Method [sleep50ms] took 53 ms.
 ```
 
-### 5.7. 异常处理
+### 5.8. 异常处理
 
 {{TestExecutionExceptionHandler}} 为`Extensions`定义了异常处理的API，从而可以处理在执行测试时抛出的异常。
 
@@ -296,7 +334,7 @@ public class IgnoreIOExceptionExtension implements TestExecutionExceptionHandler
 }
 ```
 
-### 5.8. 为测试模板提供调用上下文
+### 5.9. 为测试模板提供调用上下文
 
 当至少有一个 {{TestTemplateInvocationContextProvider}} 被注册时，标注了 {{TestTemplate}} 的方法才能被执行。每个这样的provider负责提供一个 {{TestTemplateInvocationContext}} 实例的`Stream`。每个上下文都可以指定一个自定义的显示名称和一个额外的扩展名列表，这些扩展名仅用于下一次调用 {{TestTemplate}} 方法。
 
@@ -361,25 +399,25 @@ static class MyTestTemplateInvocationContextProvider implements TestTemplateInvo
 
 {{TestTemplateInvocationContextProvider}} 扩展API主要用于实现不同类型的测试，这些测试依赖于某个类似于测试的方法的重复调用（尽管它们不在同一个上下文中）。 例如，使用不同的参数，以不同的方式准备测试类实例，或多次调用而不修改上下文。请参阅 [重复测试](#312-重复测试) 或 [参数化测试](#313-参数化测试) 的实现，它们都使用了该扩展点来提供其相关的功能。
 
-### 5.9. 在扩展中保持状态
+### 5.10. 在扩展中保持状态
 
 通常，扩展只实例化一次。随之而来的相关问题是：开发者如何能够在两次调用之间保持扩展的状态？`ExtensionContext` API提供了一个`Store`用来解决这一问题。扩展可以将值放入Store中供以后检索。请参阅 [`TimingExtension`](#一个为测试方法执行计时和记录的扩展) 了解如何使用具有方法级作用域的`Store`。要注意，在测试执行期间，被存储在一个`ExtensionContext`中的值在周围其他的`ExtensionContext`中是不可用的。由于`ExtensionContexts`可能是嵌套的，因此内部上下文的范围也可能受到限制。请参阅相应的Javadoc来了解有关通过 {{ExtensionContext_Store}} 存储和检索值的方法的详细信息。
 
-### 5.10. 在扩展中支持的实用程序
+### 5.11. 在扩展中支持的实用程序
 `junit-platform-commons`公开了一个名为 {{org.junit.platform.commons.support}} 的包，它包含了用于处理注解、类、反射和类路径扫描任务且正在维护中的实用工具方法。`TestEngine`和`Extension`开发人员（authors）应该被鼓励去使用这些方法，以便与JUnit Platform的行为保持一致。
  
-####  5.10.1. 注解支持
+####  5.11.1. 注解支持
 `AnnotationSupport`提供对注解元素（例如包、注解、类、接口、构造函数、方法和字段）进行操作的静态实用工具方法。这些方法包括检查元素是否使用特定注释进行注解或元注解，搜索特定注解以及如何在类或界面中查找注解的方法和字段。其中一些方法搜索已实现的接口和类层次结构以查找注解。有关更多详细信息，请参阅JavaDoc的 {{AnnotationSupport}}。
 
-####  5.10.2. 类支持
+####  5.11.2. 类支持
 `ClassSupport`提供静态工具方法来处理类（即`java.lang.Class`的实例）。有关详细信息，请参阅JavaDoc的 {{ClassSupport}}。
 
 
-####  5.10.3. 反射支持
+####  5.11.3. 反射支持
 `ReflectionSupport`提供了静态实用工具方法，以增强标准的JDK反射和类加载机制。这些方法包括扫描类路径以搜索匹配了指定谓词的类，加载和创建类的新实例以及查找和调用方法。其中一些方法可以遍历类层次结构以找到匹配的方法。有关更多详细信息，请参阅JavaDoc的 {{ReflectionSupport}}。
 
 
-### 5.11. 用户代码和扩展的相对执行顺序
+### 5.12. 用户代码和扩展的相对执行顺序
 
 当执行包含一个或多个测试方法的测试类时，除了用户提供的测试和生命周期方法外，还会调用大量的回调函数。 下图说明了用户提供的代码和扩展代码的相对顺序。
 
