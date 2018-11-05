@@ -138,56 +138,22 @@ test {
 其他的日志框架提供了不同的方式来重定向`java.util.logging`记录的信息。例如，对于 {{Logback}}，你可以通过向runtime类路径添加一个额外的依赖来启用{{JUL_to_SLF4J_Bridge}}。
 
 #### 4.2.2. Maven
-JUnit团队已经为Maven Surefire开发了一个基础的provider，它允许你使用`mvn test`运行JUnit 4和JUnit Jupiter测试。{{junit5-jupiter-starter-maven}} 项目中的`pom.xml`文件演示了如何使用它，你可以以它作为一个起点。
+> 📒 最初由JUnit团队开发的自定义`junit-platform-surefire-provider`已被弃用，并计划在JUnit Platform 1.4中删除。 请改用Maven Surefire的原生支持。
 
-> 📒 请在Surefire {{ surefire-version }}中使用`junit-platform-surefire-provider`。
-
-```xml
-...
-<build>
-    <plugins>
-        ...
-        <plugin>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <version>{{ surefire-version }}</version>
-            <dependencies>
-                <dependency>
-                    <groupId>org.junit.platform</groupId>
-                    <artifactId>junit-platform-surefire-provider</artifactId>
-                    <version>{{ platform-version }}</version>
-                </dependency>
-            </dependencies>
-        </plugin>
-    </plugins>
-</build>
-...
-```
+从版本 [2.22.0](https://issues.apache.org/jira/browse/SUREFIRE-1330) 开始，Maven Surefire为在JUnit平台上执行测试提供 [原生支持](http://maven.apache.org/surefire/maven-surefire-plugin/examples/junit-platform.html)。 {{junit5-jupiter-starter-maven}}项目中的pom.xml文件演示了如何使用它，并可以作为配置Maven构建的起点。
 
 ##### 配置测试引擎
-为了让Maven Surefire运行所有测试，必须将`TestEngine`实现添加到运行时类路径中。
+为了让Maven Surefire运行任何测试，必须至少将一个`TestEngine`实现添加到测试类路径中。
 
-要支持基于JUnit Jupiter的测试，你需要配置一个JUnit Jupiter API的`test`依赖，并将JUnit Jupiter `TestEngine`的实现添加到`maven-surefire-plugin`的依赖项中，如下所示。
+要配置对基于JUnit Jupiter的测试的支持，请在JUnit Jupiter API和JUnit Jupiter `TestEngine`实现上配置`test`范围依赖项，类似于以下内容。
+
 
 ```xml
-...
 <build>
     <plugins>
-        ...
         <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
             <version>{{ surefire-version }}</version>
-            <dependencies>
-                <dependency>
-                    <groupId>org.junit.platform</groupId>
-                    <artifactId>junit-platform-surefire-provider</artifactId>
-                    <version>{{ platform-version }}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.junit.jupiter</groupId>
-                    <artifactId>junit-jupiter-engine</artifactId>
-                    <version>{{ jupiter-version }}</version>
-                </dependency>
-            </dependencies>
         </plugin>
     </plugins>
 </build>
@@ -200,11 +166,18 @@ JUnit团队已经为Maven Surefire开发了一个基础的provider，它允许�
         <version>{{ jupiter-version }}</version>
         <scope>test</scope>
     </dependency>
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-engine </artifactId>
+        <version>{{ jupiter-version }}</version>
+        <scope>test</scope>
+    </dependency>
 </dependencies>
 ...
 ```
 
-只要你配置了JUnit 4的`test`依赖，并将JUnit Vintage `TestEngine`的实现添加到`maven-surefire-plugin`的依赖项中，JUnit Platform Surefire Provider 就可以运行基于JUnit 4的测试。具体配置如下：
+只要你在JUnit 4和JUnit Vintage `TestEngine`实现上配置`test`范围依赖项，Maven Surefire就可以运行基于JUnit 4的测试以及Jupiter测试，类似于以下配置：
+
 
 ```xml
 ...
@@ -214,19 +187,6 @@ JUnit团队已经为Maven Surefire开发了一个基础的provider，它允许�
         <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
             <version>{{ surefire-version }}</version>
-            <dependencies>
-                <dependency>
-                    <groupId>org.junit.platform</groupId>
-                    <artifactId>junit-platform-surefire-provider</artifactId>
-                    <version>{{ platform-version }}</version>
-                </dependency>
-                ...
-                <dependency>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
-                    <version>{{ vintage-version }}</version>
-                </dependency>
-            </dependencies>
         </plugin>
     </plugins>
 </build>
@@ -239,12 +199,15 @@ JUnit团队已经为Maven Surefire开发了一个基础的provider，它允许�
         <version>{{ junit4-version }}</version>
         <scope>test</scope>
     </dependency>
+    <dependency>
+    	  <groupId>org.junit.vintage</groupId>
+        <artifactId>junit-vintage-engine</artifactId>
+        <version>{{vintage-version}}</version>
+        <scope>test</scope>
+    </dependency>    
 </dependencies>
 ...
 ```
-
-##### 运行单个测试类
-JUnit Plaform Surefire Provider支持Maven Surefire插件所支持的测试JVM系统属性。例如，你只想要运行`org.example.MyTest`测试类中的测试方法，你可以在命令行执行`mvn -Dtest = org.example.MyTest test`。有关更多详细信息，请参阅 [Maven Surefire Plugin](https://maven.apache.org/surefire/maven-surefire-plugin/examples/single-test.html) 的文档。
 
 ##### 按测试类名过滤
 Maven Surefire插件将扫描全类名与以下模式匹配的测试类。
@@ -266,7 +229,6 @@ Maven Surefire插件将扫描全类名与以下模式匹配的测试类。
 ...
 <build>
     <plugins>
-        ...
         <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
             <version>{{ surefire-version }}</version>
@@ -275,7 +237,6 @@ Maven Surefire插件将扫描全类名与以下模式匹配的测试类。
                     <exclude/>
                 </excludes>
             </configuration>
-            ...
         </plugin>
     </plugins>
 </build>
@@ -287,8 +248,8 @@ Maven Surefire插件将扫描全类名与以下模式匹配的测试类。
 ##### 按Tag过滤
 使用以下配置属性，你可以通过Tag来过滤测试。
 
-* 要包含一个 *tags* 或者 *tag expressions*，可以使用`groups`或者`includeTags`
-* 要排除一个 *tags* 或者 *tag expressions*，可以使用`excludedGroups`或者`excludeTags`
+* 要包含一个 *tags* 或者 *tag expressions*，可以使用`groups`
+* 要排除一个 *tags* 或者 *tag expressions*，可以使用`excludedGroups`
 
 ```xml
 ...
@@ -299,14 +260,9 @@ Maven Surefire插件将扫描全类名与以下模式匹配的测试类。
             <artifactId>maven-surefire-plugin</artifactId>
             <version>{{ surefire-version }}</version>
             <configuration>
-                <properties>
-                    <includeTags>acceptance | !feature-a</includeTags>
-                    <excludeTags>integration, regression</excludeTags>
-                </properties>
+                <groups>acceptance | !feature-a</groups>
+                <excludedGroups>integration, regression</excludedGroups>
             </configuration>
-            <dependencies>
-                ...
-            </dependencies>
         </plugin>
     </plugins>
 </build>
@@ -322,7 +278,6 @@ Maven Surefire插件将扫描全类名与以下模式匹配的测试类。
 ...
 <build>
     <plugins>
-        ...
         <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
             <version>{{ surefire-version }}</version>
@@ -335,9 +290,6 @@ Maven Surefire插件将扫描全类名与以下模式匹配的测试类。
                     </configurationParameters>
                 </properties>
             </configuration>
-            <dependencies>
-                ...
-            </dependencies>
         </plugin>
     </plugins>
 </build>
@@ -434,85 +386,97 @@ Test run finished after 64 ms
 ```
 
 >📒 ***退出码***  
-> 如果任何容器或测试失败，{{ConsoleLauncher}} 就会以状态码1退出，否则退出码为0.
+> 如果任何容器或测试失败，{{ConsoleLauncher}} 将以状态码`1`退出。 如果未发现任何测试并且提供了`--fail-if-no-tests`命令行选项，则`ConsoleLauncher`将以状态代码`2`退出。否则退出代码为0。
+
 
 #### 4.3.1. Options
 
 ```sh
-Option                                        Description
-------                                        -----------
--h, --help                                    Display help information.
---disable-ansi-colors                         Disable ANSI colors in output (not
-                                                supported by all terminals).
---details <[none,flat,tree,verbose]>          Select an output details mode for when
-                                                tests are executed. Use one of: [none,
-                                                flat, tree, verbose]. If 'none' is
-                                                selected, then only the summary and test
-                                                failures are shown. (default: tree)
---details-theme <[ascii,unicode]>             Select an output details tree theme for
-                                                when tests are executed. Use one of:
-                                                [ascii, unicode] (default: unicode)
---class-path, --classpath, --cp <Path:        Provide additional classpath entries --
-  path1:path2:...>                              for example, for adding engines and
-                                                their dependencies. This option can be
-                                                repeated.
---reports-dir <Path>                          Enable report output into a specified
-                                                local directory (will be created if it
-                                                does not exist).
---scan-class-path, --scan-classpath [Path:    Scan all directories on the classpath or
-  path1:path2:...]                              explicit classpath roots. Without
-                                                arguments, only directories on the
-                                                system classpath as well as additional
-                                                classpath entries supplied via -cp
-                                                (directories and JAR files) are scanned.
-                                                Explicit classpath roots that are not on
-                                                the classpath will be silently ignored.
-                                                This option can be repeated.
--u, --select-uri <URI>                        Select a URI for test discovery. This
-                                                option can be repeated.
--f, --select-file <String>                    Select a file for test discovery. This
-                                                option can be repeated.
--d, --select-directory <String>               Select a directory for test discovery.
-                                                This option can be repeated.
--p, --select-package <String>                 Select a package for test discovery. This
-                                                option can be repeated.
--c, --select-class <String>                   Select a class for test discovery. This
-                                                option can be repeated.
--m, --select-method <String>                  Select a method for test discovery. This
-                                                option can be repeated.
--r, --select-resource <String>                Select a classpath resource for test
-                                                discovery. This option can be repeated.
--n, --include-classname <String>              Provide a regular expression to include
-                                                only classes whose fully qualified names
-                                                match. To avoid loading classes
-                                                unnecessarily, the default pattern only
-                                                includes class names that end with
-                                                "Test" or "Tests". When this option is
-                                                repeated, all patterns will be combined
-                                                using OR semantics. (default: ^.*Tests?$)
--N, --exclude-classname <String>              Provide a regular expression to exclude
-                                                those classes whose fully qualified
-                                                names match. When this option is
-                                                repeated, all patterns will be combined
-                                                using OR semantics.
---include-package <String>                    Provide a package to be included in the
-                                                test run. This option can be repeated.
---exclude-package <String>                    Provide a package to be excluded from the
-                                                test run. This option can be repeated.
--t, --include-tag <String>                    Provide a tag to be included in the test
-                                                run. This option can be repeated.
--T, --exclude-tag <String>                    Provide a tag to be excluded from the test
-                                                run. This option can be repeated.
--e, --include-engine <String>                 Provide the ID of an engine to be included
-                                                in the test run. This option can be
-                                                repeated.
--E, --exclude-engine <String>                 Provide the ID of an engine to be excluded
-                                                from the test run. This option can be
-                                                repeated.
---config <key=value>                          Set a configuration parameter for test
-                                                discovery and execution. This option can
-                                                be repeated.
+Usage: ConsoleLauncher [-h] [--disable-ansi-colors] [--fail-if-no-tests] [--scan-modules]
+                       [--scan-classpath[=PATH[;|:PATH...]]]... [--details=MODE]
+                       [--details-theme=THEME] [--reports-dir=DIR]
+                       [--config=KEY=VALUE]... [--exclude-package=PKG]...
+                       [--include-package=PKG]... [-c=CLASS]... [-cp=PATH[;|:PATH...]]...
+                       [-d=DIR]... [-e=ID]... [-E=ID]... [-f=FILE]... [-m=NAME]...
+                       [-n=PATTERN]... [-N=PATTERN]... [-o=NAME]... [-p=PKG]...
+                       [-r=RESOURCE]... [-t=TAG]... [-T=TAG]... [-u=URI]...
+Launches the JUnit Platform from the console.
+  -h, --help                 Display help information.
+      --disable-ansi-colors  Disable ANSI colors in output (not supported by all terminals).
+      --details=MODE         Select an output details mode for when tests are executed. Use
+                               one of: none, summary, flat, tree, verbose. If 'none' is
+                               selected, then only the summary and test failures are shown.
+                               Default: tree.
+      --details-theme=THEME  Select an output details tree theme for when tests are executed.
+                               Use one of: ascii, unicode. Default: unicode.
+      -cp, --classpath, --class-path=PATH[;|:PATH...]
+                             Provide additional classpath entries -- for example, for adding
+                               engines and their dependencies. This option can be repeated.
+      --fail-if-no-tests     Fail and return exit status code 2 if no tests are found.
+      --reports-dir=DIR      Enable report output into a specified local directory (will be
+                               created if it does not exist).
+      --scan-modules         EXPERIMENTAL: Scan all resolved modules for test discovery.
+  -o, --select-module=NAME   EXPERIMENTAL: Select single module for test discovery. This
+                               option can be repeated.
+      --scan-classpath, --scan-class-path[=PATH[;|:PATH...]]
+                             Scan all directories on the classpath or explicit classpath
+                               roots. Without arguments, only directories on the system
+                               classpath as well as additional classpath entries supplied via
+                               -cp (directories and JAR files) are scanned. Explicit classpath
+                               roots that are not on the classpath will be silently ignored.
+                               This option can be repeated.
+  -u, --select-uri=URI       Select a URI for test discovery. This option can be repeated.
+  -f, --select-file=FILE     Select a file for test discovery. This option can be repeated.
+  -d, --select-directory=DIR Select a directory for test discovery. This option can be
+                               repeated.
+  -p, --select-package=PKG   Select a package for test discovery. This option can be repeated.
+  -c, --select-class=CLASS   Select a class for test discovery. This option can be repeated.
+  -m, --select-method=NAME   Select a method for test discovery. This option can be repeated.
+  -r, --select-resource=RESOURCE
+                             Select a classpath resource for test discovery. This option can
+                               be repeated.
+  -n, --include-classname=PATTERN
+                             Provide a regular expression to include only classes whose fully
+                               qualified names match. To avoid loading classes unnecessarily,
+                               the default pattern only includes class names that begin with
+                               "Test" or end with "Test" or "Tests". When this option is
+                               repeated, all patterns will be combined using OR semantics.
+                               Default: [^(Test.*|.+[.$]Test.*|.*Tests?)$]
+  -N, --exclude-classname=PATTERN
+                             Provide a regular expression to exclude those classes whose fully
+                               qualified names match. When this option is repeated, all
+                               patterns will be combined using OR semantics.
+      --include-package=PKG  Provide a package to be included in the test run. This option can
+                               be repeated.
+      --exclude-package=PKG  Provide a package to be excluded from the test run. This option
+                               can be repeated.
+  -t, --include-tag=TAG      Provide a tag or tag expression to include only tests whose tags
+                               match. When this option is repeated, all patterns will be
+                               combined using OR semantics.
+  -T, --exclude-tag=TAG      Provide a tag or tag expression to exclude those tests whose tags
+                               match. When this option is repeated, all patterns will be
+                               combined using OR semantics.
+  -e, --include-engine=ID    Provide the ID of an engine to be included in the test run. This
+                               option can be repeated.
+  -E, --exclude-engine=ID    Provide the ID of an engine to be excluded from the test run.
+                               This option can be repeated.
+      --config=KEY=VALUE     Set a configuration parameter for test discovery and execution.
+                               This option can be repeated.
 ```
+
+#### 4.3.2. 参数文件 (@-files)
+在某些平台上，在创建包含大量选项或长参数的命令行时，可能会遇到命令行长度的系统限制。
+
+从版本1.3开始，`ConsoleLauncher`支持参数文件，也称为*@-files*。参数文件是本身包含要传递给命令的参数的文件。当底层[picocli](https://github.com/remkop/picocli)命令行解析器遇到以字符`@`开头的参数时，它会将该文件的内容扩展到参数列表中。
+
+文件中的参数可以用空格或换行符分隔。如果参数包含嵌入的空格，则整个参数应包含在双引号或单引号中 -- 例如，`"-f = My Files/Stuff.java"`。
+
+如果参数文件不存在或无法读取，则参数将按字面处理，不会被删除。这可能会导致"不匹配的参数"的错误消息。你可以通过执行`picocli.trace`系统属性设置为`DEBUG`的命令来解决此类错误。
+
+可以在命令行上指定多个*@-files*。指定的路径可以是相对于当前目录的相对路径或绝对路径。
+
+你可以通过使用额外的`@`符号转义以`@`开始的字符的参数。例如，`@@somearg`将成为`@somearg`，不会被扩展。
+
 
 ### 4.4. 使用JUnit 4运行JUnit Platform
 `JunitPlatform` 运行器是一个基于JUnit 4的`Runner`，它让你能够在一个JUnit 4环境中的JUnit Platform上运行那些编程模型被支持的任何测试。例如一个JUnit Jupiter测试类。
@@ -607,20 +571,33 @@ public class JUnit4SuiteDemo {
 
 标记表达式是运算符`！`，`＆`和`|`的布尔表达式。另外，`（`和`）`可用于调整运算符优先级。
 
-*Table 1. Operators (in descending order of precedence*
+*表 1. 运算符（按优先顺序降序排列）*
 
-| **Operator** | **Meaning** | **Associativity** |
+| **运算符** | **含义** | **关联性** |
 |:-------------|:------------|:------------|
-| `!` | not | right |
-| `&` | and | left |
-| `|` | or | left |
+| `!` | 非 | right |
+| `&` | 与 | left |
+| `|` | 或 | left |
 
-如果您在多个维度上标记测试，tag expressions 可帮助您选择要执行的测试。通过测试类型（例如，*micro*, *integration*, *end-to-end*）和特征（例如，**foo**，**bar**，**baz**）标记以下表达式可能很有用。
+如果你在多个维度上标记测试，tag expressions 可帮助您选择要执行的测试。通过测试类型（例如，*micro*, *integration*, *end-to-end*）和特征（例如，**foo**，**bar**，**baz**）标记以下表达式可能很有用。
 
-| **Tag Expression** | **Selection** |
+| **标记表达式** | **选择** |
 |:-------------|:------------|
-| `foo` | `all tests for foor` |
-| `bar | baz` | `all tests for bar plus all tests for baz` |
-| `bar & baz` | `all tests foro the interaction between bar and baz` |
-| `foo & !end-to-end` | `all tests for foo, but not the end-to-end tests` |
-| `(micro | integration) & (foo | baz)` | `all micro or integration tests for foo or baz` |
+| `foo` | **foo**的所有测试 |
+| `bar | baz` | **bar**和**baz**的所有测试 |
+| `bar & baz` | **bar**和**baz**的测试交集 |
+| `foo & !end-to-end` | **foo**的所有测试，但不是*端到端测试* |
+| `(micro | integration) & (foo | baz)` | **foo**或**baz**的所有微测试或集成测试|
+
+### 4.7. 捕获标准输出/错误
+从版本1.3开始，JUnit平台提供了可选择的支持，用于捕获打印到`System.out`和`System.err`的输出。 要启用它，只需将`junit.platform.output.capture.stdout`和/或`junit.platform.output.capture.stderr` [配置参数](#45-配置参数) 设置为`true`即可。 此外，你可以使用`junit.platform.output.capture.maxBuffer`配置每个执行的测试或容器使用的最大缓冲字节数。
+
+启用后，JUnit Platform会在报告测试或容器完成之前立即捕获相应的输出并使用`stdout`或`stderr`键将其作为报告条目发布到所有已注册的{{TestExecutionListener}}实例。
+
+请注意，捕获的输出将仅包含用于执行容器或测试的线程发出的输出。其他线程的任何输出都将被省略，因为特别是在 [并行执行测试](#317-并行执行) 时，不可能将其归因于特定的测试或容器。
+
+> ⚠️ 捕获输出目前是一项*实验性*功能。 你被邀请尝试并向JUnit团队提供反馈，以便他们可以 [改进](#8-api演变) 并最终推广此功能。
+
+
+
+

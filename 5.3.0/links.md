@@ -88,6 +88,12 @@
 {% assign ParameterizedTest = '[@ParameterizedTest](' | append: javadoc-root | append: '/org/junit/jupiter/params/ParameterizedTest.html)' %}
 {% assign ParameterResolver = '[ParameterResolver](' | append: javadoc-root | append: '/org/junit/jupiter/api/extension/ParameterResolver.html)' %}
 {% assign RegisterExtension = '[@RegisterExtension](' | append: javadoc-root | append: '/org/junit/jupiter/api/extension/RegisterExtension.html)' %}
+{% assign MethodSource = '[@MethodSource](' | append: javadoc-root | append: '/org/junit/jupiter/params/provider/MethodSource.html)' %}
+{% assign Execution = '[@Execution](' | append: javadoc-root | append: '/org/junit/jupiter/api/parallel/Execution.html)' %}
+{% assign ResourceLock = '[@ResourceLock](' | append: javadoc-root | append: '/org/junit/jupiter/api/parallel/ResourceLock.html)' %}
+
+{% assign ParallelExecutionConfigurationStrategy = '[ParallelExecutionConfigurationStrategy](' | append: javadoc-root | append: '/org/junit/platform/engine/support/hierarchical/ParallelExecutionConfigurationStrategy.html)' %}
+
 
 {% assign RepetitionInfo = '[RepetitionInfo](' | append: javadoc-root | append: '/org/junit/jupiter/api/RepetitionInfo.html)' %}
 {% assign TestExecutionExceptionHandler = '[TestExecutionExceptionHandler](' | append: javadoc-root | append: '/org/junit/jupiter/api/extension/TestExecutionExceptionHandler.html)' %}

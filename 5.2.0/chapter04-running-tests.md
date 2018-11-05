@@ -607,20 +607,20 @@ public class JUnit4SuiteDemo {
 
 标记表达式是运算符`！`，`＆`和`|`的布尔表达式。另外，`（`和`）`可用于调整运算符优先级。
 
-*Table 1. Operators (in descending order of precedence*
+*表 1. 运算符（按优先顺序降序排列）*
 
-| **Operator** | **Meaning** | **Associativity** |
+| **运算符** | **含义** | **关联性** |
 |:-------------|:------------|:------------|
-| `!` | not | right |
-| `&` | and | left |
-| `|` | or | left |
+| `!` | 非 | right |
+| `&` | 与 | left |
+| `|` | 或 | left |
 
-如果您在多个维度上标记测试，tag expressions 可帮助您选择要执行的测试。通过测试类型（例如，*micro*, *integration*, *end-to-end*）和特征（例如，**foo**，**bar**，**baz**）标记以下表达式可能很有用。
+如果你在多个维度上标记测试，tag expressions 可帮助您选择要执行的测试。通过测试类型（例如，*micro*, *integration*, *end-to-end*）和特征（例如，**foo**，**bar**，**baz**）标记以下表达式可能很有用。
 
-| **Tag Expression** | **Selection** |
+| **标记表达式** | **选择** |
 |:-------------|:------------|
-| `foo` | `all tests for foor` |
-| `bar | baz` | `all tests for bar plus all tests for baz` |
-| `bar & baz` | `all tests foro the interaction between bar and baz` |
-| `foo & !end-to-end` | `all tests for foo, but not the end-to-end tests` |
-| `(micro | integration) & (foo | baz)` | `all micro or integration tests for foo or baz` |
+| `foo` | **foo**的所有测试 |
+| `bar | baz` | **bar**和**baz**的所有测试 |
+| `bar & baz` | **bar**和**baz**的测试交集 |
+| `foo & !end-to-end` | **foo**的所有测试，但不是*端到端测试* |
+| `(micro | integration) & (foo | baz)` | **foo**或**baz**的所有微测试或集成测试|

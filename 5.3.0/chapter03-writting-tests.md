@@ -1175,7 +1175,7 @@ palindromes(String) ✔
 #### 3.14.1. 必需的设置
 为了使用参数化测试，你必须添加`junit-jupiter-params`依赖。详细信息请参考 [依赖元数据](#21-依赖元数据)。
 
-### 3.15. 消费参数
+#### 3.14.2 消费参数
 参数化测试方法通常会在参数源索引和方法参数索引之间采用一对一关联（请参阅  [@CsvSource](#sample-consume-arguments-csv-source) 中的示例）之后直接从配置的源中消耗参数（请参阅 [参数源](#source-of-arguments)）。但是，参数化测试方法也可以选择将来自源的参数*聚合* 为传递给该方法的单个对象（请参阅 [参数聚合](#argument-aggregation)）。其他参数也可以由ParameterResolver提供（例如，获取`TestInfo`，`TestReporter`等的实例）。具体而言，参数化测试方法必须根据以下规则声明形式参数。
 
 - 首先必须声明零个或多个*索引参数*。
@@ -1187,7 +1187,7 @@ palindromes(String) ✔
 
 <a id="source-of-arguments"></a>
 
-#### 3.15.1. 参数源
+#### 3.14.3. 参数源
 Junit Jupiter提供一些开箱即用的*源* 注解。接下来每个子章节将提供一个简要的概述和一个示例。更多信息请参阅 {{ params-provider-package }} 包中的JavaDoc。
 
 ##### @ValueSource
@@ -1258,7 +1258,11 @@ void testWithEnumSourceRegex(TimeUnit timeUnit) {
 
 ##### @MethodSource
 
-`@MethodSource`允许你引用测试类或外部类中的一个或多个*工厂* 方法。这些工厂方法必须返回一个`Stream`、`Iterable`、`Iterator`或者参数数组。另外，它们不能接收任何参数。除非测试类用`@TestInstance(Lifecycle.PER_CLASS)`注解，否则测试类中的工厂方法必须是`static`的；而外部类中的工厂方法必须始终是`static`的。
+`@MethodSource`允许你引用测试类或外部类中的一个或多个*工厂* 方法。
+
+除非使用`@TestInstance(Lifecycle.PER_CLASS)`注解标注测试类，否则测试类中的工厂方法必须是`static`的。 而外部类中的工厂方法必须始终是`static`的。 此外，此类工厂方法不能接受任何参数。
+
+每个工厂方法必须生成一个参数流，并且流中的每组参数将被作为被`@ParameterizedTest`标注的方法的单独调用的物理参数来提供。 一般来说，这会转换为`Arguments`的`Stream`（即，`Stream<Arguments>`）; 但是，实际的具体返回类型可以采用多种形式。 在此上下文中，"流?是JUnit可以可靠地转换为`Stream`的任何内容，例如`Stream`，`DoubleStream`，`LongStream`，`IntStream`，`Collection`，`Iterator`，`Iterable`，对象数组或基元数组。 流中的"参数"可以作为参数的实例，对象数组（例如，`Object[]`）提供，或者如果参数化测试方法接受单个参数，则提供单个值。
 
 如果你只需要一个参数，你可以返回一个参数类型的实例的`Stream`，如下面示例所示。
 
@@ -1302,7 +1306,8 @@ static IntStream range() {
 }
 ```
 
-如果测试方法声明了多个参数，则需要返回一个`Arguments`实例的集合或Stream，如下面代码所示。请注意，`Arguments.of(Object ...)`是`Arguments`接口中定义的静态工厂方法。
+如果参数化测试方法声明了多个参数，则需要返回`Arguments`实例或对象数组的集合，流或数组，如下所示（有关支持的返回类型的更多详细信息，请参阅{{MethodSource}}的JavaDoc）。 请注意，`arguments(Object ...)`是`Arguments`接口中定义的静态工厂方法。 另外，`Arguments.of(Object ...)`可以替代`arguments(Object ...)`。
+
 
 ```java
 @ParameterizedTest
@@ -1416,7 +1421,7 @@ static class MyArgumentsProvider implements ArgumentsProvider {
 }
 ```
 
-#### 3.15.2. 参数转换
+#### 3.14.4. 参数转换
 
 ##### 扩展转换
 JUnit Jupiter为提供给`@ParameterizedTest`的参数提供了 [扩展基本类型转换](https://docs.oracle.com/javase/specs/jls/se8/html/jls-5.html#jls-5.1.2) 的支持。例如，使用`@ValueSource(ints = {1,2,3})`注解的参数化测试可以声明为不仅接受`int`类型的参数，还接受`long`，`float`或`double`类型的参数。
@@ -1450,7 +1455,10 @@ void testWithImplicitArgumentConversion(TimeUnit argument) {
 |`double/Double` | `"1.0" → 1.0d`|
 |`Enum subclass` | `"SECONDS" → TimeUnit.SECONDS`|
 | `java.io.File` | `"/path/to/file"` → `new File("/path/to/file")`|
-| `java.math.BigDecimal` | `"123.456e789" → new BigDecimal("123.456e789")` |
+| `java.lang.Class`          | `"java.lang.Integer"`                    -> `java.lang.Integer.class` *(使用 `$` 表示内嵌类, 比如. `"java.lang.Thread$State"`)*|
+| `java.lang.Class` | `"byte"`→ `byte.class` *(支持基本类型)*|
+| `java.lang.Class` | `"char[]"` → `char[].class` *(支持数组类型)*|
+| `java.math.BigDecimal` | `"123.456e789" → new BigDecimal("123.456e789")`|
 | `java.math.BigInteger` | `"1234567890123456789"` → `new BigInteger("1234567890123456789")` |
 | `java.net.URI` | `"http://junit.org/"` → `URI.create("http://junit.org/")` |
 | `java.net.URL` | `"http://junit.org/" → new URL("http://junit.org/")` |
@@ -1535,7 +1543,7 @@ void testWithExplicitJavaTimeConverter(@JavaTimeConversionPattern("dd.MM.yyyy") 
 ```
 <a id = "argument-aggregation"></a>
 
-#### 3.15.3. 参数聚合
+#### 3.14.5. 参数聚合
 默认情况下，提供给`@ParameterizedTest`方法的每个参数对应于单个方法参数。因此，期望提供大量参数的参数源可能导致大的方法签名。
 
 在这种情况下，可以使用{{ArgumentsAccessor}}而不是多个参数。使用此API，你可以通过传递给你的测试方法的单个参数去访问提供的参数。另外，它还支持类型转换，如 [隐式转换](#implicit-conversion) 中所述。
@@ -1608,7 +1616,7 @@ public @interface CsvToPerson {
 }
 ```
 
-#### 3.15.4. 自定义显示名称
+#### 3.14.6. 自定义显示名称
 默认情况下，参数化测试调用的显示名称包含了该特定调用的索引和所有参数的`String`表示形式。不过，你可以通过`@ParameterizedTest`注解的`name`属性来自定义调用的显示名称，如下面代码所示。
 
 ```java
@@ -1637,7 +1645,7 @@ Display name of container ✔
 |`{0}, {1}, …​`| 单个参数|
 
 
-#### 3.15.5. 生命周期和互操作性
+#### 3.14.7. 生命周期和互操作性
 参数化测试的每次调用拥有跟普通`@Test`方法相同的生命周期。例如，`@BeforeEach`方法将在每次调用之前执行。类似于 [动态测试](#315-动态测试)，调用将逐个出现在IDE的测试树中。你可能会在一个测试类中混合常规`@Test`方法和`@ParameterizedTest`方法。
 
 你可以在`@ParameterizedTest`方法上使用`ParameterResolver`扩展。但是，被参数源解析的方法参数必须出现在参数列表的首位。由于测试类可能包含常规测试和具有不同参数列表的参数化测试，因此，参数源的值不会被生命周期方法（例如`@BeforeEach`）和测试类构造函数解析。
@@ -1660,18 +1668,18 @@ void afterEach(TestInfo testInfo) {
 }
 ```
 
-### 3.16. 测试模板
+### 3.15. 测试模板
 
 {{ TestTemplate }} 方法不是一个常规的测试用例，它是测试用例的模板。因此，它的设计初衷是用来被多次调用，而调用次数取决于注册提供者返回的调用上下文数量。所以，它必须结合 {{ TestTemplateInvocationContextProvider }} 扩展一起使用。测试模板方法每一次调用跟执行常规`@Test`方法一样，它也完全支持相同的生命周期回调和扩展。关于它的用例请参阅 [为测试模板提供调用上下文](#58-为测试模板提供调用上下文)。
 
 
-### 3.17. 动态测试
+### 3.16. 动态测试
 
 JUnit Juppiter的 [注解](#31-注解) 章节描述的标准`@Test`注解跟JUnit 4中的`@Test`注解非常类似。两者都描述了实现测试用例的方法。这些测试用例都是静态的，因为它们是在编译时完全指定的，而且它们的行为不能在运行时被改变。*假设提供了一种基本的动态行为形式，但其表达性却被故意地加以限制*。
 
 除了这些标准的测试以外，JUnit Jupiter还引入了一种全新的测试编程模型。这种新的测试是一个*动态测试*，它们由一个使用了`@TestRactory`注解的工厂方法在运行时生成。
 
-相比于`@Test`方法，`@TestFactory`方法本身不是测试用例，它是测试用例的工厂。因此，动态测试是工厂的产品。从技术上讲，`@TestFactory`方法必须返回一个`DynamicNode`实例的`Stream`、`Collection`、`Iterable`或`Iterator`。`DynamicNode`的两个可实例化子类是`DynamicContainer`和`DynamicTest`。`DynamicContainer`实例由一个*显示名称* 和一个动态子节点列表组成，它允许创建任意嵌套的动态节点层次结构。而`DynamicTest`实例会被延迟执行，从而生成动态甚至非确定性的测试用例。
+与`@Test`方法相比，`@TestFactory`方法本身不是测试用例，而是测试用例的工厂。 因此，动态测试是工厂的产物。 从技术上讲，`@TestFactory`方法必须返回`Stream`，`Collection`，`Iterable`，`Iterator`或`DynamicNode`实例数组。 `DynamicNode`的可实例化子类是`DynamicContainer`和`DynamicTest`。 `DynamicContainer`实例由*显示名称*和动态子节点列表组成，你可以创建任意嵌套的动态节点层次结构。 `DynamicTest`实例将被延迟执行，从而动态甚至非确定性地生成测试用例。
 
 任何由`@TestFactory`方法返回的`Stream`在调用`stream.close()`的时候会被正确地关闭，这样我们就可以安全地使用一个资源，例如：`Files.lines()`。
 
@@ -1690,7 +1698,7 @@ JUnit Juppiter的 [注解](#31-注解) 章节描述的标准`@Test`注解跟JUni
 > ⚠️ 动态测试目前是一个试验性功能。详细信息请参阅 [试验性API](#82-试验性api) 中的表格。
 
 
-#### 3.17.1. 动态测试示例
+#### 3.16.1. 动态测试示例
 
 下面的`DynamicTestsDemo`类演示了测试工厂和动态测试的几个示例。
 
@@ -1817,3 +1825,104 @@ class DynamicTestsDemo {
 
 }
 ```
+
+### 3.17. 并行执行
+默认情况下，JUnit Jupiter测试在单个线程中按顺序运行。要并行运行测试，例如 加速执行，自5.3版本开始作为可选择的功能被加入进来。要启用并行执行，只需将`junit.jupiter.execution.parallel.enabled`配置参数设置为`true`，例如 在`junit-platform.properties`中（请参阅其他选项的 [配置参数](#45-配置参数)）。
+
+启用后，JUnit Jupiter引擎将根据提供的 [配置](parallel-execution-configuration) 完全并行地在所有级别的测试树上执行测试，同时观察声明性 [同步机制](parallel-execution-synchronization)。 请注意，[捕获标准输出/错误](#47-捕获标准输出/错误) 功能需要单独开启。
+
+> ⚠️ 并行测试执行目前是一项实验性功能。 你被邀请尝试并向JUnit团队提供反馈，以便他们可以 [改进](#8-api演变) 并最终推广此功能。
+
+
+<a id = "parallel-execution-configuration"></a>
+
+#### 3.17.1 配置
+可以使用 {{ParallelExecutionConfigurationStrategy}} 配置所需并行度和最大池大小等属性。 JUnit平台提供了两种开箱即用的实现：`dynamic`和`fixed`。 当然，你也可以实现一个`custom`的策略。
+
+要选择策略，只需将`junit.jupiter.execution.parallel.config.strategy`配置参数设置为以下选项之一：
+
+`dynamic`
+
+根据可用处理器/核心数乘以`junit.jupiter.execution.parallel.config.dynamic.factor`配置参数（默认为`1`）计算所需的并行度。
+
+`fixed`
+强制使用`junit.jupiter.execution.parallel.config.fixed.parallelism`配置参数作为所需的并行度。
+
+`custom`
+允许通过强制`junit.jupiter.execution.parallel.config.custom.class`配置参数指定自定义 {{ParallelExecutionConfigurationStrategy}} 实现，以确定所需的配置。
+
+如果未设置配置任何策略，则JUnit Jupiter使用因子为1的动态配置策略，即所需的并行度将等于可用处理器/核心的数量。
+
+
+<a id = "parallel-execution-synchronization"></a>
+
+#### 3.17.2 同步
+在`org.junit.jupiter.api.parallel`包中，JUnit Jupiter提供了两种基于注解的声明性机制，用于在不同测试中使用共享资源时更改执行模式并允许同步。
+
+如果启用了并行执行，默认情况下会同时执行所有类和方法。你可以使用 {{Execution}} 注解更改带注解的元素及其子元素（如果有）的执行模式。有以下两种模式：
+
+`SAME_THREAD`
+
+强制执行父级使用的同一线程。例如，在测试方法上使用时，测试方法将在与包含测试类的任何`@BeforeAll`或`@AfterAll`方法相同的线程中执行。
+
+
+`CONCURRENT`
+
+除非存在资源约束要强制在同一线程中执行，否则执行并发。
+
+此外，{{ResourceLock}} 注解允许声明测试类或测试方法使用需要同步访问的特定共享资源，以确保可靠的测试执行。
+
+如果你并行运行下面示例中的测试，你会发现它们很不稳定，即有时通过而其他时间失败。因为它们所读取的资源在写入是存在竞争。
+
+```java
+@Execution(CONCURRENT)
+class SharedResourcesDemo {
+
+    private Properties backup;
+
+    @BeforeEach
+    void backup() {
+        backup = new Properties();
+        backup.putAll(System.getProperties());
+    }
+
+    @AfterEach
+    void restore() {
+        System.setProperties(backup);
+    }
+
+    @Test
+    @ResourceLock(value = SYSTEM_PROPERTIES, mode = READ)
+    void customPropertyIsNotSetByDefault() {
+        assertNull(System.getProperty("my.prop"));
+    }
+
+    @Test
+    @ResourceLock(value = SYSTEM_PROPERTIES, mode = READ_WRITE)
+    void canSetCustomPropertyToFoo() {
+        System.setProperty("my.prop", "foo");
+        assertEquals("foo", System.getProperty("my.prop"));
+    }
+
+    @Test
+    @ResourceLock(value = SYSTEM_PROPERTIES, mode = READ_WRITE)
+    void canSetCustomPropertyToBar() {
+        System.setProperty("my.prop", "bar");
+        assertEquals("bar", System.getProperty("my.prop"));
+    }
+}
+```
+
+当使用该注解声明对共享资源的访问时，JUnit Jupiter引擎会使用此信息来确保不会并行运行冲突的测试。
+
+除了用于唯一标记已使用资源的字符串之外，你还可以指定访问模式。需要对资源进行`READ`访问的两个测试可以彼此并行运行，除非有其他`READ_WRITE`访问模式的测试正在运行。
+
+
+
+
+
+
+
+
+
+
