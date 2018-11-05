@@ -95,3 +95,6 @@
 {% assign TestTemplate = '[@TestTemplate](' | append: javadoc-root | append: '/org/junit/jupiter/api/TestTemplate.html)' %}
 {% assign TestTemplateInvocationContext = '[TestTemplateInvocationContext](' | append: javadoc-root | append: '/org/junit/jupiter/api/extension/TestTemplateInvocationContext.html)' %}
 {% assign TestTemplateInvocationContextProvider = '[TestTemplateInvocationContextProvider](' | append: javadoc-root | append: '/org/junit/jupiter/api/extension/TestTemplateInvocationContextProvider.html)' %}
+{% assign HierarchicalTestEngine = '[HierarchicalTestEngine](' | append: javadoc-root | append: '/org/junit/platform/engine/support/hierarchical/HierarchicalTestEngine.html)' %}
+{% assign TestInstanceFactory = '[TestInstanceFactory](' | append: javadoc-root | append: '/org/junit/jupiter/api/extension/TestInstanceFactory.html)' %}
+

@@ -81,7 +81,7 @@ launcher.execute(request);
 
 #### 7.1.3 插入你自己的测试引擎
 
-Junit 目前提供了两种开箱即用的 {{TestEngine}} ：
+Junit 目前提供了两种 {{TestEngine}} 实现：
 
 - {{junit-jupiter-engine}}: JUnit Jupiter的核心。
 
@@ -91,5 +91,37 @@ Junit 目前提供了两种开箱即用的 {{TestEngine}} ：
 第三方也可以通过在 {{junit-platform-engine}} 模块中实现接口并*注册* 引擎来提供他们自己的`TestEngine`。 目前Java的`java.util.ServiceLoader`机制支持引擎注册。 例如，`junit-jupiter-engine`模块将其`org.junit.jupiter.engine.JupiterTestEngine`注册到一个名为`org.junit.platform.engine.TestEngine`的文件中，该文件位于`junit-jupiter-engine`JAR包中的`/META-INF/services`目录。
 
 
+>📒 {{HierarchicalTestEngine}} 是一个边界的抽象基础实现（由{{junit-jupiter-engine}}使用），它只需要实现者为测试发现提供逻辑。 它实现了实现`Node`接口的`TestDescriptors`的执行，包括对并行执行的支持。
+
+> ⚠️ `junit-`前缀是为JUnit Team的TestEngines保留的
+>
+>  JUnit 平台 `Launcher`强制规定只有JUnit团队发布的`TestEngine`实现可以使用`junit-`前缀作为其`TestEngine` ID。
+
+> - 任何第三方`TestEngine`一旦声称是`junit-jupiter`或`junit-vintage`，JUnit平台则会抛出异常，并立即停止执行。
+> - 任何第三方`TestEngine`使用`junit-`前缀作为其ID，JUnit平台则会记录警告消息，平台在后续版本将针对此类违规行为抛出异常。
+
+
+
 #### 7.1.4 插入你自己的测试执行监听器
-除了以编程方式来注册测试执行监听器的公共 {{Launcher}} API方法之外，在运行时由Java的`java.util.ServiceLoader`发现的自定义 {{TestExecutionListener}} 实现会被自动注册到`DefaultLauncher`。 例如，一个实现了 {{TestExecutionListener}} 并声明在`/META-INF/services/org.junit.platform.launcher.TestExecutionListener`文件中的`example.TestInfoPrinter`类会被自动加载和注册。
+除了以编程方式注册测试执行侦听器的公共 {{Launcher}} API方法之外，默认情况下，自定义的`TestExecutionListener`实现将在运行时通过Java的`java.util.ServiceLoader`机制发现，并自动注册到通过`LauncherFactory`创建的`Launcher`。 例如，一个实现了 {{TestExecutionListener}} 并声明在`/META-INF/services/org.junit.platform.launcher.TestExecutionListener`文件中的`example.TestInfoPrinter`类会被自动加载和注册。
+
+#### 7.1.5. 配置启动器
+如果你需要对测试引擎和测试执行侦听器的自动检测和注册进行细粒度控制，你可以创建一个`LauncherConfig`实例并将其提供给`LauncherFactory.create(LauncherConfig)`方法即可。 通常情况下，`LauncherConfig`的实例是通过内置的流式构建器API创建的，如以下示例所示。
+
+```java
+LauncherConfig launcherConfig = LauncherConfig.builder()
+    .enableTestEngineAutoRegistration(false)
+    .enableTestExecutionListenerAutoRegistration(false)
+    .addTestEngines(new CustomTestEngine())
+    .addTestExecutionListeners(new CustomTestExecutionListener())
+    .build();
+
+Launcher launcher = LauncherFactory.create(launcherConfig);
+
+LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
+    .selectors(selectPackage("com.example.mytests"))
+    .build();
+
+launcher.execute(request);
+```
+
