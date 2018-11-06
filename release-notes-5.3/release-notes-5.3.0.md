@@ -4,7 +4,7 @@
 
 **范围**：
 
-并行测试执行，`System.out`和`System.err`的输出捕获，新的`TestInstanceFactory`扩展API，动态测试的自定义测试源，从实验到维护状态的动态测试API的推广，`junit-platform-gradle-plugin`的停止， 对`junit-platform-surefire-provider`的弃用，以及各种小改进和错误修复。
+并行测试执行，`System.out`和`System.err`的输出捕获，新的`TestInstanceFactory`扩展API，动态测试的自定义测试源，从实验到维护状态的动态测试API的推广，`junit-platform-gradle-plugin`的终止， 对`junit-platform-surefire-provider`的弃用，以及各种小改进和错误修复。
 
 关于此版本所有已关闭的 问题和pull request的完整列表，请参阅GitHub上JUnit仓库中的 [5.3 M1](https://github.com/junit-team/junit5/milestone/23?closed=1)、[5.3 RC1](https://github.com/junit-team/junit5/milestone/27?closed=1) 和 [5.3 GA](https://github.com/junit-team/junit5/milestone/28?closed=1) 里程碑页面。
 
@@ -14,7 +14,7 @@
 - 现在，在`--details`详细模式下运行`ConsoleLauncher`时，完整的堆栈跟踪将打印到控制台。
 - 如果嵌套类或嵌套接口具有无效的类文件，则`ReflectionUtils.findNestedClasses()`和`ReflectionSupport.findNestedClasses()`不再允许抛出`NoClassDefFoundError`。 相反，错误现在将被吞下并记录在警告级别。
 - 所有`DiscoverySelector`实现（例如，`PackageSelector`、`ClassSelector`、`MethodSelector`等）现在实现了`equals()`和`hashCode()`，以便在存储在集合中时获得正确的行为。
-- 修改了`ClassSource`，以便`equals()`和`hashCode()`现在正确地基于所需的类名而不是可选的Class引用。 此外，现在强制执行类名的非空前置条件。
+- 修改了`ClassSource`，以便`equals()`和`hashCode()`现在正确地基于所需的类名而不是可选的`Class`引用。此外，现在强制执行类名的非空前置条件。
 
 ###### 弃用及重大变化
 - `junit-platform-gradle-plugin`已经停止使用，不再作为JUnit 5的一部分发布。请使用 [Gradle的原生支持]({{ site.url }}{{ '/junit5/' }}{{ page.version }}{{ '/user-guide-cn/#42-构建工具支持' }}) 在JUnit平台上运行测试（需要Gradle 4.6或更高版本）。
