@@ -4,7 +4,7 @@
 
 中文文档链接：<http://sjyuan.cc/junit5/user-guide-cn/>
 
-英文文档链接：<http://junit.org/junit5/docs/current/user-guide/>
+英文文档链接：<https://junit.org/junit5/docs/current/user-guide/>
 
 ## 贡献者
 [袁慎建](http://sjyuan.cc/about/) • [王亚鑫](http://www.jianshu.com/u/048f932015bc) • [何僵乐](http://www.jianshu.com/u/ab3e5acc3f2c) • [赵琪琪](https://www.jianshu.com/u/2db65e841261)
@@ -29,7 +29,7 @@
 超链接两端各保留一个空格。段落中存在超链接，如果链接到外部，翻译段落中也同样链接到外部。如果是文档内部链接，预留出超链接格式，但不填写内容。例如：
 
 ```
-- [TestEngine](http://junit.org/junit5/docs/current/api/org/junit/platform/engine/TestEngine.html)
+- [TestEngine](https://junit.org/junit5/docs/current/api/org/junit/platform/engine/TestEngine.html)
 - [基于JUnit的Runner](#)
 ```
 

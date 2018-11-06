@@ -583,7 +583,7 @@ public class JUnit4SuiteDemo {
 
 
 >📒 ***附加配置选项***  
-> 除了`@SelectPackages`之外，还有很多配置选项可以用来发现和过滤测试。详细内容请参考 [Javadoc](http://junit.org/junit5/docs/5.2.0/api/org/junit/platform/suite/api/package-summary.html).
+> 除了`@SelectPackages`之外，还有很多配置选项可以用来发现和过滤测试。详细内容请参考 [Javadoc](https://junit.org/junit5/docs/5.2.0/api/org/junit/platform/suite/api/package-summary.html).
 
 ### 4.5. 配置参数
 除了告诉平台要包含哪些测试类、测试引擎以及要扫描哪些包等之外，有时还需要提供额外的自定义配置参数，该参数特定于特定的测试引擎。例如，JUnit Jupiter `TestEngine`支持以下用例中的*配置参数*。

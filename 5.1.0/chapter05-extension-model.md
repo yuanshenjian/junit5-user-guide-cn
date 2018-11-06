@@ -376,7 +376,7 @@ static class MyTestTemplateInvocationContextProvider implements TestTemplateInvo
 
 <a id="511-用户代码和扩展代码"></a>
 
-![](http://junit.org/junit5/docs/5.1.0/user-guide/images/extensions_lifecycle.png)
+![](https://junit.org/junit5/docs/5.1.0/user-guide/images/extensions_lifecycle.png)
 
 ###### 用户代码和扩展代码
 

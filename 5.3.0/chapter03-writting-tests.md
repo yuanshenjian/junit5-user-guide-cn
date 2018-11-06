@@ -277,7 +277,7 @@ class AssertionsDemo {
 #### 3.4.1. 第三方断言类库
 虽然JUnit Jupiter提供的断言工具包已经满足了许多测试场景，但有时我们会遇到需要更加强大且具备例如*匹配器* 功能的场景。在这些场景中，JUnit团队推荐使用第三方断言类库，例如：{{ AssertJ }}、{{ Hamcrest }}、{{ Truth }} 等等。因此，开发人员可以自由使用他们选择的断言类库。
 
-举个例子，*匹配器* 和流式调用的API组合起来使用可以让断言更加具有描述性和可读性。然而，JUnit Jupiter的 {{ Assertions }} 类没有提供一个类似于JUnit 4的`org.junit.Assert`类中 [assertThat()](http://junit.org/junit4/javadoc/latest/org/junit/Assert.html#assertThat) 方法，该方法接受一个Hamcrest [Matcher](http://junit.org/junit4/javadoc/latest/org/hamcrest/Matcher.html)。所以，我们鼓励开发人员使用由第三方断言库提供的匹配器的内置支持。
+举个例子，*匹配器* 和流式调用的API组合起来使用可以让断言更加具有描述性和可读性。然而，JUnit Jupiter的 {{ Assertions }} 类没有提供一个类似于JUnit 4的`org.junit.Assert`类中 [assertThat()](https://junit.org/junit4/javadoc/latest/org/junit/Assert.html#assertThat) 方法，该方法接受一个Hamcrest [Matcher](https://junit.org/junit4/javadoc/latest/org/hamcrest/Matcher.html)。所以，我们鼓励开发人员使用由第三方断言库提供的匹配器的内置支持。
 
 下面的例子演示如何在JUnit Jupiter中使用Hamcrest提供的`assertThat()`。只要Hamcrest库已经被添加到classpath中，你就可以静态导入诸如`assertThat()`、`is()`以及`equalTo()`方法，然后在测试方法中使用它们，如下面代码所示的`assertWithHamcrestMatcher()`方法。
 
@@ -709,7 +709,7 @@ class TestingAStackDemo {
 
 * {{ TestInfoParameterResolver }}：如果一个方法参数的类型是 {{ TestInfo }}，`TestInfoParameterResolver`将根据当前的测试提供一个`TestInfo`的实例用于填充参数的值。然后，`TestInfo`就可以被用来检索关于当前测试的信息，例如：显示名称、测试类、测试方法或相关的Tag。显示名称要么是一个类似于测试类或测试方法的技术名称，要么是一个通过`@DisplayName`配置的自定义名称。
 
- [TestInfo](http://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/TestInfo.html) 就像JUnit 4规则中`TestName`规则的代替者。以下演示如何将`TestInfo`注入到测试构造函数、`@BeforeEach`方法和`@Test`方法中。
+ [TestInfo](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/TestInfo.html) 就像JUnit 4规则中`TestName`规则的代替者。以下演示如何将`TestInfo`注入到测试构造函数、`@BeforeEach`方法和`@Test`方法中。
 
 ```java
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -1460,8 +1460,8 @@ void testWithImplicitArgumentConversion(TimeUnit argument) {
 | `java.lang.Class` | `"char[]"` → `char[].class` *(支持数组类型)*|
 | `java.math.BigDecimal` | `"123.456e789" → new BigDecimal("123.456e789")`|
 | `java.math.BigInteger` | `"1234567890123456789"` → `new BigInteger("1234567890123456789")` |
-| `java.net.URI` | `"http://junit.org/"` → `URI.create("http://junit.org/")` |
-| `java.net.URL` | `"http://junit.org/" → new URL("http://junit.org/")` |
+| `java.net.URI` | `"https://junit.org/"` → `URI.create("https://junit.org/")` |
+| `java.net.URL` | `"https://junit.org/" → new URL("https://junit.org/")` |
 | `java.nio.charset.Charset` | `"UTF-8"` → `Charset.forName("UTF-8")` |
 | `java.nio.file.Path` | `"/path/to/file"` → `Paths.get("/path/to/file")` |
 |`java.time.Instant` | `"1970-01-01T00:00:00Z" → Instant.ofEpochMilli(0)`|

@@ -27,7 +27,7 @@
 
 ##### 新特性与改进
 * 自定义的`TestExecutionListener`实现现在可以通过Java的`ServiceLoader`机制自动注册。
-* `TestEngine `API添加了新的默认方法`getGroupId()`,`getArtifactId()`和`getVersion()`，这些方法用来调试和报告。默认情况下，包属性（一般来自JAR属性清单）用来决定发行ID和版本号；而组ID默认是空的。更多细节请参阅Javadoc的 [TestEngine](http://junit.org/junit5/docs/current/api/org/junit/platform/engine/TestEngine.html) 文档。
+* `TestEngine `API添加了新的默认方法`getGroupId()`,`getArtifactId()`和`getVersion()`，这些方法用来调试和报告。默认情况下，包属性（一般来自JAR属性清单）用来决定发行ID和版本号；而组ID默认是空的。更多细节请参阅Javadoc的 [TestEngine](https://junit.org/junit5/docs/current/api/org/junit/platform/engine/TestEngine.html) 文档。
 * 已发现的测试引擎的记录信息得到增强，包括group ID、artifact ID和每个测试引擎的版本，如果它们能够通过`getGroupId()`，`getArtifactId()`，以及`getVersion()`方法获取。
 * 现在，`ConsoleLauncher` 的`--scan-classpath`允许扫描JAR文件作为显式参数提供的测试（请参阅 [Options](#431-options)）。
 * 现在，`ConsoleLauncher`中新的`--details<Details>`选项允许在执行测试时选择一个输出细节的模式。可以使用`none`、`flat`、`tree`，或者`verbose`中的一个来指定该模式。如果没有指定，则只会输出汇总和测试失败信息（请参阅 [Options](#431-options)）。
@@ -62,7 +62,7 @@
 * 现在，`Assertions.assertThrows()`方法在生成断言失败的消息时，会采用规范名称作为异常类型。
 * 现在，在测试方法上注册的`TestInstancePostProcessors`会被调用。
 * `Asserrions.fail`现在有了新的变体：`Assertions.fail(Throwable cause)`和`Assertions.fail(String message, Throwable cause)`。
-* 新的`Assertions.assertLinesMatch()`方法会比较字符串列表，应用了`Object :: equals`和正则表达式。 `assertLinesMatch()`还提供了一个快速转发机制，可以跳过每个调用中预期会更改的行，例如持续时间，时间戳，堆栈跟踪等。详细信息请参阅 [org.junit.jupiter.Assertions](http://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Assertions.html) 的JavaDoc。
+* 新的`Assertions.assertLinesMatch()`方法会比较字符串列表，应用了`Object :: equals`和正则表达式。 `assertLinesMatch()`还提供了一个快速转发机制，可以跳过每个调用中预期会更改的行，例如持续时间，时间戳，堆栈跟踪等。详细信息请参阅 [org.junit.jupiter.Assertions](https://junit.org/junit5/docs/current/api/org/junit/jupiter/api/Assertions.html) 的JavaDoc。
 * 现在可以通过Java的`ServiceLoader`机制自动注册扩展。详情请参阅 [自动扩展注册](#522-自动扩展注册)。
 
 #### JUnit Vintage

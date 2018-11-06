@@ -109,7 +109,7 @@ JUnit Vintage测试引擎实现，允许在新的JUnit Platform上运行低版�
 
 ### 2.2. 依赖关系图
 
-![](http://junit.org/junit5/docs/5.0.2/user-guide/images/component-diagram.svg)
+![](https://junit.org/junit5/docs/5.0.2/user-guide/images/component-diagram.svg)
 
 
 ### 2.3 JUnit Jupiter示例工程
